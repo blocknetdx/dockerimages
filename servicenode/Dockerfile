@@ -1,5 +1,7 @@
 FROM ubuntu:trusty
 
+ARG cores=1
+
 RUN apt update \
   && apt install -y --no-install-recommends \
      software-properties-common \
@@ -38,7 +40,7 @@ RUN mkdir -p /opt/blocknetdx \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
   && ./configure LDFLAGS="-L/tmp/berkeley/lib/" CPPFLAGS="-I/tmp/berkeley/include/" --without-gui --enable-hardening \
-  && make -j4 \
+  && make -j$cores \
   && make install \
   && rm -rf /opt/blocknetdx/ /tmp/berkeley/*
 
