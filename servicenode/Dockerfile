@@ -1,6 +1,7 @@
 FROM ubuntu:trusty
 
 ARG cores=1
+ENV ecores=$cores
 
 RUN apt update \
   && apt install -y --no-install-recommends \
@@ -40,7 +41,7 @@ RUN mkdir -p /opt/blocknetdx \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
   && ./configure LDFLAGS="-L/tmp/berkeley/lib/" CPPFLAGS="-I/tmp/berkeley/include/" --without-gui --enable-hardening \
-  && make -j$cores \
+  && make -j$ecores \
   && make install \
   && rm -rf /opt/blocknetdx/ /tmp/berkeley/*
 
