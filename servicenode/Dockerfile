@@ -10,7 +10,7 @@ RUN apt update \
      wget curl git python vim \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN	add-apt-repository ppa:bitcoin/bitcoin \
+RUN add-apt-repository ppa:bitcoin/bitcoin \
   && apt update \
   && apt install -y --no-install-recommends \
      build-essential libtool autotools-dev bsdmainutils \
@@ -45,9 +45,8 @@ RUN mkdir -p /opt/blocknetdx \
   && make install \
   && rm -rf /opt/blocknetdx/ /tmp/berkeley/*
 
-# Write default blocknetdx.conf with random rpcpassword (can be overridden on commandline)
-RUN echo "import os, random, string; length = 25; chars = string.ascii_letters + string.digits + '$%^&*'; random.seed = (os.urandom(1024)); print ''.join(random.choice(chars) for i in range(length))" > /usr/local/bin/passgen.py \
-  && echo "datadir=/opt/blockchain/data   \n\
+# Write default blocknetdx.conf (can be overridden on commandline)
+RUN echo "datadir=/opt/blockchain/data    \n\
                                           \n\
 dbcache=256                               \n\
 maxmempool=512                            \n\
@@ -63,9 +62,7 @@ logips=1                                  \n\
                                           \n\
 rpcallowip=127.0.0.1                      \n\
 rpctimeout=15                             \n\
-rpcclienttimeout=15                       \n\
-rpcuser=snode" > /opt/blockchain/config/blocknetdx.conf \
-  && echo "rpcpassword=$(python /usr/local/bin/passgen.py)" >> /opt/blockchain/config/blocknetdx.conf
+rpcclienttimeout=15" > /opt/blockchain/config/blocknetdx.conf
 
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
@@ -73,4 +70,4 @@ VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 # Port, RPC, Test Port, Test RPC
 EXPOSE 41412 41414 41474 41419
 
-CMD ["blocknetdxd", "-daemon=0"]
+CMD ["blocknetdxd", "-daemon=0", "-server=0"]
