@@ -1,0 +1,3 @@
+data/**/*
+!data/chainstate/
+!data/blocks/

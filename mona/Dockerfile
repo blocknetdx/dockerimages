@@ -1,5 +1,6 @@
+# This is a snapshot of the blockchain: Blocks 1193272
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/monacoin:0.14.2 .
+# docker build --build-arg cores=8 -t blocknetdx/monacoin:0.14.2-snap1193272 .
 
 FROM ubuntu:trusty
 
@@ -66,6 +67,9 @@ logips=1                                \n\
 rpcallowip=127.0.0.1                    \n\
 rpctimeout=15                           \n\
 rpcclienttimeout=15                     \n" > /opt/blockchain/config/monacoin.conf
+
+# Copy snapshot
+COPY blockchain/data/ /opt/blockchain/data/
 
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
