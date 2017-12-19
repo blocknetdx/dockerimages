@@ -1,5 +1,6 @@
+# This is a snapshot of the blockchain: Blocks 500644
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/syscoin2:2.1.6 .
+# docker build --build-arg cores=8 -t blocknetdx/syscoin2:2.1.6-snap500644 .
 
 FROM ubuntu:trusty
 
@@ -66,6 +67,9 @@ logips=1                                \n\
 rpcallowip=127.0.0.1                    \n\
 rpctimeout=15                           \n\
 rpcclienttimeout=15                     \n" > /opt/blockchain/config/syscoin.conf
+
+# Copy snapshot
+COPY blockchain/data/ /opt/blockchain/data/
 
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
