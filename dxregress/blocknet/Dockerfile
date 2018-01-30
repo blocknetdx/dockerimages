@@ -1,5 +1,5 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/dxregress/blocknet:3.7.36 .
+# docker build --build-arg cores=8 -t blocknetdx/dxregress/blocknet:3.7.48 .
 FROM ubuntu:trusty
 
 ARG cores=1
