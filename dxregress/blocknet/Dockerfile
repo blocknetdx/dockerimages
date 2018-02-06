@@ -1,6 +1,6 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/dxregress/blocknet:3.7.36 .
-FROM ubuntu:trusty
+# docker build --build-arg cores=8 -t blocknetdx/dxregress-blocknet:3.8.69 .
+FROM ubuntu:xenial
 
 ARG cores=1
 ENV ecores=$cores
@@ -18,7 +18,7 @@ RUN add-apt-repository ppa:bitcoin/bitcoin \
      build-essential libtool autotools-dev bsdmainutils \
      libevent-dev autoconf automake pkg-config libssl-dev \
      libboost-system-dev libboost-filesystem-dev libboost-chrono-dev \
-     libboost-program-options-dev libboost-test-dev libboost-thread-dev \
+     libboost-program-options-dev libboost-test-dev libboost-thread-dev libboost-date-time-dev \
      libdb4.8-dev libdb4.8++-dev libgmp-dev libminiupnpc-dev libzmq3-dev \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -35,7 +35,7 @@ RUN mkdir -p /tmp/berkeley \
 # Copy source
 COPY . /opt/blocknetdx/BlockDX/
 
-# Build source
+# Build source (requires a wallet.dat)
 RUN mkdir -p /opt/blockchain/config \
   && mkdir -p /opt/blockchain/dxregress/testnet4 \
   && ln -s /opt/blockchain/config /root/.blocknetdx \
