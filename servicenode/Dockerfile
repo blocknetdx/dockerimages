@@ -1,3 +1,5 @@
+# Build via docker:
+# docker build --build-arg cores=8 -t blocknetdx/servicenode:3.8.74-dev .
 FROM ubuntu:trusty
 
 ARG cores=1
