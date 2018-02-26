@@ -68,7 +68,7 @@ rpctimeout=15                           \n\
 rpcclienttimeout=15                     \n" > /opt/blockchain/config/syscoin.conf
 
 # Copy snapshot
-COPY blockchain/data/ /opt/blockchain/data/
+COPY data/ /opt/blockchain/data/
 
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
