@@ -1,5 +1,5 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/syscoin2:2.1.6 .
+# docker build --build-arg cores=8 -t blocknetdx/syscoin2:2.1.6-snap593801 .
 
 FROM ubuntu:trusty
 
@@ -67,6 +67,9 @@ rpcallowip=127.0.0.1                    \n\
 rpctimeout=15                           \n\
 rpcclienttimeout=15                     \n" > /opt/blockchain/config/syscoin.conf
 
+# Copy snapshot
+COPY blockchain/data/ /opt/blockchain/data/
+
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 
@@ -74,4 +77,3 @@ VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 EXPOSE 8369 8370 18369 18370
 
 CMD ["syscoind", "-daemon=0"]
-
