@@ -1,5 +1,5 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/monacoin:0.14.2 .
+# docker build --build-arg cores=8 -t blocknetdx/monacoin:0.14.2-snap1255126 .
 
 FROM ubuntu:trusty
 
@@ -67,6 +67,9 @@ rpcallowip=127.0.0.1                    \n\
 rpctimeout=15                           \n\
 rpcclienttimeout=15                     \n" > /opt/blockchain/config/monacoin.conf
 
+# Copy snapshot
+COPY data/ /opt/blockchain/data/
+
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 
@@ -74,4 +77,3 @@ VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 EXPOSE 9401 9402 19403 19402
 
 CMD ["monacoind", "-daemon=0"]
-
