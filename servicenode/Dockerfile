@@ -1,8 +1,9 @@
 # Build via docker:
 # docker build --build-arg cores=8 -t blocknetdx/servicenode:3.9.10 .
+# docker build --build-arg cores=32 -t blocknetdx/servicenode:3.9.10 .
 FROM ubuntu:trusty
 
-ARG cores=1
+ARG cores=32
 ENV ecores=$cores
 
 RUN apt update \
@@ -43,6 +44,7 @@ RUN mkdir -p /opt/blocknetdx \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
   && ./configure LDFLAGS="-L/tmp/berkeley/lib/" CPPFLAGS="-I/tmp/berkeley/include/" --without-gui --enable-hardening \
+  && echo "Building with cores: $ecores" \
   && make -j$ecores \
   && make install \
   && rm -rf /opt/blocknetdx/ /tmp/berkeley/*
