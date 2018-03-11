@@ -72,4 +72,4 @@ VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 # Port, RPC, Test Port, Test RPC
 EXPOSE 41412 41414 41474 41419
 
-CMD ["blocknetdxd", "-daemon=0", "-server=0"]
+CMD ["blocknetdxd", "-daemon=0"]
