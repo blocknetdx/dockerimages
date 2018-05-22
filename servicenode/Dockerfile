@@ -1,6 +1,6 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/servicenode:3.9.16 .
-# docker build --build-arg cores=32 -t blocknetdx/servicenode:3.9.16 .
+# docker build --build-arg cores=8 -t blocknetdx/servicenode:3.9.22-dev .
+# docker build --build-arg cores=32 -t blocknetdx/servicenode:3.9.22-dev .
 FROM ubuntu:trusty
 
 ARG cores=32
@@ -39,7 +39,7 @@ RUN mkdir -p /opt/blocknetdx \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.blocknetdx \
   && cd /opt/blocknetdx \
-  && git clone --depth 1 --branch v3.9.16 https://github.com/BlocknetDX/BlockDX.git \
+  && git clone --depth 1 --branch v3.9.22 https://github.com/BlocknetDX/BlockDX.git \
   && cd /opt/blocknetdx/BlockDX \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
