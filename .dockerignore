@@ -1,0 +1,4 @@
+data/**/*
+!data/chainstate/
+!data/blocks/
+!data/debug.log

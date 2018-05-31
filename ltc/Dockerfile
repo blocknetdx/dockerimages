@@ -1,9 +1,9 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/servicenode:3.9.22 .
-# docker build --build-arg cores=32 -t blocknetdx/servicenode:3.9.22 .
+# docker build --build-arg cores=8 -t blocknetdx/litecoin:0.14.2 .
+
 FROM ubuntu:trusty
 
-ARG cores=32
+ARG cores=1
 ENV ecores=$cores
 
 RUN apt update \
@@ -34,44 +34,43 @@ RUN mkdir -p /tmp/berkeley \
   && make install
 
 # Build source
-RUN mkdir -p /opt/blocknetdx \
+RUN mkdir -p /opt/litecoin \
   && mkdir -p /opt/blockchain/config \
   && mkdir -p /opt/blockchain/data \
-  && ln -s /opt/blockchain/config /root/.blocknetdx \
-  && cd /opt/blocknetdx \
-  && git clone --depth 1 --branch v3.9.22 https://github.com/BlocknetDX/BlockDX.git \
-  && cd /opt/blocknetdx/BlockDX \
+  && ln -s /opt/blockchain/config /root/.litecoin \
+  && cd /opt/litecoin \
+  && git clone --depth 1 --branch v0.14.2 https://github.com/litecoin-project/litecoin.git \
+  && cd /opt/litecoin/litecoin \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
   && ./configure LDFLAGS="-L/tmp/berkeley/lib/" CPPFLAGS="-I/tmp/berkeley/include/" --without-gui --enable-hardening \
-  && echo "Building with cores: $ecores" \
   && make -j$ecores \
   && make install \
-  && rm -rf /opt/blocknetdx/ /tmp/berkeley/*
+  && rm -rf /opt/litecoin/ /tmp/berkeley/*
 
-# Write default blocknetdx.conf (can be overridden on commandline)
-RUN echo "datadir=/opt/blockchain/data    \n\
-                                          \n\
-dbcache=256                               \n\
-maxmempool=512                            \n\
-                                          \n\
-port=41412    # testnet: 41474            \n\
-rpcport=41414 # testnet: 41419            \n\
-                                          \n\
-listen=1                                  \n\
-server=1                                  \n\
-maxconnections=100                        \n\
-logtimestamps=1                           \n\
-logips=1                                  \n\
-                                          \n\
-rpcallowip=127.0.0.1                      \n\
-rpctimeout=15                             \n\
-rpcclienttimeout=15" > /opt/blockchain/config/blocknetdx.conf
+# Write default litecoin.conf (can be overridden on commandline)
+RUN echo "datadir=/opt/blockchain/data  \n\
+                                        \n\
+dbcache=256                             \n\
+maxmempool=512                          \n\
+                                        \n\
+port=9333    # testnet: 19333           \n\
+rpcport=9332 # testnet: 19332           \n\
+                                        \n\
+listen=1                                \n\
+server=1                                \n\
+maxconnections=16                       \n\
+logtimestamps=1                         \n\
+logips=1                                \n\
+                                        \n\
+rpcallowip=127.0.0.1                    \n\
+rpctimeout=15                           \n\
+rpcclienttimeout=15                     \n" > /opt/blockchain/config/litecoin.conf
 
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 
 # Port, RPC, Test Port, Test RPC
-EXPOSE 41412 41414 41474 41419
+EXPOSE 9333 9332 19333 19332
 
-CMD ["blocknetdxd", "-daemon=0", "-server=0"]
+CMD ["litecoind", "-daemon=0"]
