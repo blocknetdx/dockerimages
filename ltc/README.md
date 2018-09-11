@@ -18,7 +18,7 @@ Simple
 
 Run a simple litecoin node on port 9333:
 ```
-docker run -d --name=litecoin -p 9333:9333 blocknetdx/litecoin:0.14.2
+docker run -d --name=litecoin -p 9333:9333 blocknetdx/litecoin:latest
 ```
 
 
