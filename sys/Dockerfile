@@ -1,9 +1,9 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/syscoin3:3.0.4 .
+# docker build --build-arg cores=8 -t blocknetdx/syscoin3:3.1.3 .
 
 FROM ubuntu:xenial
 
-ARG cores=32
+ARG cores=1
 ENV ecores=$cores
 
 RUN apt update \
@@ -24,30 +24,20 @@ RUN add-apt-repository ppa:bitcoin/bitcoin \
      libdb4.8-dev libdb4.8++-dev libgmp-dev libminiupnpc-dev libzmq3-dev \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Build berkeleydb4.8
-RUN mkdir -p /tmp/berkeley \
-  && cd /tmp/berkeley \
-  && wget 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz' \
-  && [ "$(printf '12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef db-4.8.30.NC.tar.gz' | sha256sum -c)" = "db-4.8.30.NC.tar.gz: OK" ] || $(echo "Berkeley DB 4.8 sha256sum failed"; exit 1) \
-  && tar -xzvf db-4.8.30.NC.tar.gz \
-  && cd db-4.8.30.NC/build_unix/ \
-  && ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/tmp/berkeley \
-  && make install
-
 # Build source
 RUN mkdir -p /opt/syscoin \
   && mkdir -p /opt/blockchain/config \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.syscoincore \
   && cd /opt/syscoin \
-  && git clone --depth 1 --branch 3.0.4 https://github.com/syscoin/syscoin.git \
+  && git clone --depth 1 --branch 3.1.3.0 https://github.com/syscoin/syscoin.git \
   && cd /opt/syscoin/syscoin \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure LDFLAGS="-L/tmp/berkeley/lib/" CPPFLAGS="-I/tmp/berkeley/include/" --with-boot-libdir="/usr/local/lib" --without-gui --enable-hardening \
+  && ./configure --with-boot-libdir="/usr/local/lib" --without-gui --enable-hardening \
   && make -j$ecores \
   && make install \
-  && rm -rf /opt/syscoin/ /tmp/berkeley/*
+  && rm -rf /opt/syscoin/
 
 # Write default syscoin.conf (can be overridden on commandline)
 RUN echo "datadir=/opt/blockchain/data  \n\
