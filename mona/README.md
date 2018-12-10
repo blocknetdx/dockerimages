@@ -18,7 +18,7 @@ Simple
 
 Run a simple monacoin node on port 9401:
 ```
-docker run -d --name=monacoin -p 9401:9401 blocknetdx/monacoin:0.14.2
+docker run -d --name=monacoin -p 9401:9401 blocknetdx/monacoin:latest
 ```
 
 
