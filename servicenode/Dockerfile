@@ -2,7 +2,7 @@
 # docker build --build-arg cores=8 -t blocknetdx/servicenode:3.11.0 .
 FROM ubuntu:trusty
 
-ARG cores=4
+ARG cores=1
 ENV ecores=$cores
 
 RUN apt update \
