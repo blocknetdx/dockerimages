@@ -33,14 +33,11 @@ RUN mkdir -p /opt/crown \
   && mkdir crown \
   && git clone --depth 1 --branch v0.12.5.3 https://github.com/Crowndev/crown-core crown \
   && cd /opt/crown/crown/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/crown/crown/src/crownd /opt/blockchain/crownd \
+  && make install \
   && rm -rf /opt/crown/
 
 # Write default crown.conf (can be overridden on commandline)

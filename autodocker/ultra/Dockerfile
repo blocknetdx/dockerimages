@@ -33,14 +33,11 @@ RUN mkdir -p /opt/ultranatum \
   && mkdir ultranatum \
   && git clone --depth 1 --branch 1.1.0.2 https://github.com/ultranatum/ultranatum ultranatum \
   && cd /opt/ultranatum/ultranatum/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/ultranatum/ultranatum/src/ultranatumd /opt/blockchain/ultranatumd \
+  && make install \
   && rm -rf /opt/ultranatum/
 
 # Write default ultranatum.conf (can be overridden on commandline)

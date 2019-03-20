@@ -33,14 +33,11 @@ RUN mkdir -p /opt/lbrycrd \
   && mkdir lbrycrd \
   && git clone --depth 1 --branch v0.12.3.1 https://github.com/lbryio/lbrycrd lbrycrd \
   && cd /opt/lbrycrd/lbrycrd/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/lbrycrd/lbrycrd/src/lbrycrdd /opt/blockchain/lbrycrdd \
+  && make install \
   && rm -rf /opt/lbrycrd/
 
 # Write default lbrycrd.conf (can be overridden on commandline)

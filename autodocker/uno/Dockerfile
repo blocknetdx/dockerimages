@@ -33,14 +33,11 @@ RUN mkdir -p /opt/unobtanium \
   && mkdir unobtanium \
   && git clone --depth 1 --branch v0.10.4.0 https://github.com/unobtanium-official/Unobtanium unobtanium \
   && cd /opt/unobtanium/unobtanium/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/unobtanium/unobtanium/src/unobtaniumd /opt/blockchain/unobtaniumd \
+  && make install \
   && rm -rf /opt/unobtanium/
 
 # Write default unobtanium.conf (can be overridden on commandline)

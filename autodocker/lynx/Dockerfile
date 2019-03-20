@@ -33,14 +33,11 @@ RUN mkdir -p /opt/lynx \
   && mkdir lynx \
   && git clone --depth 1 --branch v0.16.3.4 https://github.com/doh9Xiet7weesh9va9th/lynx lynx \
   && cd /opt/lynx/lynx/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/lynx/lynx/src/lynxd /opt/blockchain/lynxd \
+  && make install \
   && rm -rf /opt/lynx/
 
 # Write default lynx.conf (can be overridden on commandline)

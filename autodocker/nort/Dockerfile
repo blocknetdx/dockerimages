@@ -33,14 +33,11 @@ RUN mkdir -p /opt/northern \
   && mkdir northern \
   && git clone --depth 1 --branch 2.4.0 https://github.com/zabtc/Northern northern \
   && cd /opt/northern/northern/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/northern/northern/src/northernd /opt/blockchain/northernd \
+  && make install \
   && rm -rf /opt/northern/
 
 # Write default northern.conf (can be overridden on commandline)

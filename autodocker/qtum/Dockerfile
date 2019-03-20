@@ -33,14 +33,11 @@ RUN mkdir -p /opt/qtum \
   && mkdir qtum \
   && git clone --depth 1 --branch mainnet-ignition-v0.17.1 https://github.com/qtumproject/qtum qtum \
   && cd /opt/qtum/qtum/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/qtum/qtum/src/qtumd /opt/blockchain/qtumd \
+  && make install \
   && rm -rf /opt/qtum/
 
 # Write default qtum.conf (can be overridden on commandline)

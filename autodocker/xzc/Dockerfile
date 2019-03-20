@@ -33,14 +33,11 @@ RUN mkdir -p /opt/zcoin \
   && mkdir zcoin \
   && git clone --depth 1 --branch v0.13.7.7 https://github.com/zcoinofficial/zcoin zcoin \
   && cd /opt/zcoin/zcoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/zcoin/zcoin/src/zcoind /opt/blockchain/zcoind \
+  && make install \
   && rm -rf /opt/zcoin/
 
 # Write default zcoin.conf (can be overridden on commandline)

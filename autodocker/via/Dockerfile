@@ -33,14 +33,11 @@ RUN mkdir -p /opt/viacoin \
   && mkdir viacoin \
   && git clone --depth 1 --branch v0.15.2 https://github.com/viacoin/viacoin viacoin \
   && cd /opt/viacoin/viacoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/viacoin/viacoin/src/viacoind /opt/blockchain/viacoind \
+  && make install \
   && rm -rf /opt/viacoin/
 
 # Write default viacoin.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/vitae \
   && mkdir vitae \
   && git clone --depth 1 --branch 4.3.0 https://github.com/VitaeTeam/Vitae vitae \
   && cd /opt/vitae/vitae/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/vitae/vitae/src/vitaed /opt/blockchain/vitaed \
+  && make install \
   && rm -rf /opt/vitae/
 
 # Write default vitae.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/gobyte \
   && mkdir gobyte \
   && git clone --depth 1 --branch v0.12.2.4 https://github.com/gobytecoin/gobyte gobyte \
   && cd /opt/gobyte/gobyte/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/gobyte/gobyte/src/gobyted /opt/blockchain/gobyted \
+  && make install \
   && rm -rf /opt/gobyte/
 
 # Write default gobyte.conf (can be overridden on commandline)

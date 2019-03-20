@@ -33,14 +33,11 @@ RUN mkdir -p /opt/wagerr \
   && mkdir wagerr \
   && git clone --depth 1 --branch v2.0.2 https://github.com/wagerr/wagerr wagerr \
   && cd /opt/wagerr/wagerr/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/wagerr/wagerr/src/wagerrd /opt/blockchain/wagerrd \
+  && make install \
   && rm -rf /opt/wagerr/
 
 # Write default wagerr.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/pivx \
   && mkdir pivx \
   && git clone --depth 1 --branch v3.1.1 https://github.com/PIVX-Project/PIVX pivx \
   && cd /opt/pivx/pivx/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/pivx/pivx/src/pivxd /opt/blockchain/pivxd \
+  && make install \
   && rm -rf /opt/pivx/
 
 # Write default pivx.conf (can be overridden on commandline)

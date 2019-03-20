@@ -33,14 +33,11 @@ RUN mkdir -p /opt/mktcoin \
   && mkdir mktcoin \
   && git clone --depth 1 --branch 0.14.3.1 https://github.com/Mktcoin-official/Mktcoin mktcoin \
   && cd /opt/mktcoin/mktcoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/mktcoin/mktcoin/src/mktcoind /opt/blockchain/mktcoind \
+  && make install \
   && rm -rf /opt/mktcoin/
 
 # Write default mktcoin.conf (can be overridden on commandline)

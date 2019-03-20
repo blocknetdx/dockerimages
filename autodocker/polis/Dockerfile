@@ -33,14 +33,11 @@ RUN mkdir -p /opt/polis \
   && mkdir polis \
   && git clone --depth 1 --branch v1.4.8.1 https://github.com/polispay/polis polis \
   && cd /opt/polis/polis/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/polis/polis/src/polisd /opt/blockchain/polisd \
+  && make install \
   && rm -rf /opt/polis/
 
 # Write default polis.conf (can be overridden on commandline)

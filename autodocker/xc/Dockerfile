@@ -33,14 +33,11 @@ RUN mkdir -p /opt/xcurrency \
   && mkdir xcurrency \
   && git clone --depth 1 --branch v3.0.05 https://github.com/XCurrency/xc xcurrency \
   && cd /opt/xcurrency/xcurrency/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/xcurrency/xcurrency/src/xcurrencyd /opt/blockchain/xcurrencyd \
+  && make install \
   && rm -rf /opt/xcurrency/
 
 # Write default xcurrency.conf (can be overridden on commandline)

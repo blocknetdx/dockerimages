@@ -33,14 +33,11 @@ RUN mkdir -p /opt/htmlcoin \
   && mkdir htmlcoin \
   && git clone --depth 1 --branch v2.3.0 https://github.com/HTMLCOIN/HTMLCOIN htmlcoin \
   && cd /opt/htmlcoin/htmlcoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/htmlcoin/htmlcoin/src/htmlcoind /opt/blockchain/htmlcoind \
+  && make install \
   && rm -rf /opt/htmlcoin/
 
 # Write default htmlcoin.conf (can be overridden on commandline)

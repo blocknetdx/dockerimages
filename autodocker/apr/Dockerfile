@@ -33,14 +33,11 @@ RUN mkdir -p /opt/aprcoin \
   && mkdir aprcoin \
   && git clone --depth 1 --branch V3.0 https://github.com/APRCoin/zenith-repository aprcoin \
   && cd /opt/aprcoin/aprcoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/aprcoin/aprcoin/src/aprcoind /opt/blockchain/aprcoind \
+  && make install \
   && rm -rf /opt/aprcoin/
 
 # Write default aprcoin.conf (can be overridden on commandline)

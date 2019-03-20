@@ -33,14 +33,11 @@ RUN mkdir -p /opt/nix \
   && mkdir nix \
   && git clone --depth 1 --branch v2.2.0.1 https://github.com/NixPlatform/NixCore nix \
   && cd /opt/nix/nix/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/nix/nix/src/nixd /opt/blockchain/nixd \
+  && make install \
   && rm -rf /opt/nix/
 
 # Write default nix.conf (can be overridden on commandline)

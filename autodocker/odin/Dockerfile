@@ -33,14 +33,11 @@ RUN mkdir -p /opt/odin \
   && mkdir odin \
   && git clone --depth 1 --branch v1.4.2 https://github.com/odinblockchain/Odin odin \
   && cd /opt/odin/odin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/odin/odin/src/odind /opt/blockchain/odind \
+  && make install \
   && rm -rf /opt/odin/
 
 # Write default odin.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/dash \
   && mkdir dash \
   && git clone --depth 1 --branch v0.13.0.0 https://github.com/dashpay/dash dash \
   && cd /opt/dash/dash/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/dash/dash/src/dashd /opt/blockchain/dashd \
+  && make install \
   && rm -rf /opt/dash/
 
 # Write default dash.conf (can be overridden on commandline)

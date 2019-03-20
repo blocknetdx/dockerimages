@@ -33,14 +33,11 @@ RUN mkdir -p /opt/fujicoin \
   && mkdir fujicoin \
   && git clone --depth 1 --branch fujicoin-v0.16.3 https://github.com/fujicoin/fujicoin fujicoin \
   && cd /opt/fujicoin/fujicoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/fujicoin/fujicoin/src/fujicoind /opt/blockchain/fujicoind \
+  && make install \
   && rm -rf /opt/fujicoin/
 
 # Write default fujicoin.conf (can be overridden on commandline)

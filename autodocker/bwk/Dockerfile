@@ -33,14 +33,11 @@ RUN mkdir -p /opt/bulwark \
   && mkdir bulwark \
   && git clone --depth 1 --branch 2.1.1 https://github.com/bulwark-crypto/Bulwark bulwark \
   && cd /opt/bulwark/bulwark/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/bulwark/bulwark/src/bulwarkd /opt/blockchain/bulwarkd \
+  && make install \
   && rm -rf /opt/bulwark/
 
 # Write default bulwark.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/xsn \
   && mkdir xsn \
   && git clone --depth 1 --branch v1.0.9 https://github.com/X9Developers/XSN xsn \
   && cd /opt/xsn/xsn/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/xsn/xsn/src/xsnd /opt/blockchain/xsnd \
+  && make install \
   && rm -rf /opt/xsn/
 
 # Write default xsn.conf (can be overridden on commandline)

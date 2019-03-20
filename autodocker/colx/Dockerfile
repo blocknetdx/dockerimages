@@ -33,14 +33,11 @@ RUN mkdir -p /opt/colossusXT \
   && mkdir colossusXT \
   && git clone --depth 1 --branch v1.2.0 https://github.com/ColossusCoinXT/ColossusCoinXT colossusXT \
   && cd /opt/colossusXT/colossusXT/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/colossusXT/colossusXT/src/colossusXTd /opt/blockchain/colossusXTd \
+  && make install \
   && rm -rf /opt/colossusXT/
 
 # Write default colossusXT.conf (can be overridden on commandline)

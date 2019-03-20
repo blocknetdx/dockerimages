@@ -33,14 +33,11 @@ RUN mkdir -p /opt/send \
   && mkdir send \
   && git clone --depth 1 --branch v1.2.0.0 https://github.com/SocialSend/SocialSend send \
   && cd /opt/send/send/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/send/send/src/sendd /opt/blockchain/sendd \
+  && make install \
   && rm -rf /opt/send/
 
 # Write default send.conf (can be overridden on commandline)

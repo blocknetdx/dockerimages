@@ -33,14 +33,11 @@ RUN mkdir -p /opt/crave \
   && mkdir crave \
   && git clone --depth 1 --branch v2.5.1 https://github.com/Crave-Project/Crave-NG crave \
   && cd /opt/crave/crave/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/crave/crave/src/craved /opt/blockchain/craved \
+  && make install \
   && rm -rf /opt/crave/
 
 # Write default crave.conf (can be overridden on commandline)

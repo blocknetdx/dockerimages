@@ -33,14 +33,11 @@ RUN mkdir -p /opt/bitcoingreen \
   && mkdir bitcoingreen \
   && git clone --depth 1 --branch v1.3.0 https://github.com/bitcoingreen/bitcoingreen bitcoingreen \
   && cd /opt/bitcoingreen/bitcoingreen/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/bitcoingreen/bitcoingreen/src/bitcoingreend /opt/blockchain/bitcoingreend \
+  && make install \
   && rm -rf /opt/bitcoingreen/
 
 # Write default bitcoingreen.conf (can be overridden on commandline)

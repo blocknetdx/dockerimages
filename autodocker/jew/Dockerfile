@@ -33,14 +33,11 @@ RUN mkdir -p /opt/shekel \
   && mkdir shekel \
   && git clone --depth 1 --branch 1.4.0 https://github.com/shekeltechnologies/JewNew shekel \
   && cd /opt/shekel/shekel/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/shekel/shekel/src/shekeld /opt/blockchain/shekeld \
+  && make install \
   && rm -rf /opt/shekel/
 
 # Write default shekel.conf (can be overridden on commandline)

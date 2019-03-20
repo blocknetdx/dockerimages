@@ -33,14 +33,11 @@ RUN mkdir -p /opt/banq \
   && mkdir banq \
   && git clone --depth 1 --branch v1.0 https://github.com/banq-platform/banq banq \
   && cd /opt/banq/banq/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/banq/banq/src/banqd /opt/blockchain/banqd \
+  && make install \
   && rm -rf /opt/banq/
 
 # Write default banq.conf (can be overridden on commandline)

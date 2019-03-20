@@ -33,14 +33,11 @@ RUN mkdir -p /opt/desire \
   && mkdir desire \
   && git clone --depth 1 --branch Desire-v.0.12.2.2 https://github.com/lazyboozer/Desire desire \
   && cd /opt/desire/desire/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/desire/desire/src/desired /opt/blockchain/desired \
+  && make install \
   && rm -rf /opt/desire/
 
 # Write default desire.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/kreds \
   && mkdir kreds \
   && git clone --depth 1 --branch v1.0.0.6 https://github.com/KredsBlockchain/kreds-core kreds \
   && cd /opt/kreds/kreds/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/kreds/kreds/src/kredsd /opt/blockchain/kredsd \
+  && make install \
   && rm -rf /opt/kreds/
 
 # Write default kreds.conf (can be overridden on commandline)

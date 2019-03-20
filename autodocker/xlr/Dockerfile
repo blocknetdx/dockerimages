@@ -33,14 +33,11 @@ RUN mkdir -p /opt/solaris \
   && mkdir solaris \
   && git clone --depth 1 --branch v2.8.1.0 https://github.com/Solaris-Project/Solaris solaris \
   && cd /opt/solaris/solaris/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/solaris/solaris/src/solarisd /opt/blockchain/solarisd \
+  && make install \
   && rm -rf /opt/solaris/
 
 # Write default solaris.conf (can be overridden on commandline)

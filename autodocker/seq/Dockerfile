@@ -33,14 +33,11 @@ RUN mkdir -p /opt/sequence \
   && mkdir sequence \
   && git clone --depth 1 --branch v1.3.0.0 https://github.com/duality-solutions/Sequence sequence \
   && cd /opt/sequence/sequence/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/sequence/sequence/src/sequenced /opt/blockchain/sequenced \
+  && make install \
   && rm -rf /opt/sequence/
 
 # Write default sequence.conf (can be overridden on commandline)

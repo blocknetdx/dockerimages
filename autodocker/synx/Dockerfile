@@ -33,14 +33,11 @@ RUN mkdir -p /opt/syndicate \
   && mkdir syndicate \
   && git clone --depth 1 --branch x2.1.0 https://github.com/SyndicateLtd/SyndicateQT syndicate \
   && cd /opt/syndicate/syndicate/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/syndicate/syndicate/src/syndicated /opt/blockchain/syndicated \
+  && make install \
   && rm -rf /opt/syndicate/
 
 # Write default syndicate.conf (can be overridden on commandline)

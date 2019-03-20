@@ -33,14 +33,11 @@ RUN mkdir -p /opt/civitas \
   && mkdir civitas \
   && git clone --depth 1 --branch v1.2.2 https://github.com/eastcoastcrypto/Civitas civitas \
   && cd /opt/civitas/civitas/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/civitas/civitas/src/civitasd /opt/blockchain/civitasd \
+  && make install \
   && rm -rf /opt/civitas/
 
 # Write default civitas.conf (can be overridden on commandline)

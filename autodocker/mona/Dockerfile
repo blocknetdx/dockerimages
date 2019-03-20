@@ -33,14 +33,11 @@ RUN mkdir -p /opt/monacoin \
   && mkdir monacoin \
   && git clone --depth 1 --branch monacoin-0.16.3 https://github.com/monacoinproject/monacoin monacoin \
   && cd /opt/monacoin/monacoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/monacoin/monacoin/src/monacoind /opt/blockchain/monacoind \
+  && make install \
   && rm -rf /opt/monacoin/
 
 # Write default monacoin.conf (can be overridden on commandline)

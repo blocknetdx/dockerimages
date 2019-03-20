@@ -33,14 +33,11 @@ RUN mkdir -p /opt/galactrum \
   && mkdir galactrum \
   && git clone --depth 1 --branch v1.2.1 https://github.com/galactrum/galactrum galactrum \
   && cd /opt/galactrum/galactrum/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/galactrum/galactrum/src/galactrumd /opt/blockchain/galactrumd \
+  && make install \
   && rm -rf /opt/galactrum/
 
 # Write default galactrum.conf (can be overridden on commandline)

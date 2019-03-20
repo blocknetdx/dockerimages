@@ -33,14 +33,11 @@ RUN mkdir -p /opt/sparks \
   && mkdir sparks \
   && git clone --depth 1 --branch v0.12.3.2 https://github.com/SparksReborn/sparkspay sparks \
   && cd /opt/sparks/sparks/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/sparks/sparks/src/sparksd /opt/blockchain/sparksd \
+  && make install \
   && rm -rf /opt/sparks/
 
 # Write default sparks.conf (can be overridden on commandline)

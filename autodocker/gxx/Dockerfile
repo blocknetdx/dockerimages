@@ -33,14 +33,11 @@ RUN mkdir -p /opt/GravityCoin \
   && mkdir GravityCoin \
   && git clone --depth 1 --branch 4.0.5.0 https://github.com/GravityCoinOfficial/GravityCoin GravityCoin \
   && cd /opt/GravityCoin/GravityCoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/GravityCoin/GravityCoin/src/GravityCoind /opt/blockchain/GravityCoind \
+  && make install \
   && rm -rf /opt/GravityCoin/
 
 # Write default GravityCoin.conf (can be overridden on commandline)

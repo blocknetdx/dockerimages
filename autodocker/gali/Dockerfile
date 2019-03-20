@@ -33,14 +33,11 @@ RUN mkdir -p /opt/galilel \
   && mkdir galilel \
   && git clone --depth 1 --branch v3.2.0 https://github.com/Galilel-Project/galilel galilel \
   && cd /opt/galilel/galilel/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/galilel/galilel/src/galileld /opt/blockchain/galileld \
+  && make install \
   && rm -rf /opt/galilel/
 
 # Write default galilel.conf (can be overridden on commandline)

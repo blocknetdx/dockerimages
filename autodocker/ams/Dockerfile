@@ -33,14 +33,11 @@ RUN mkdir -p /opt/amsterdamcoin \
   && mkdir amsterdamcoin \
   && git clone --depth 1 --branch v4.6.0.0 https://github.com/CoinProjects/AmsterdamCoin-v4 amsterdamcoin \
   && cd /opt/amsterdamcoin/amsterdamcoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/amsterdamcoin/amsterdamcoin/src/amsterdamcoind /opt/blockchain/amsterdamcoind \
+  && make install \
   && rm -rf /opt/amsterdamcoin/
 
 # Write default amsterdamcoin.conf (can be overridden on commandline)

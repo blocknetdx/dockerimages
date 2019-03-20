@@ -33,14 +33,11 @@ RUN mkdir -p /opt/sucr \
   && mkdir sucr \
   && git clone --depth 1 --branch v0.12.2.1 https://github.com/sucremoneda/SucreCore sucr \
   && cd /opt/sucr/sucr/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/sucr/sucr/src/sucrd /opt/blockchain/sucrd \
+  && make install \
   && rm -rf /opt/sucr/
 
 # Write default sucr.conf (can be overridden on commandline)

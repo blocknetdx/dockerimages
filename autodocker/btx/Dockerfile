@@ -33,14 +33,11 @@ RUN mkdir -p /opt/bitcore \
   && mkdir bitcore \
   && git clone --depth 1 --branch 0.15.2.0.0 https://github.com/LIMXTEC/BitCore bitcore \
   && cd /opt/bitcore/bitcore/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/bitcore/bitcore/src/bitcored /opt/blockchain/bitcored \
+  && make install \
   && rm -rf /opt/bitcore/
 
 # Write default bitcore.conf (can be overridden on commandline)

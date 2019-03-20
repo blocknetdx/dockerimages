@@ -33,14 +33,11 @@ RUN mkdir -p /opt/tribe \
   && mkdir tribe \
   && git clone --depth 1 --branch v1.0.0 https://github.com/TribeCrypto/tribe tribe \
   && cd /opt/tribe/tribe/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/tribe/tribe/src/tribed /opt/blockchain/tribed \
+  && make install \
   && rm -rf /opt/tribe/
 
 # Write default tribe.conf (can be overridden on commandline)

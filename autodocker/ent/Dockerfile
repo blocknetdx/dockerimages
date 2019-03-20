@@ -33,14 +33,11 @@ RUN mkdir -p /opt/eternity \
   && mkdir eternity \
   && git clone --depth 1 --branch v0.12.1.7 https://github.com/eternity-group/eternity eternity \
   && cd /opt/eternity/eternity/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/eternity/eternity/src/eternityd /opt/blockchain/eternityd \
+  && make install \
   && rm -rf /opt/eternity/
 
 # Write default eternity.conf (can be overridden on commandline)

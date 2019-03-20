@@ -33,14 +33,11 @@ RUN mkdir -p /opt/vsync \
   && mkdir vsync \
   && git clone --depth 1 --branch v3.8.5.0 https://github.com/VsyncCrypto/VSX vsync \
   && cd /opt/vsync/vsync/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/vsync/vsync/src/vsyncd /opt/blockchain/vsyncd \
+  && make install \
   && rm -rf /opt/vsync/
 
 # Write default vsync.conf (can be overridden on commandline)

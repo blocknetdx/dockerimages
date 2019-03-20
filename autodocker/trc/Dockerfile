@@ -33,14 +33,11 @@ RUN mkdir -p /opt/terracoin \
   && mkdir terracoin \
   && git clone --depth 1 --branch v0.12.2.4 https://github.com/terracoin/terracoin terracoin \
   && cd /opt/terracoin/terracoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/terracoin/terracoin/src/terracoind /opt/blockchain/terracoind \
+  && make install \
   && rm -rf /opt/terracoin/
 
 # Write default terracoin.conf (can be overridden on commandline)

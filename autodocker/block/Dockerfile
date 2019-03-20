@@ -33,14 +33,11 @@ RUN mkdir -p /opt/blocknetdx \
   && mkdir blocknetdx \
   && git clone --depth 1 --branch v3.12.1-classic https://github.com/BlocknetDX/blocknet blocknetdx \
   && cd /opt/blocknetdx/blocknetdx/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/blocknetdx/blocknetdx/src/blocknetdxd /opt/blockchain/blocknetdxd \
+  && make install \
   && rm -rf /opt/blocknetdx/
 
 # Write default blocknetdx.conf (can be overridden on commandline)

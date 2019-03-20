@@ -33,14 +33,11 @@ RUN mkdir -p /opt/securecloud \
   && mkdir securecloud \
   && git clone --depth 1 --branch v2.4.3 https://github.com/securecloudnet/SecureCloud securecloud \
   && cd /opt/securecloud/securecloud/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/securecloud/securecloud/src/securecloudd /opt/blockchain/securecloudd \
+  && make install \
   && rm -rf /opt/securecloud/
 
 # Write default securecloud.conf (can be overridden on commandline)

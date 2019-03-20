@@ -33,14 +33,11 @@ RUN mkdir -p /opt/myriadcoin \
   && mkdir myriadcoin \
   && git clone --depth 1 --branch v0.16.3.0 https://github.com/myriadteam/myriadcoin myriadcoin \
   && cd /opt/myriadcoin/myriadcoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/myriadcoin/myriadcoin/src/myriadcoind /opt/blockchain/myriadcoind \
+  && make install \
   && rm -rf /opt/myriadcoin/
 
 # Write default myriadcoin.conf (can be overridden on commandline)

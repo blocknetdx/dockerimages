@@ -33,14 +33,11 @@ RUN mkdir -p /opt/australiacash \
   && mkdir australiacash \
   && git clone --depth 1 --branch v0.17.4.0 https://github.com/AustraliaCash/AustraliaCash-Core australiacash \
   && cd /opt/australiacash/australiacash/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/australiacash/australiacash/src/australiacashd /opt/blockchain/australiacashd \
+  && make install \
   && rm -rf /opt/australiacash/
 
 # Write default australiacash.conf (can be overridden on commandline)

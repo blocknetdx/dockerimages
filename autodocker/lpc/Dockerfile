@@ -33,14 +33,11 @@ RUN mkdir -p /opt/lightpaycoin \
   && mkdir lightpaycoin \
   && git clone --depth 1 --branch v1.0.1.0 https://github.com/lpcproject/LightPayCoin lightpaycoin \
   && cd /opt/lightpaycoin/lightpaycoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/lightpaycoin/lightpaycoin/src/lightpaycoind /opt/blockchain/lightpaycoind \
+  && make install \
   && rm -rf /opt/lightpaycoin/
 
 # Write default lightpaycoin.conf (can be overridden on commandline)

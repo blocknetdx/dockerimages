@@ -33,14 +33,11 @@ RUN mkdir -p /opt/ccbc \
   && mkdir ccbc \
   && git clone --depth 1 --branch v1.2.0.1 https://github.com/CryptoCashBack-Hub/CCBC ccbc \
   && cd /opt/ccbc/ccbc/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/ccbc/ccbc/src/ccbcd /opt/blockchain/ccbcd \
+  && make install \
   && rm -rf /opt/ccbc/
 
 # Write default ccbc.conf (can be overridden on commandline)

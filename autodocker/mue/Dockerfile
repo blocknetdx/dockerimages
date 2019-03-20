@@ -33,14 +33,11 @@ RUN mkdir -p /opt/monetaryunit \
   && mkdir monetaryunit \
   && git clone --depth 1 --branch v2.1.2 https://github.com/muecoin/MUE monetaryunit \
   && cd /opt/monetaryunit/monetaryunit/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/monetaryunit/monetaryunit/src/monetaryunitd /opt/blockchain/monetaryunitd \
+  && make install \
   && rm -rf /opt/monetaryunit/
 
 # Write default monetaryunit.conf (can be overridden on commandline)

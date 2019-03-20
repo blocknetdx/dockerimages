@@ -33,14 +33,11 @@ RUN mkdir -p /opt/einsteinium \
   && mkdir einsteinium \
   && git clone --depth 1 --branch v0.13.5.0 https://github.com/emc2foundation/einsteinium einsteinium \
   && cd /opt/einsteinium/einsteinium/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/einsteinium/einsteinium/src/einsteiniumd /opt/blockchain/einsteiniumd \
+  && make install \
   && rm -rf /opt/einsteinium/
 
 # Write default einsteinium.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/syscoin \
   && mkdir syscoin \
   && git clone --depth 1 --branch 3.2.0.0 https://github.com/syscoin/syscoin syscoin \
   && cd /opt/syscoin/syscoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/syscoin/syscoin/src/syscoind /opt/blockchain/syscoind \
+  && make install \
   && rm -rf /opt/syscoin/
 
 # Write default syscoin.conf (can be overridden on commandline)

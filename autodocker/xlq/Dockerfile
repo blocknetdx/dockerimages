@@ -33,14 +33,11 @@ RUN mkdir -p /opt/alqo \
   && mkdir alqo \
   && git clone --depth 1 --branch v4.2 https://github.com/ALQOCRYPTO/ALQO alqo \
   && cd /opt/alqo/alqo/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/alqo/alqo/src/alqod /opt/blockchain/alqod \
+  && make install \
   && rm -rf /opt/alqo/
 
 # Write default alqo.conf (can be overridden on commandline)

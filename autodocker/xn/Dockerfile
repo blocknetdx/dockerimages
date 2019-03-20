@@ -33,14 +33,11 @@ RUN mkdir -p /opt/nodium \
   && mkdir nodium \
   && git clone --depth 1 --branch 3.0.6 https://github.com/nodiumproject/zNodium nodium \
   && cd /opt/nodium/nodium/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/nodium/nodium/src/nodiumd /opt/blockchain/nodiumd \
+  && make install \
   && rm -rf /opt/nodium/
 
 # Write default nodium.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/nyx \
   && mkdir nyx \
   && git clone --depth 1 --branch v2.0.0.0 https://github.com/nyxpay/nyx nyx \
   && cd /opt/nyx/nyx/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/nyx/nyx/src/nyxd /opt/blockchain/nyxd \
+  && make install \
   && rm -rf /opt/nyx/
 
 # Write default nyx.conf (can be overridden on commandline)

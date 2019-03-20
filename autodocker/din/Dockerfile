@@ -33,14 +33,11 @@ RUN mkdir -p /opt/dinero \
   && mkdir dinero \
   && git clone --depth 1 --branch v1.0.1.1 https://github.com/dinerocoin/dinero dinero \
   && cd /opt/dinero/dinero/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/dinero/dinero/src/dinerod /opt/blockchain/dinerod \
+  && make install \
   && rm -rf /opt/dinero/
 
 # Write default dinero.conf (can be overridden on commandline)

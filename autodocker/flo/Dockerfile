@@ -33,14 +33,11 @@ RUN mkdir -p /opt/flo \
   && mkdir flo \
   && git clone --depth 1 --branch v0.15.1.1 https://github.com/floblockchain/flo flo \
   && cd /opt/flo/flo/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/flo/flo/src/flod /opt/blockchain/flod \
+  && make install \
   && rm -rf /opt/flo/
 
 # Write default flo.conf (can be overridden on commandline)

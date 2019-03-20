@@ -33,14 +33,11 @@ RUN mkdir -p /opt/ixcoin \
   && mkdir ixcoin \
   && git clone --depth 1 --branch v0.14.1 https://github.com/IXCore/IXCoin ixcoin \
   && cd /opt/ixcoin/ixcoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/ixcoin/ixcoin/src/ixcoind /opt/blockchain/ixcoind \
+  && make install \
   && rm -rf /opt/ixcoin/
 
 # Write default ixcoin.conf (can be overridden on commandline)

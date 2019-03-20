@@ -33,14 +33,11 @@ RUN mkdir -p /opt/litecoin \
   && mkdir litecoin \
   && git clone --depth 1 --branch v0.16.3 https://github.com/litecoin-project/litecoin litecoin \
   && cd /opt/litecoin/litecoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/litecoin/litecoin/src/litecoind /opt/blockchain/litecoind \
+  && make install \
   && rm -rf /opt/litecoin/
 
 # Write default litecoin.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/vertcoin \
   && mkdir vertcoin \
   && git clone --depth 1 --branch 0.14.0 https://github.com/vertcoin-project/vertcoin-core vertcoin \
   && cd /opt/vertcoin/vertcoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/vertcoin/vertcoin/src/vertcoind /opt/blockchain/vertcoind \
+  && make install \
   && rm -rf /opt/vertcoin/
 
 # Write default vertcoin.conf (can be overridden on commandline)

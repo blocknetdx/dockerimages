@@ -33,14 +33,11 @@ RUN mkdir -p /opt/phore \
   && mkdir phore \
   && git clone --depth 1 --branch v1.6.0 https://github.com/phoreproject/Phore phore \
   && cd /opt/phore/phore/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/phore/phore/src/phored /opt/blockchain/phored \
+  && make install \
   && rm -rf /opt/phore/
 
 # Write default phore.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/faircoin \
   && mkdir faircoin \
   && git clone --depth 1 --branch v2.0.1 https://github.com/faircoin/faircoin faircoin \
   && cd /opt/faircoin/faircoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/faircoin/faircoin/src/faircoind /opt/blockchain/faircoind \
+  && make install \
   && rm -rf /opt/faircoin/
 
 # Write default faircoin.conf (can be overridden on commandline)

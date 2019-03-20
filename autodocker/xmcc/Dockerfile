@@ -33,14 +33,11 @@ RUN mkdir -p /opt/monoeci \
   && mkdir monoeci \
   && git clone --depth 1 --branch v0.12.2.3 https://github.com/monacocoin-net/monoeci-core monoeci \
   && cd /opt/monoeci/monoeci/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/monoeci/monoeci/src/monoecid /opt/blockchain/monoecid \
+  && make install \
   && rm -rf /opt/monoeci/
 
 # Write default monoeci.conf (can be overridden on commandline)

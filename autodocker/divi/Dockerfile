@@ -33,14 +33,11 @@ RUN mkdir -p /opt/divi \
   && mkdir divi \
   && git clone --depth 1 --branch DESK-1.2.2 https://github.com/Divicoin/Divi divi \
   && cd /opt/divi/divi/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/divi/divi/src/divid /opt/blockchain/divid \
+  && make install \
   && rm -rf /opt/divi/
 
 # Write default divi.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/blast \
   && mkdir blast \
   && git clone --depth 1 --branch v1.3.0.0 https://github.com/blastdev/blast-core blast \
   && cd /opt/blast/blast/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/blast/blast/src/blastd /opt/blockchain/blastd \
+  && make install \
   && rm -rf /opt/blast/
 
 # Write default blast.conf (can be overridden on commandline)

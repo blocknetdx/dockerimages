@@ -33,14 +33,11 @@ RUN mkdir -p /opt/straks \
   && mkdir straks \
   && git clone --depth 1 --branch 1.14.7.4 https://github.com/straks/straks straks \
   && cd /opt/straks/straks/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/straks/straks/src/straksd /opt/blockchain/straksd \
+  && make install \
   && rm -rf /opt/straks/
 
 # Write default straks.conf (can be overridden on commandline)

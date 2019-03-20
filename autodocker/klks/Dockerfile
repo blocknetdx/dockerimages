@@ -33,14 +33,11 @@ RUN mkdir -p /opt/klks \
   && mkdir klks \
   && git clone --depth 1 --branch v2.8.0 https://github.com/kalkulusteam/klks klks \
   && cd /opt/klks/klks/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/klks/klks/src/klksd /opt/blockchain/klksd \
+  && make install \
   && rm -rf /opt/klks/
 
 # Write default klks.conf (can be overridden on commandline)

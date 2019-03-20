@@ -33,14 +33,11 @@ RUN mkdir -p /opt/namecoin \
   && mkdir namecoin \
   && git clone --depth 1 --branch nc0.13.99-name-tab-beta1 https://github.com/namecoin/namecoin-core namecoin \
   && cd /opt/namecoin/namecoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/namecoin/namecoin/src/namecoind /opt/blockchain/namecoind \
+  && make install \
   && rm -rf /opt/namecoin/
 
 # Write default namecoin.conf (can be overridden on commandline)

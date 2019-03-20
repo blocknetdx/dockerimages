@@ -33,14 +33,11 @@ RUN mkdir -p /opt/innova \
   && mkdir innova \
   && git clone --depth 1 --branch 12.1.10 https://github.com/innovacoin/innova innova \
   && cd /opt/innova/innova/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/innova/innova/src/innovad /opt/blockchain/innovad \
+  && make install \
   && rm -rf /opt/innova/
 
 # Write default innova.conf (can be overridden on commandline)

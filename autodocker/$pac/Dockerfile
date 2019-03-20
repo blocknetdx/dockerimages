@@ -33,14 +33,11 @@ RUN mkdir -p /opt/paccoin \
   && mkdir paccoin \
   && git clone --depth 1 --branch v0.12.5.1 https://github.com/PACCommunity/PAC paccoin \
   && cd /opt/paccoin/paccoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/paccoin/paccoin/src/paccoind /opt/blockchain/paccoind \
+  && make install \
   && rm -rf /opt/paccoin/
 
 # Write default paccoin.conf (can be overridden on commandline)

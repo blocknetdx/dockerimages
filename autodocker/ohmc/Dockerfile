@@ -33,14 +33,11 @@ RUN mkdir -p /opt/ohmc \
   && mkdir ohmc \
   && git clone --depth 1 --branch 2.3.2.1 https://github.com/theohmproject/OhmCoin ohmc \
   && cd /opt/ohmc/ohmc/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/ohmc/ohmc/src/ohmcd /opt/blockchain/ohmcd \
+  && make install \
   && rm -rf /opt/ohmc/
 
 # Write default ohmc.conf (can be overridden on commandline)

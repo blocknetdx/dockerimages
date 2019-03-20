@@ -33,14 +33,11 @@ RUN mkdir -p /opt/aeriumx \
   && mkdir aeriumx \
   && git clone --depth 1 --branch v2.2 https://github.com/aeriumcoin/AeriumX aeriumx \
   && cd /opt/aeriumx/aeriumx/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/aeriumx/aeriumx/src/aeriumxd /opt/blockchain/aeriumxd \
+  && make install \
   && rm -rf /opt/aeriumx/
 
 # Write default aeriumx.conf (can be overridden on commandline)

@@ -33,14 +33,11 @@ RUN mkdir -p /opt/carebitcoin \
   && mkdir carebitcoin \
   && git clone --depth 1 --branch v4.0.0.0 https://github.com/carebitcoin/carebitcoin carebitcoin \
   && cd /opt/carebitcoin/carebitcoin/ \
-  && cd depends \
-  && make -j$ecores NO_QT=1 \
-  && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure --with-gui=no --enable-hardening \
   && make -j$ecores \
-  && cp /opt/carebitcoin/carebitcoin/src/carebitcoind /opt/blockchain/carebitcoind \
+  && make install \
   && rm -rf /opt/carebitcoin/
 
 # Write default carebitcoin.conf (can be overridden on commandline)
