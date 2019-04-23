@@ -1,5 +1,5 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/servicenode:3.12.1 .
+# docker build --build-arg cores=8 -t blocknetdx/servicenode:3.13.0 .
 FROM ubuntu:bionic
 
 ARG cores=1
@@ -28,14 +28,14 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
      g++-8-multilib gcc-8-multilib binutils-gold \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV PROJECTDIR=/opt/blocknetdx/BlockDX
+ENV PROJECTDIR=/opt/blocknetdx/blocknet
 ENV BASEPREFIX=$PROJECTDIR/depends
 ENV HOST=x86_64-pc-linux-gnu
 
 # Copy source files
 RUN mkdir -p /opt/blocknetdx \
   && cd /opt/blocknetdx \
-  && git clone --depth 1 --branch 3.12.1 https://github.com/BlocknetDX/BlockDX.git
+  && git clone --depth 1 --branch 3.13.0 https://github.com/BlocknetDX/blocknet.git
 
 # Build source
 RUN mkdir -p /opt/blockchain/config \
