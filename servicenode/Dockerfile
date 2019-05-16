@@ -1,5 +1,5 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/servicenode:3.13.0 .
+# docker build --build-arg cores=8 -t blocknetdx/servicenode:3.13.1 .
 FROM ubuntu:bionic
 
 ARG cores=1
@@ -35,7 +35,7 @@ ENV HOST=x86_64-pc-linux-gnu
 # Copy source files
 RUN mkdir -p /opt/blocknetdx \
   && cd /opt/blocknetdx \
-  && git clone --depth 1 --branch 3.13.0 https://github.com/BlocknetDX/blocknet.git
+  && git clone --depth 1 --branch 3.13.1 https://github.com/blocknetdx/blocknet.git
 
 # Build source
 RUN mkdir -p /opt/blockchain/config \
@@ -48,7 +48,7 @@ RUN mkdir -p /opt/blockchain/config \
   && ./autogen.sh \
   && CONFIG_SITE=$BASEPREFIX/$HOST/share/config.site ./configure CC=gcc-8 CXX=g++-8 CFLAGS='-Wno-deprecated' CXXFLAGS='-Wno-deprecated' --disable-ccache --disable-maintainer-mode --disable-dependency-tracking --without-gui --enable-hardening --prefix=/ \
   && echo "Building with cores: $ecores" \
-  && make CC=gcc-8 CXX=g++-8 -j$ecores \
+  && make -j$ecores \
   && make install
 
 # Write default blocknetdx.conf (can be overridden on commandline)
