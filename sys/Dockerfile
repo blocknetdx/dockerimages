@@ -1,5 +1,5 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/syscoin3:3.1.3 .
+# docker build --build-arg cores=8 -t blocknetdx/syscoin4:4.0.3 .
 
 FROM ubuntu:xenial
 
@@ -30,7 +30,7 @@ RUN mkdir -p /opt/syscoin \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.syscoincore \
   && cd /opt/syscoin \
-  && git clone --depth 1 --branch 3.1.3.0 https://github.com/syscoin/syscoin.git \
+  && git clone --depth 1 --branch v4.0.3 https://github.com/syscoin/syscoin.git \
   && cd /opt/syscoin/syscoin \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
@@ -50,7 +50,6 @@ rpcport=8370 # testnet: 18370           \n\
                                         \n\
 listen=1                                \n\
 server=1                                \n\
-maxconnections=16                       \n\
 logtimestamps=1                         \n\
 logips=1                                \n\
                                         \n\

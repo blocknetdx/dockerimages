@@ -1,12 +1,12 @@
-Official Blocknet Syscoin3 Images
+Official Blocknet Syscoin4 Images
 =================================
 
-These Syscoin docker images can be found on the docker hub: https://hub.docker.com/r/blocknetdx/syscoin3/
+These Syscoin docker images can be found on the docker hub: https://hub.docker.com/r/blocknetdx/syscoin4/
 
 Syscoin
 ========
 
-These Syscoin images are optimized for use with the Blocknet DX.
+These Syscoin images are optimized for use with Block DX (https://blocknet.co/block-dx/).
 
 **Note**
 
@@ -18,7 +18,7 @@ Simple
 
 Run a simple Syscoin node on port 8369:
 ```
-docker run -d --name=syscoin -p 8369:8369 blocknetdx/syscoin3:3.0.4
+docker run -d --name=syscoin -p 8369:8369 blocknetdx/syscoin4:latest
 ```
 
 
@@ -27,7 +27,7 @@ Persist blockchain w/ volumes
 
 Run a syscoin node that persists the blockchain on a host directory. Recommended to avoid time consuming resyncs when updating to later container versions.
 ```
-docker run -d --name=syscoin -p 8369:8369 -v=/crypto/syscoin/config:/opt/blockchain/config -v=/crypto/syscoin/data:/opt/blockchain/data blocknetdx/syscoin3:3.0.4
+docker run -d --name=syscoin -p 8369:8369 -v=/crypto/syscoin/config:/opt/blockchain/config -v=/crypto/syscoin/data:/opt/blockchain/data blocknetdx/syscoin4:latest
 ```
 
 
@@ -39,10 +39,10 @@ See https://docs.docker.com/engine/admin/start-containers-automatically/
 `--restart=no|on-failure:retrycount|always|unless-stopped`
 
 ```
-docker run -d --restart=no --name=syscoin -p 8369:8369 blocknetdx/syscoin:3.0.4 syscoind -daemon=0 -rpcuser=sys -rpcpassword=sys123
-docker run -d --restart=on-failure:10 --name=syscoin -p 8369:8369 blocknetdx/syscoin:3.0.4 syscoind -daemon=0 -rpcuser=sys -rpcpassword=sys123
-docker run -d --restart=unless-stopped --name=syscoin -p 8369:8369 blocknetdx/syscoin:3.0.4 syscoind -daemon=0 -rpcuser=sys -rpcpassword=sys123
-docker run -d --restart=always --name=syscoin -p 8369:8369 blocknetdx/syscoin:3.0.4 syscoind -daemon=0 -rpcuser=sys -rpcpassword=sys123
+docker run -d --restart=no --name=syscoin -p 8369:8369 blocknetdx/syscoin:latest syscoind -daemon=0 -rpcuser=sys -rpcpassword=sys123
+docker run -d --restart=on-failure:10 --name=syscoin -p 8369:8369 blocknetdx/syscoin:latest syscoind -daemon=0 -rpcuser=sys -rpcpassword=sys123
+docker run -d --restart=unless-stopped --name=syscoin -p 8369:8369 blocknetdx/syscoin:latest syscoind -daemon=0 -rpcuser=sys -rpcpassword=sys123
+docker run -d --restart=always --name=syscoin -p 8369:8369 blocknetdx/syscoin:latest syscoind -daemon=0 -rpcuser=sys -rpcpassword=sys123
 ```
 
 
@@ -83,4 +83,4 @@ rpcclienttimeout=15
 License
 =======
 
-This code is licensed under the Apache 2.0 License. Please refer to the [LICENSE](https://github.com/BlocknetDX/dockerimages/blob/master/LICENSE).
+This code is licensed under the Apache 2.0 License. Please refer to the [LICENSE](https://github.com/blocknetdx/dockerimages/blob/master/LICENSE).
