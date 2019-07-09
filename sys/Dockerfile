@@ -28,7 +28,7 @@ RUN add-apt-repository ppa:bitcoin/bitcoin \
 RUN mkdir -p /opt/syscoin \
   && mkdir -p /opt/blockchain/config \
   && mkdir -p /opt/blockchain/data \
-  && ln -s /opt/blockchain/config /root/.syscoincore \
+  && ln -s /opt/blockchain/config /root/.syscoin \
   && cd /opt/syscoin \
   && git clone --depth 1 --branch v4.0.3 https://github.com/syscoin/syscoin.git \
   && cd /opt/syscoin/syscoin \
