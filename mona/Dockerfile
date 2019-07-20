@@ -1,5 +1,5 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/monacoin:0.16.3 .
+# docker build --build-arg cores=8 -t blocknetdx/monacoin:0.17.1 .
 
 FROM ubuntu:trusty
 
@@ -29,7 +29,7 @@ RUN mkdir -p /opt/monacoin \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.monacoin \
   && cd /opt/monacoin \
-  && git clone --depth 1 --branch monacoin-0.16.3 https://github.com/monacoinproject/monacoin.git \
+  && git clone --depth 1 --branch master-0.17 https://github.com/monacoinproject/monacoin.git \
   && cd /opt/monacoin/monacoin \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
