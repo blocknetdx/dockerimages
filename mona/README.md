@@ -27,7 +27,7 @@ Persist blockchain w/ volumes
 
 Run a monacoin node that persists the blockchain on a host directory. Recommended to avoid time consuming resyncs when updating to later container versions.
 ```
-docker run -d --name=monacoin -p 9401:9401 -v=/crypto/monacoin/config:/opt/blockchain/config -v=/crypto/monacoin/data:/opt/blockchain/data blocknetdx/monacoin:0.14.2
+docker run -d --name=monacoin -p 9401:9401 -v=/crypto/monacoin/config:/opt/blockchain/config -v=/crypto/monacoin/data:/opt/blockchain/data blocknetdx/monacoin:0.17.1
 ```
 
 
@@ -39,10 +39,10 @@ See https://docs.docker.com/engine/admin/start-containers-automatically/
 `--restart=no|on-failure:retrycount|always|unless-stopped`
 
 ```
-docker run -d --restart=no --name=monacoin -p 9401:9401 blocknetdx/monacoin:0.14.2 monacoind -daemon=0 -rpcuser=mona -rpcpassword=mona123
-docker run -d --restart=on-failure:10 --name=monacoin -p 9401:9401 blocknetdx/monacoin:0.14.2 monacoind -daemon=0 -rpcuser=mona -rpcpassword=mona123
-docker run -d --restart=unless-stopped --name=monacoin -p 9401:9401 blocknetdx/monacoin:0.14.2 monacoind -daemon=0 -rpcuser=mona -rpcpassword=mona123
-docker run -d --restart=always --name=monacoin -p 9401:9401 blocknetdx/monacoin:0.14.2 monacoind -daemon=0 -rpcuser=mona -rpcpassword=mona123
+docker run -d --restart=no --name=monacoin -p 9401:9401 blocknetdx/monacoin:0.17.1 monacoind -daemon=0 -rpcuser=mona -rpcpassword=mona123
+docker run -d --restart=on-failure:10 --name=monacoin -p 9401:9401 blocknetdx/monacoin:0.17.1 monacoind -daemon=0 -rpcuser=mona -rpcpassword=mona123
+docker run -d --restart=unless-stopped --name=monacoin -p 9401:9401 blocknetdx/monacoin:0.17.1 monacoind -daemon=0 -rpcuser=mona -rpcpassword=mona123
+docker run -d --restart=always --name=monacoin -p 9401:9401 blocknetdx/monacoin:0.17.1 monacoind -daemon=0 -rpcuser=mona -rpcpassword=mona123
 ```
 
 

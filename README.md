@@ -58,13 +58,13 @@ datadir=/opt/blockchain/data
 
 dbcache=256                   
 maxmempool=512                
+maxmempoolxbridge=128
 
 port=41412    # testnet: 41474
 rpcport=41414 # testnet: 41419
 
 listen=1                      
 server=1                      
-maxconnections=100            
 logtimestamps=1               
 logips=1                      
 
