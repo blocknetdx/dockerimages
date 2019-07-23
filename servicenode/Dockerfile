@@ -1,8 +1,8 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/servicenode:3.10.5 .
-FROM ubuntu:trusty
+# docker build --build-arg cores=8 -t blocknetdx/servicenode:3.13.1 .
+FROM ubuntu:bionic
 
-ARG cores=4
+ARG cores=1
 ENV ecores=$cores
 
 RUN apt update \
@@ -17,49 +17,52 @@ RUN add-apt-repository ppa:bitcoin/bitcoin \
   && apt install -y --no-install-recommends \
      build-essential libtool autotools-dev bsdmainutils \
      libevent-dev autoconf automake pkg-config libssl-dev \
-     libboost-system-dev libboost-filesystem-dev libboost-chrono-dev \
-     libboost-program-options-dev libboost-test-dev libboost-thread-dev \
-     libdb4.8-dev libdb4.8++-dev libgmp-dev libminiupnpc-dev libzmq3-dev \
+     libdb4.8-dev libdb4.8++-dev python-setuptools cmake \
+     libcap-dev \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Build berkeleydb4.8
-RUN mkdir -p /tmp/berkeley \
-  && cd /tmp/berkeley \
-  && wget 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz' \
-  && [ "$(printf '12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef db-4.8.30.NC.tar.gz' | sha256sum -c)" = "db-4.8.30.NC.tar.gz: OK" ] || $(echo "Berkeley DB 4.8 sha256sum failed"; exit 1) \
-  && tar -xzvf db-4.8.30.NC.tar.gz \
-  && cd db-4.8.30.NC/build_unix/ \
-  && ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/tmp/berkeley \
-  && make install
+# gcc 8
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
+  && apt update \
+  && apt install -y --no-install-recommends \
+     g++-8-multilib gcc-8-multilib binutils-gold \
+  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+ENV PROJECTDIR=/opt/blocknetdx/blocknet
+ENV BASEPREFIX=$PROJECTDIR/depends
+ENV HOST=x86_64-pc-linux-gnu
+
+# Copy source files
+RUN mkdir -p /opt/blocknetdx \
+  && cd /opt/blocknetdx \
+  && git clone --depth 1 --branch 3.13.1 https://github.com/blocknetdx/blocknet.git
 
 # Build source
-RUN mkdir -p /opt/blocknetdx \
-  && mkdir -p /opt/blockchain/config \
+RUN mkdir -p /opt/blockchain/config \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.blocknetdx \
-  && cd /opt/blocknetdx \
-  && git clone --depth 1 --branch 3.10.5 https://github.com/BlocknetDX/BlockDX.git \
-  && cd /opt/blocknetdx/BlockDX \
-  && chmod +x ./autogen.sh \
+  && cd $BASEPREFIX \
+  && make -j$ecores && make install \
+  && cd $PROJECTDIR \
+  && chmod +x ./autogen.sh; sync \
   && ./autogen.sh \
-  && ./configure LDFLAGS="-L/tmp/berkeley/lib/" CPPFLAGS="-I/tmp/berkeley/include/" --without-gui --enable-hardening \
+  && CONFIG_SITE=$BASEPREFIX/$HOST/share/config.site ./configure CC=gcc-8 CXX=g++-8 CFLAGS='-Wno-deprecated' CXXFLAGS='-Wno-deprecated' --disable-ccache --disable-maintainer-mode --disable-dependency-tracking --without-gui --enable-hardening --prefix=/ \
   && echo "Building with cores: $ecores" \
   && make -j$ecores \
-  && make install \
-  && rm -rf /opt/blocknetdx/ /tmp/berkeley/*
+  && make install
 
 # Write default blocknetdx.conf (can be overridden on commandline)
 RUN echo "datadir=/opt/blockchain/data    \n\
                                           \n\
 dbcache=256                               \n\
 maxmempool=512                            \n\
+maxmempoolxbridge=128                     \n\
                                           \n\
 port=41412    # testnet: 41474            \n\
 rpcport=41414 # testnet: 41419            \n\
                                           \n\
 listen=1                                  \n\
 server=1                                  \n\
-maxconnections=100                        \n\
 logtimestamps=1                           \n\
 logips=1                                  \n\
                                           \n\
