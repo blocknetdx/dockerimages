@@ -29,7 +29,7 @@ RUN mkdir -p /opt/monacoin \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.monacoin \
   && cd /opt/monacoin \
-  && git clone --depth 1 --branch master-0.17 https://github.com/monacoinproject/monacoin.git \
+  && git clone --depth 1 --branch monacoin-0.17.1 https://github.com/monacoinproject/monacoin.git \
   && cd /opt/monacoin/monacoin \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
