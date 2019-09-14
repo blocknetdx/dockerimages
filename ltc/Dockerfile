@@ -1,5 +1,5 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/litecoin:0.16.0 .
+# docker build --build-arg cores=8 -t blocknetdx/litecoin:0.16.3 .
 
 FROM ubuntu:trusty
 
@@ -29,7 +29,7 @@ RUN mkdir -p /opt/litecoin \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.litecoin \
   && cd /opt/litecoin \
-  && git clone --depth 1 --branch v0.16.0 https://github.com/litecoin-project/litecoin.git \
+  && git clone --depth 1 --branch v0.16.3 https://github.com/litecoin-project/litecoin.git \
   && cd /opt/litecoin/litecoin \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
@@ -47,9 +47,7 @@ maxmempool=512                          \n\
 port=9333    # testnet: 19333           \n\
 rpcport=9332 # testnet: 19332           \n\
                                         \n\
-listen=1                                \n\
 server=1                                \n\
-maxconnections=16                       \n\
 logtimestamps=1                         \n\
 logips=1                                \n\
                                         \n\
