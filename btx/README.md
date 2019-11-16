@@ -1,81 +1,80 @@
-Official Blocknet Bitcore Images
+Official Blocknet Bitcoin Images
 =================================
 
-These bitcore docker images can be found on the docker hub: https://hub.docker.com/r/blocknetdx/bitcore/
+These btx docker images can be found on the docker hub: https://hub.docker.com/r/blocknetdx/btx/
 
-Bitcore
+btx
 ========
 
-These bitcore images are optimized for use with the Blocknet DX.
+These btx images are optimized for use with the Blocknet DX.
 
 **Note**
 
-These images are _not a replacement or endorsement_ of the Bitcore Project (https://github.com/LIMXTEC/BitCore).
+These images are _not a replacement or endorsement_ of the btx project (https://github.com/LIMXTEC/BitCore).
 
 
 Simple
 ======
 
-Run a simple bitcore node on port 8555:
+Run a simple btx node on port 8555:
 ```
-docker run -d --name=bitcore -p 8555:8555 blocknetdx/bitcore:latest
+docker run -d --name=btx -p 8555:8555 blocknetdx/btx:latest
 ```
 
 
 Persist blockchain w/ volumes
 =============================
 
-Run a bitcore node that persists the blockchain on a host directory. Recommended to avoid time consuming resyncs when updating to later container versions.
+Run a btx node that persists the blockchain on a host directory. Recommended to avoid time consuming resyncs when updating to later container versions.
 ```
-docker run -d --name=bitcore -p 8555:8555 -v=/crypto/bitcore/config:/opt/blockchain/config -v=/crypto/bitcore/data:/opt/blockchain/data blocknetdx/bitcore:0.15.2.0
+docker run -d --name=btx -p 8555:8555 -v=/crypto/btx/config:/opt/blockchain/config -v=/crypto/btx/data:/opt/blockchain/data blocknetdx/btx:0.17.0.1
 ```
 
 
 Automatically restart the container
 ===================================
 
-See https://docs.docker.com/engine/admin/start-containers-automatically/ 
+See https://docs.docker.com/engine/admin/start-containers-automatically/
 
 `--restart=no|on-failure:retrycount|always|unless-stopped`
 
 ```
-docker run -d --restart=no --name=bitcore -p 8555:8555 blocknetdx/bitcore:0.15.2.0 bitcored -daemon=0 -rpcuser=btx -rpcpassword=btx123
-docker run -d --restart=on-failure:10 --name=bitcore -p 8555:8555 blocknetdx/bitcore:0.15.2.0 bitcored -daemon=0 -rpcuser=btx -rpcpassword=btx123
-docker run -d --restart=unless-stopped --name=bitcore -p 8555:8555 blocknetdx/bitcore:0.15.2.0 bitcored -daemon=0 -rpcuser=btx -rpcpassword=btx123
-docker run -d --restart=always --name=bitcore -p 8555:8555 blocknetdx/bitcore:0.15.2.0 bitcored -daemon=0 -rpcuser=btx -rpcpassword=btx123
+docker run -d --restart=no --name=btx -p 8555:8555 blocknetdx/btx:0.17.0.1 bitcored -daemon=0 -rpcuser= -rpcpassword=123
+docker run -d --restart=on-failure:10 --name=btx -p 8555:8555 blocknetdx/btx:0.17.0.1 bitcored -daemon=0 -rpcuser= -rpcpassword=123
+docker run -d --restart=unless-stopped --name=bitcoin -p 8555:8555 blocknetdx/btx:0.17.0.1 bitcored -daemon=0 -rpcuser= -rpcpassword=123
+docker run -d --restart=always --name=bitcoin -p 8555:8555 blocknetdx/btx:0.17.0.1 bitcored -daemon=0 -rpcuser= -rpcpassword=123
 ```
 
 
 Container shell access
 ======================
 
-To login to the bitcore container and run RPC commands use the following command:
+To login to the btx container and run RPC commands use the following command:
 ```
-docker exec -it bitcore /bin/bash
+docker exec -it btx /bin/bash
 ```
 
 
 Default bitcore.conf
 =====================
 
-The default configuration is below. A custom configuration file can be passed to the bitcore node container through the `/opt/blockchain/config` volume. Some of these parameters can also be adjusted on the command line.
+The default configuration is below. A custom configuration file can be passed to the btx  node container through the `/opt/blockchain/config` volume. Some of these parameters can also be adjusted on the command line.
 ```
 datadir=/opt/blockchain/data
-                             
-dbcache=256                  
-maxmempool=512               
-                             
-port=8555    # testnet: 8666
-rpcport=8556 # testnet: 50332
-                             
-listen=1                     
-server=1                     
-maxconnections=16            
-logtimestamps=1              
-logips=1                     
-                             
-rpcallowip=127.0.0.1         
-rpctimeout=15                
+
+dbcache=256
+maxmempool=512
+
+port=8333    # testnet: 18333
+rpcport=8332 # testnet: 18332
+
+listen=1
+server=1
+logtimestamps=1
+logips=1
+
+rpcallowip=127.0.0.1
+rpctimeout=15
 rpcclienttimeout=15
 ```
 
