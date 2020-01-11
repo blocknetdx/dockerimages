@@ -2,7 +2,7 @@
 # docker build --build-arg cores=8 -t blocknetdx/eos:latest .
 FROM ubuntu:18.04
 
-ARG cores=4
+ARG cores=2
 ENV ecores=$cores
 
 RUN apt update \
