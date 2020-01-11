@@ -14,12 +14,14 @@ RUN apt update \
       libtool libusb-1.0-0-dev libbz2-dev libssl-dev libgmp3-dev \
       libicu-dev zlib1g-dev libcurl4-gnutls-dev libbson-1.0 libsasl2-dev \
       libgmp-dev libsecp256k1-0 libsecp256k1-dev libbz2-dev \
-      libssl-dev libbz2-dev libmongoc-1.0-0 mongodb \
+      libssl-dev libbz2-dev libmongoc-1.0-0 mongodb sed \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN cd ~ \
   && git clone --depth 1 --branch v2.0.0-rc3 --recursive https://github.com/EOSIO/eos \
   && cd eos/scripts \
+  && sed -i 's/-gt 7/-gt 1/g' eosio_build.sh \
+  && sed -i 's/-lt 7/-lt 1/g' eosio_build_ubuntu.sh \
   && JOBS=$ecores ./eosio_build.sh -y \
   && ./eosio_install.sh \
   && cd ~/eos/build && make clean \
