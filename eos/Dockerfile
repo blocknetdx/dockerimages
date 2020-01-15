@@ -2,7 +2,7 @@
 # docker build --build-arg cores=8 -t blocknetdx/eos:latest .
 FROM ubuntu:18.04
 
-ARG cores=2
+ARG cores=1
 ENV ecores=$cores
 
 RUN apt update \
@@ -14,14 +14,12 @@ RUN apt update \
       libtool libusb-1.0-0-dev libbz2-dev libssl-dev libgmp3-dev \
       libicu-dev zlib1g-dev libcurl4-gnutls-dev libbson-1.0 libsasl2-dev \
       libgmp-dev libsecp256k1-0 libsecp256k1-dev libbz2-dev \
-      libssl-dev libbz2-dev libmongoc-1.0-0 mongodb sed \
+      libssl-dev libbz2-dev libmongoc-1.0-0 mongodb \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN cd ~ \
   && git clone --depth 1 --branch v2.0.0 --recursive https://github.com/EOSIO/eos \
   && cd eos/scripts \
-  && sed -i 's/-gt 7/-gt 1/g' eosio_build.sh \
-  && sed -i 's/-lt 7/-lt 1/g' eosio_build_ubuntu.sh \
   && JOBS=$ecores ./eosio_build.sh -y \
   && ./eosio_install.sh \
   && cd ~/eos/build && make clean \
@@ -65,8 +63,6 @@ chain-state-db-size-mb = 65536                                   \n\
 state-history-endpoint = 0.0.0.0:8080                            \n\
 http-server-address = 0.0.0.0:8888                               \n\
 http-validate-host = false                                       \n\
-verbose-http-errors = false                                      \n\
-sync-fetch-span = 10000                                          \n\
 max-clients = 256                                                \n\
 trace-history = true                                             \n\
 chain-state-history = true                                       \n\
@@ -304,6 +300,6 @@ RUN cd ~/.local/share/eosio/nodeos/config \
 WORKDIR /root/eosio/2.0/bin/
 VOLUME ["/root/.local/share/eosio"]
 
-EXPOSE 8888 9876
+EXPOSE 8888 8080 9876
 
 CMD ["./nodeos", "--disable-replay-opts"]
