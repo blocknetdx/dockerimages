@@ -300,6 +300,6 @@ RUN cd ~/.local/share/eosio/nodeos/config \
 WORKDIR /root/eosio/2.0/bin/
 VOLUME ["/root/.local/share/eosio"]
 
-EXPOSE 8888 8080 9876
+EXPOSE 8080 8888 9876
 
 CMD ["./nodeos", "--disable-replay-opts"]
