@@ -1,4 +1,4 @@
-Official Blocknet Bitcoin Images
+Official Blocknet Docker Images
 =================================
 
 These eos docker images can be found on the docker hub: https://hub.docker.com/r/blocknetdx/eos/
@@ -31,8 +31,8 @@ Choose a location you plan on using for your `nodeos` volume. For this example w
 
 Create the directories needed for your config files and enter said directory:
 
--   `mkdir -p /opt/eos/nodeos/config`
--   `cd /opt/eos/nodeos/config`
+* `mkdir -p /opt/eos/nodeos/config`
+* `cd /opt/eos/nodeos/config`
 
 **Step 3**
 
@@ -52,8 +52,6 @@ chain-state-db-size-mb = 65536
 state-history-endpoint = 0.0.0.0:8080
 http-server-address = 0.0.0.0:8888
 http-validate-host = false
-verbose-http-errors = false
-sync-fetch-span = 10000
 max-clients = 256
 trace-history = true
 chain-state-history = true
@@ -331,19 +329,19 @@ Now that you’re staged, we’ll run the Docker container.
 
 Pull the official Blocknet EOS image:
 
-`docker pull blocknetdx/eos:latest`
+* `docker pull blocknetdx/eos`
 
 **Step 2**
 
 Run your container:
 
-`docker run -p 9876:9876 -p 8888:8888 -d -v /opt/eos/:/root/.local/share/eosio/  --name eos blocknetdx/eos:latest`
+* `docker run -d -p 9876:9876 -p 8888:8888 -p 8080:8080 -v /opt/eos/:/root/.local/share/eosio/  --name eos blocknetdx/eos`
 
 _or_
 
 **Step 2.a** *only required for non `docker -v` setups:*
 
-`docker run -p 9876:9876 -p 8888:8888 -d --name eos blocknetdx/eos:latest`
+* `docker run -d -p 9876:9876 -p 8888:8888 -p 8080:8080 --name eos blocknetdx/eos`
 
 *In the above case, data from the container's `/root/.local/share/eosio` directory will persist to the host machine's default `/var/lib/docker/volumes` directory.*
 
@@ -353,7 +351,7 @@ _Done!_
 
 ### **Controlling Your `nodeos` Container**
 
-The `docker run` command from the **Setup** section is used to first run and start your container.  After this, you'll be leveraging the `docker stop` and `docker start` commands.
+The `docker run` command from the **Setup** section is used to first run and start your container.  After this, you'll be leveraging the `docker attach`, `docker stop`, and `docker start` commands.
 
 To **gracefully** shutdown `nodeos` running in your container, follow these steps:
 
@@ -361,7 +359,7 @@ To **gracefully** shutdown `nodeos` running in your container, follow these step
 
 Enter your container
 
-`docker attach eos`
+* `docker attach eos`
 
 **Step 2**
 
@@ -376,12 +374,12 @@ After `nodeos` shuts down, you should automatically exit the container.  If for 
 
 _**Warning:** Stopping a container with `nodeos` actively running in it will lead to a corrupted block database requiring a replay!_
 
-**Starting the Container**
+**Starting, Entering, and Stopping the Container**
 
 
-To start the container: `docker start eos`
-To enter the container: `docker attach eos`
-To exit the container and keep it running: `ctrl+p+q`
+* To start the container: `docker start eos`
+* To enter the container: `docker attach eos`
+* To exit the container and keep it running: `ctrl+p+q`
 
 ---
 
