@@ -35,12 +35,12 @@ ENV HOST=x86_64-pc-linux-gnu
 # Copy source files
 RUN mkdir -p /opt/blocknetdx \
   && cd /opt/blocknetdx \
-  && git clone --depth 1 --branch v3.14.1 https://github.com/blocknetdx/blocknet.git
+  && git clone --depth 1 --branch v4.0.0 https://github.com/blocknetdx/blocknet.git
 
 # Build source
 RUN mkdir -p /opt/blockchain/config \
   && mkdir -p /opt/blockchain/data \
-  && ln -s /opt/blockchain/config /root/.blocknetdx \
+  && ln -s /opt/blockchain/config /root/.blocknet \
   && cd $BASEPREFIX \
   && make -j$ecores && make install \
   && cd $PROJECTDIR \
@@ -51,10 +51,10 @@ RUN mkdir -p /opt/blockchain/config \
   && make -j$ecores \
   && make install
 
-# Write default blocknetdx.conf (can be overridden on commandline)
+# Write default blocknet.conf (can be overridden on commandline)
 RUN echo "datadir=/opt/blockchain/data    \n\
                                           \n\
-dbcache=256                               \n\
+dbcache=512                               \n\
 maxmempool=512                            \n\
 maxmempoolxbridge=128                     \n\
                                           \n\
@@ -67,7 +67,7 @@ logips=1                                  \n\
                                           \n\
 rpcallowip=127.0.0.1                      \n\
 rpctimeout=30                             \n\
-rpcclienttimeout=15" > /opt/blockchain/config/blocknetdx.conf
+rpcclienttimeout=30" > /opt/blockchain/config/blocknet.conf
 
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
@@ -75,4 +75,4 @@ VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 # Port, RPC, Test Port, Test RPC
 EXPOSE 41412 41414 41474 41419
 
-CMD ["blocknetdxd", "-daemon=0", "-server=0"]
+CMD ["blocknetd", "-daemon=0", "-server=0"]
