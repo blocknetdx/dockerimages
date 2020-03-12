@@ -56,8 +56,6 @@ The default configuration is below. A custom configuration file can be passed to
 ```
 datadir=/opt/blockchain/data  
 
-dbcache=512                   
-maxmempool=512                
 maxmempoolxbridge=128
 
 port=41412    # testnet: 41474

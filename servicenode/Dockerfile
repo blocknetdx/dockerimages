@@ -35,7 +35,7 @@ ENV HOST=x86_64-pc-linux-gnu
 # Copy source files
 RUN mkdir -p /opt/blocknetdx \
   && cd /opt/blocknetdx \
-  && git clone --depth 1 --branch v4.0.2 https://github.com/blocknetdx/blocknet.git
+  && git clone --depth 1 --branch v4.1.0 https://github.com/blocknetdx/blocknet.git
 
 # Build source
 RUN mkdir -p /opt/blockchain/config \
@@ -54,8 +54,6 @@ RUN mkdir -p /opt/blockchain/config \
 # Write default blocknet.conf (can be overridden on commandline)
 RUN echo "datadir=/opt/blockchain/data    \n\
                                           \n\
-dbcache=512                               \n\
-maxmempool=512                            \n\
 maxmempoolxbridge=128                     \n\
                                           \n\
 port=41412    # testnet: 41474            \n\
