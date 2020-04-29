@@ -11,14 +11,13 @@ RUN apt update \
       cmake make bzip2 automake autoconf doxygen graphviz autotools-dev \
       build-essential patch sudo libtool ruby pkg-config clang lldb \
       llvm-7-dev python2.7 python2.7-dev python3 python3-dev \
-      libtool libusb-1.0-0-dev libbz2-dev libssl-dev libgmp3-dev \
+      libusb-1.0-0-dev libbz2-dev libssl-dev libgmp3-dev \
       libicu-dev zlib1g-dev libcurl4-gnutls-dev libbson-1.0 libsasl2-dev \
-      libgmp-dev libsecp256k1-0 libsecp256k1-dev libbz2-dev \
-      libssl-dev libbz2-dev libmongoc-1.0-0 mongodb \
+      libgmp-dev libsecp256k1-0 libsecp256k1-dev libmongoc-1.0-0 mongodb \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN cd ~ \
-  && git clone --depth 1 --branch v2.0.0-rc3 --recursive https://github.com/EOSIO/eos \
+  && git clone --depth 1 --branch v2.0.1 --recursive https://github.com/EOSIO/eos \
   && cd eos/scripts \
   && JOBS=$ecores ./eosio_build.sh -y \
   && ./eosio_install.sh \
