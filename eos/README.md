@@ -55,6 +55,8 @@ http-validate-host = false
 max-clients = 256
 trace-history = true
 chain-state-history = true
+wasm-runtime = eos-vm-jit
+eos-vm-oc-enable = true
 
 p2p-peer-address = api-full1.eoseoul.io:9876
 p2p-peer-address = api-full2.eoseoul.io:9876
@@ -335,7 +337,7 @@ Pull the official Blocknet EOS image:
 
 Run your container:
 
-* `docker run -d -p 9876:9876 -p 8888:8888 -p 8080:8080 -v /opt/eos/:/root/.local/share/eosio/  --name eos blocknetdx/eos`
+* `docker run -d -p 9876:9876 -p 8888:8888 -p 8080:8080 -v /opt/eos/:/root/.local/share/eosio/ --name eos blocknetdx/eos`
 
 _or_
 
