@@ -17,7 +17,7 @@ RUN apt update \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN cd ~ \
-  && git clone --depth 1 --branch v2.0.3 --recursive https://github.com/EOSIO/eos \
+  && git clone --depth 1 --branch v2.0.4 --recursive https://github.com/EOSIO/eos \
   && cd eos/scripts \
   && JOBS=$ecores ./eosio_build.sh -y \
   && ./eosio_install.sh \
@@ -65,6 +65,8 @@ http-validate-host = false                                       \n\
 max-clients = 256                                                \n\
 trace-history = true                                             \n\
 chain-state-history = true                                       \n\
+wasm-runtime = eos-vm-jit                                        \n\
+eos-vm-oc-enable = true                                          \n\
 p2p-peer-address = api-full1.eoseoul.io:9876                     \n\
 p2p-peer-address = api-full2.eoseoul.io:9876                     \n\
 p2p-peer-address = boot.eostitan.com:9876                        \n\
