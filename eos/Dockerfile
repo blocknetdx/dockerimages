@@ -17,7 +17,7 @@ RUN apt update \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN cd ~ \
-  && git clone --depth 1 --branch v2.0.1 --recursive https://github.com/EOSIO/eos \
+  && git clone --depth 1 --branch v2.0.2 --recursive https://github.com/EOSIO/eos \
   && cd eos/scripts \
   && JOBS=$ecores ./eosio_build.sh -y \
   && ./eosio_install.sh \
