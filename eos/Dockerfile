@@ -1,56 +1,59 @@
-# Build via docker:
+# build via docker:
 # docker build --build-arg cores=8 -t blocknetdx/eos:latest .
 FROM ubuntu:18.04
 
 ARG cores=1
 ENV ecores=$cores
 
+# install dependencies
 RUN apt update \
-  && apt install -y curl vim wget git apt-utils \
-  && apt install -y \
-      cmake make bzip2 automake autoconf doxygen graphviz autotools-dev \
-      build-essential patch sudo libtool ruby pkg-config clang lldb \
-      llvm-7-dev python2.7 python2.7-dev python3 python3-dev \
-      libusb-1.0-0-dev libbz2-dev libssl-dev libgmp3-dev \
-      libicu-dev zlib1g-dev libcurl4-gnutls-dev libbson-1.0 libsasl2-dev \
-      libgmp-dev libsecp256k1-0 libsecp256k1-dev libmongoc-1.0-0 mongodb \
-  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && apt install -y \
+      make bzip2 automake libbz2-dev libssl-dev doxygen graphviz libgmp3-dev \
+      autotools-dev libicu-dev python2.7 python2.7-dev python3 python3-dev \
+      autoconf libtool curl zlib1g-dev sudo ruby libusb-1.0-0-dev \
+      libcurl4-gnutls-dev pkg-config patch vim-common jq wget git cmake \
+&& apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN cd ~ \
-  && git clone --depth 1 --branch v2.0.2 --recursive https://github.com/EOSIO/eos \
-  && cd eos/scripts \
-  && JOBS=$ecores ./eosio_build.sh -y \
-  && ./eosio_install.sh \
-  && cd ~/eos/build && make clean \
-  && mkdir -p ~/.local/share/eosio/nodeos/config
+# clone EOSIO repository
+RUN git clone --depth 1 --branch v2.0.2 --recursive https://github.com/EOSIO/eos.git /root/eosio/eos \
+      && cd /root/eosio/eos \
+      && git submodule update --init --recursive \
+      && cd /root/eosio/eos/scripts
 
-RUN cd ~/.local/share/eosio/nodeos/config \
-  && echo '{                                                                                 \n\
-  "initial_timestamp": "2018-03-02T12:00:00.000",                                            \n\
-  "initial_key": "EOS8Znrtgwt8TfpmbVpTKvA2oB8Nqey625CLN8bCN3TEbgx86Dsvr",                    \n\
-  "initial_configuration": {                                                                 \n\
-    "max_block_net_usage": 1048576,                                                          \n\
-    "target_block_net_usage_pct": 1000,                                                      \n\
-    "max_transaction_net_usage": 524288,                                                     \n\
-    "base_per_transaction_net_usage": 12,                                                    \n\
-    "net_usage_leeway": 500,                                                                 \n\
-    "context_free_discount_net_usage_num": 20,                                               \n\
-    "context_free_discount_net_usage_den": 100,                                              \n\
-    "max_block_cpu_usage": 100000,                                                           \n\
-    "target_block_cpu_usage_pct": 500,                                                       \n\
-    "max_transaction_cpu_usage": 50000,                                                      \n\
-    "min_transaction_cpu_usage": 100,                                                        \n\
-    "max_transaction_lifetime": 3600,                                                        \n\
-    "deferred_trx_expiration_window": 600,                                                   \n\
-    "max_transaction_delay": 3888000,                                                        \n\
-    "max_inline_action_size": 4096,                                                          \n\
-    "max_inline_action_depth": 4,                                                            \n\
-    "max_authority_depth": 6                                                                 \n\
-  },                                                                                         \n\
-    "initial_chain_id": "0000000000000000000000000000000000000000000000000000000000000000"   \n\
+# build EOSIO
+RUN JOBS=$ecores /root/eosio/eos/scripts/eosio_build.sh -y -P
+
+# install EOSIO
+RUN /root/eosio/eos/scripts/eosio_install.sh -y \
+      && cd /root/eosio/eos/build && make clean \
+      && mkdir -p /root/.local/share/eosio/nodeos/config
+
+RUN cd /root/.local/share/eosio/nodeos/config \
+        && echo '{                                                              \n\
+  "initial_timestamp": "2018-06-08T08:08:08.888",                               \n\
+  "initial_key": "EOS7EarnUhcyYqmdnPon8rm7mBCTnBoot6o7fE2WzjvEX2TdggbL3",       \n\
+  "initial_configuration": {                                                    \n\
+    "max_block_net_usage": 1048576,                                             \n\
+    "target_block_net_usage_pct": 1000,                                         \n\
+    "max_transaction_net_usage": 524288,                                        \n\
+    "base_per_transaction_net_usage": 12,                                       \n\
+    "net_usage_leeway": 500,                                                    \n\
+    "context_free_discount_net_usage_num": 20,                                  \n\
+    "context_free_discount_net_usage_den": 100,                                 \n\
+    "max_block_cpu_usage": 200000,                                              \n\
+    "target_block_cpu_usage_pct": 1000,                                         \n\
+    "max_transaction_cpu_usage": 150000,                                        \n\
+    "min_transaction_cpu_usage": 100,                                           \n\
+    "max_transaction_lifetime": 3600,                                           \n\
+    "deferred_trx_expiration_window": 600,                                      \n\
+    "max_transaction_delay": 3888000,                                           \n\
+    "max_inline_action_size": 4096,                                             \n\
+    "max_inline_action_depth": 4,                                               \n\
+    "max_authority_depth": 6                                                    \n\
+  }                                                                             \n\
 }' > genesis.json
 
-RUN cd ~/.local/share/eosio/nodeos/config \
+RUN cd /root/.local/share/eosio/nodeos/config \
   && echo 'plugin = eosio::net_plugin                            \n\
 plugin = eosio::net_api_plugin                                   \n\
 plugin = eosio::chain_plugin                                     \n\
@@ -62,101 +65,67 @@ chain-state-db-size-mb = 65536                                   \n\
 state-history-endpoint = 0.0.0.0:8080                            \n\
 http-server-address = 0.0.0.0:8888                               \n\
 http-validate-host = false                                       \n\
-max-clients = 256                                                \n\
+max-clients = 50                                                 \n\
 trace-history = true                                             \n\
 chain-state-history = true                                       \n\
-p2p-peer-address = api-full1.eoseoul.io:9876                     \n\
-p2p-peer-address = api-full2.eoseoul.io:9876                     \n\
-p2p-peer-address = boot.eostitan.com:9876                        \n\
-p2p-peer-address = bp.cryptolions.io:9876                        \n\
-p2p-peer-address = bp.eosbeijing.one:8080                        \n\
-p2p-peer-address = bp.libertyblock.io:9800                       \n\
-p2p-peer-address = br.eosrio.io:9876                             \n\
-p2p-peer-address = eos-seed-de.privex.io:9876                    \n\
-p2p-peer-address = eu1.eosdac.io:49876                           \n\
-p2p-peer-address = fullnode.eoslaomao.com:443                    \n\
-p2p-peer-address = mainnet.eoscalgary.io:5222                    \n\
-p2p-peer-address = node.eosflare.io:1883                         \n\
-p2p-peer-address = node1.eoscannon.io:59876                      \n\
-p2p-peer-address = node1.eosnewyork.io:6987                      \n\
-p2p-peer-address = node2.eosnewyork.io:6987                      \n\
-p2p-peer-address = p2p.eosdetroit.io:3018                        \n\
-p2p-peer-address = p2p.meet.one:9876                             \n\
-p2p-peer-address = peer.eosn.io:9876                             \n\
+wasm-runtime = eos-vm-jit                                        \n\
+eos-vm-oc-enable = true                                          \n\
 p2p-peer-address = peer.main.alohaeos.com:9876                   \n\
-p2p-peer-address = peer1.mainnet.helloeos.com.cn:80              \n\
-p2p-peer-address = peer2.mainnet.helloeos.com.cn:80              \n\
-p2p-peer-address = peering.mainnet.eoscanada.com:9876            \n\
-p2p-peer-address = peering1.mainnet.eosasia.one:80               \n\
-p2p-peer-address = peering2.mainnet.eosasia.one:80               \n\
-p2p-peer-address = publicnode.cypherglass.com:9876               \n\
-p2p-peer-address = seed1.greymass.com:9876                       \n\
-p2p-peer-address = seed2.greymass.com:9876                       \n\
-p2p-peer-address = node869-mainnet.eosauthority.com:9393         \n\
-p2p-peer-address = peer.main.alohaeos.com:9876                   \n\
-p2p-peer-address = node869-mainnet.eosauthority.com:9393         \n\
-p2p-peer-address = peer.main.alohaeos.com:9876                   \n\
-p2p-peer-address = p2p.eosargentina.io:5222                      \n\
+p2p-peer-address = p2p.eossweden.org:9876                        \n\
 p2p-peer-address = seed1.genereos.io:9876                        \n\
-p2p-peer-address = 47.91.245.50:9876                             \n\
-p2p-peer-address = peer.eos-mainnet.eosblocksmith.io:5010        \n\
-p2p-peer-address = p2p.eosio.cr:9876                             \n\
-p2p-peer-address = bp.cryptolions.io:9876                        \n\
-p2p-peer-address = eos.csx.io:9876                               \n\
-p2p-peer-address = publicnode.cypherglass.com:9876               \n\
-p2p-peer-address = p2p.telos.dutcheos.io:9876                    \n\
-p2p-peer-address = eos-mainnet-peer.ecoboost.app:80              \n\
-p2p-peer-address = p2p.eos42.io:9882                             \n\
-p2p-peer-address = mainnet.eosamsterdam.net:9876                 \n\
-p2p-peer-address = bp.antpool.com:443                            \n\
-p2p-peer-address = mainnet.eosarabia.net:3571                    \n\
-p2p-peer-address = peering1.mainnet.eosasia.one:80               \n\
-p2p-peer-address = peering2.mainnet.eosasia.one:80               \n\
-p2p-peer-address = p2p.athenbp.club:9800                         \n\
-p2p-peer-address = node869-mainnet.eosauthority.com:9393         \n\
-p2p-peer-address = mainnet.eosbcn.com:2095                       \n\
-p2p-peer-address = bp.eosbeijing.one:8080                        \n\
+p2p-peer-address = p2p.sheos.org:5556                            \n\
+p2p-peer-address = eos.unlimitedeos.com:15555                    \n\
+p2p-peer-address = eos.okpool.top:9876                           \n\
+p2p-peer-address = peer1.eosphere.io:9876                        \n\
+p2p-peer-address = node1.eosnewyork.io:6987                      \n\
+p2p-peer-address = p2p.validatoreos.xyz:9800                     \n\
+p2p-peer-address = node1.zbeos.com:9876                          \n\
 p2p-peer-address = p2p.eoscafeblock.com:9000                     \n\
-p2p-peer-address = peering.mainnet.eoscanada.com:9876            \n\
-p2p-peer-address = p2p.eos.wiki:39876                            \n\
-p2p-peer-address = p2p.eoseoul.io:9876                           \n\
-p2p-peer-address = peer1.eoshuobipool.com:18181                  \n\
+p2p-peer-address = peer.eos-mainnet.eosblocksmith.io:5010        \n\
+p2p-peer-address = api.eosvenezuela.io:9876                      \n\
+p2p-peer-address = p2p-emlg.eosnairobi.io:9076                   \n\
+p2p-peer-address = bp.eosbeijing.one:8080                        \n\
+p2p-peer-address = api3.tokenika.io:9876                         \n\
+p2p-peer-address = boot.eostitan.com:9876                        \n\
 p2p-peer-address = peer2.eoshuobipool.com:18181                  \n\
-p2p-peer-address = 136.243.90.53:9876                            \n\
-p2p-peer-address = eos.infstones.io:9876                         \n\
 p2p-peer-address = p2p.eosdetroit.io:3018                        \n\
+p2p-peer-address = seed.eoscleaner.com:9876                      \n\
+p2p-peer-address = epeer3.nodeone.io:8980                        \n\
+p2p-peer-address = p2p.stargalaxy.xyz:9876                       \n\
+p2p-peer-address = peering1.mainnet.eosasia.one:80               \n\
+p2p-peer-address = p2p-eos.whaleex.com:9876                      \n\
+p2p-peer-address = peer1.eoshuobipool.com:18181                  \n\
+p2p-peer-address = bp.cryptolions.io:9876                        \n\
+p2p-peer-address = p2p.eosargentina.io:5222                      \n\
+p2p-peer-address = p2p.eos42.io:9882                             \n\
+p2p-peer-address = peering.mainnet.eoscanada.com:9876            \n\
+p2p-peer-address = p2p.meet.one:9876                             \n\
+p2p-peer-address = p2p.athenbp.club:9800                         \n\
+p2p-peer-address = br.eosrio.io:9876                             \n\
+p2p-peer-address = eos-mainnet-peer.ecoboost.app:80              \n\
+p2p-peer-address = p2p.eoseoul.io:9876                           \n\
+p2p-peer-address = p2p.newdex.one:9876                           \n\
+p2p-peer-address = node1.eoscannon.io:59876                      \n\
+p2p-peer-address = eosbp-0.atticlab.net:9876                     \n\
+p2p-peer-address = seed.greymass.com:9876                        \n\
 p2p-peer-address = peer.eosio.sg:80                              \n\
+p2p-peer-address = node2.zbeos.com:9876                          \n\
+p2p-peer-address = publicnode.cypherglass.com:9876               \n\
+p2p-peer-address = eos-bp.inbex.pro:9876                         \n\
+p2p-peer-address = p2p.eosio.cr:9876                             \n\
+p2p-peer-address = p2p.eosflare.io:9876                          \n\
+p2p-peer-address = epeer1.nodeone.io:8970                        \n\
+p2p-peer-address = pubnode.eosrapid.com:9876                     \n\
 p2p-peer-address = fullnode.eoslaomao.com:443                    \n\
 p2p-peer-address = mainnet.eoslaomao.com:443                     \n\
-p2p-peer-address = api.eosmetal.io:19877                         \n\
-p2p-peer-address = peer.eosn.io:9876                             \n\
-p2p-peer-address = epeer3.nodeone.io:8980                        \n\
-p2p-peer-address = br.eosrio.io:9876                             \n\
-p2p-peer-address = fn001.eossv.org:445                           \n\
-p2p-peer-address = boot.eostitan.com:9876                        \n\
+p2p-peer-address = mainnet.eosamsterdam.net:9876                 \n\
 p2p-peer-address = peer1.mainnet.helloeos.com.cn:80              \n\
-p2p-peer-address = p2p.hkeos.com:9876                            \n\
-p2p-peer-address = 47.75.70.208:9376                             \n\
-p2p-peer-address = p2p.eosmainnet.more.top:18181                 \n\
-p2p-peer-address = p2p.newdex.one:9876                           \n\
-p2p-peer-address = eos.okpool.top:9876                           \n\
-p2p-peer-address = eosdapp.oneeos.org:9000                       \n\
-p2p-peer-address = p2p.sheos.org:5556                            \n\
-p2p-peer-address = eos-p2p.slowmist.io:9876                      \n\
-p2p-peer-address = p2p.telos.africa:9877                         \n\
-p2p-peer-address = p2p.stargalaxy.xyz:9876                       \n\
-p2p-peer-address = peer.eosgeneva.io:9876                        \n\
-p2p-peer-address = seed.greymass.com:9876                        \n\
-p2p-peer-address = p2p.theteloscope.io:9876                      \n\
-p2p-peer-address = api3.tokenika.io:9876                         \n\
-p2p-peer-address = eth2.tokenika.io:9876                         \n\
-p2p-peer-address = eos.unlimitedeos.com:15555                    \n\
-p2p-peer-address = p2p.validatoreos.xyz:9800                     \n\
+p2p-peer-address = node869-mainnet.eosauthority.com:9393         \n\
 p2p-peer-address = mainnet.get-scatter.com:9876                  \n\
-p2p-peer-address = p2p-eos.whaleex.com:9876                      \n\
-p2p-peer-address = 104.156.59.167:9876                           \n\
-p2p-peer-address = node1.zbeos.com:9876                          \n\
-p2p-peer-address = node2.zbeos.com:9876                          \n\
+p2p-peer-address = bp.antpool.com:443                            \n\
+p2p-peer-address = 47.75.70.208:9376                             \n\
+p2p-peer-address = fn001.eossv.org:445                           \n\
+p2p-peer-address = mainnet.eosarabia.net:3571                    \n\
 actor-blacklist=newdexmobapp                                     \n\
 actor-blacklist=ftsqfgjoscma                                     \n\
 actor-blacklist=hpbcc4k42nxy                                     \n\
@@ -244,7 +213,7 @@ actor-blacklist=gezdonzygage                                     \n\
 actor-blacklist=ha4tkobrgqge                                     \n\
 actor-blacklist=gq4dkmzzhege' > config.ini
 
-RUN cd ~/.local/share/eosio/nodeos/config \
+RUN cd /root/.local/share/eosio/nodeos/config \
   && echo '{                                           \n\
         "includes": [],                                \n\
         "appenders": [{                                \n\
@@ -301,4 +270,4 @@ VOLUME ["/root/.local/share/eosio"]
 
 EXPOSE 8080 8888 9876
 
-CMD ["./nodeos", "--disable-replay-opts"]
+CMD ["./nodeos", "--disable-replay-opts", "--genesis-json=/root/.local/share/eosio/nodeos/config/genesis.json"]
