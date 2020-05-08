@@ -52,100 +52,67 @@ chain-state-db-size-mb = 65536
 state-history-endpoint = 0.0.0.0:8080
 http-server-address = 0.0.0.0:8888
 http-validate-host = false
-max-clients = 256
 trace-history = true
 chain-state-history = true
+wasm-runtime = eos-vm-jit
+eos-vm-oc-enable = true
 
-p2p-peer-address = api-full1.eoseoul.io:9876
-p2p-peer-address = api-full2.eoseoul.io:9876
-p2p-peer-address = boot.eostitan.com:9876
-p2p-peer-address = bp.cryptolions.io:9876
-p2p-peer-address = bp.eosbeijing.one:8080
-p2p-peer-address = bp.libertyblock.io:9800
-p2p-peer-address = br.eosrio.io:9876
-p2p-peer-address = eos-seed-de.privex.io:9876
-p2p-peer-address = eu1.eosdac.io:49876
-p2p-peer-address = fullnode.eoslaomao.com:443
-p2p-peer-address = mainnet.eoscalgary.io:5222
-p2p-peer-address = node.eosflare.io:1883
-p2p-peer-address = node1.eoscannon.io:59876
-p2p-peer-address = node1.eosnewyork.io:6987
-p2p-peer-address = node2.eosnewyork.io:6987
-p2p-peer-address = p2p.eosdetroit.io:3018
-p2p-peer-address = p2p.meet.one:9876
-p2p-peer-address = peer.eosn.io:9876
 p2p-peer-address = peer.main.alohaeos.com:9876
-p2p-peer-address = peer1.mainnet.helloeos.com.cn:80
-p2p-peer-address = peer2.mainnet.helloeos.com.cn:80
-p2p-peer-address = peering.mainnet.eoscanada.com:9876
-p2p-peer-address = peering1.mainnet.eosasia.one:80
-p2p-peer-address = peering2.mainnet.eosasia.one:80
-p2p-peer-address = publicnode.cypherglass.com:9876
-p2p-peer-address = seed1.greymass.com:9876
-p2p-peer-address = seed2.greymass.com:9876
-p2p-peer-address = node869-mainnet.eosauthority.com:9393
-p2p-peer-address = peer.main.alohaeos.com:9876
-p2p-peer-address = p2p.eosargentina.io:5222
+p2p-peer-address = p2p.eossweden.org:9876
 p2p-peer-address = seed1.genereos.io:9876
-p2p-peer-address = 47.91.245.50:9876
-p2p-peer-address = peer.eos-mainnet.eosblocksmith.io:5010
-p2p-peer-address = p2p.eosio.cr:9876
-p2p-peer-address = bp.cryptolions.io:9876
-p2p-peer-address = eos.csx.io:9876
-p2p-peer-address = publicnode.cypherglass.com:9876
-p2p-peer-address = p2p.telos.dutcheos.io:9876
-p2p-peer-address = eos-mainnet-peer.ecoboost.app:80
-p2p-peer-address = p2p.eos42.io:9882
-p2p-peer-address = mainnet.eosamsterdam.net:9876
-p2p-peer-address = bp.antpool.com:443
-p2p-peer-address = mainnet.eosarabia.net:3571
-p2p-peer-address = peering1.mainnet.eosasia.one:80
-p2p-peer-address = peering2.mainnet.eosasia.one:80
-p2p-peer-address = p2p.athenbp.club:9800
-p2p-peer-address = node869-mainnet.eosauthority.com:9393
-p2p-peer-address = mainnet.eosbcn.com:2095
-p2p-peer-address = bp.eosbeijing.one:8080
+p2p-peer-address = p2p.sheos.org:5556
+p2p-peer-address = eos.unlimitedeos.com:15555
+p2p-peer-address = eos.okpool.top:9876
+p2p-peer-address = peer1.eosphere.io:9876
+p2p-peer-address = node1.eosnewyork.io:6987
+p2p-peer-address = p2p.validatoreos.xyz:9800
+p2p-peer-address = node1.zbeos.com:9876
 p2p-peer-address = p2p.eoscafeblock.com:9000
-p2p-peer-address = peering.mainnet.eoscanada.com:9876
-p2p-peer-address = p2p.eos.wiki:39876
-p2p-peer-address = p2p.eoseoul.io:9876
-p2p-peer-address = peer1.eoshuobipool.com:18181
+p2p-peer-address = peer.eos-mainnet.eosblocksmith.io:5010
+p2p-peer-address = api.eosvenezuela.io:9876
+p2p-peer-address = p2p-emlg.eosnairobi.io:9076
+p2p-peer-address = bp.eosbeijing.one:8080
+p2p-peer-address = api3.tokenika.io:9876
+p2p-peer-address = boot.eostitan.com:9876
 p2p-peer-address = peer2.eoshuobipool.com:18181
-p2p-peer-address = 136.243.90.53:9876
-p2p-peer-address = eos.infstones.io:9876
 p2p-peer-address = p2p.eosdetroit.io:3018
+p2p-peer-address = seed.eoscleaner.com:9876
+p2p-peer-address = epeer3.nodeone.io:8980
+p2p-peer-address = p2p.stargalaxy.xyz:9876
+p2p-peer-address = peering1.mainnet.eosasia.one:80
+p2p-peer-address = p2p-eos.whaleex.com:9876
+p2p-peer-address = peer1.eoshuobipool.com:18181
+p2p-peer-address = bp.cryptolions.io:9876
+p2p-peer-address = p2p.eosargentina.io:5222
+p2p-peer-address = p2p.eos42.io:9882
+p2p-peer-address = peering.mainnet.eoscanada.com:9876
+p2p-peer-address = p2p.meet.one:9876
+p2p-peer-address = p2p.athenbp.club:9800
+p2p-peer-address = br.eosrio.io:9876
+p2p-peer-address = eos-mainnet-peer.ecoboost.app:80
+p2p-peer-address = p2p.eoseoul.io:9876
+p2p-peer-address = p2p.newdex.one:9876
+p2p-peer-address = node1.eoscannon.io:59876
+p2p-peer-address = eosbp-0.atticlab.net:9876
+p2p-peer-address = seed.greymass.com:9876
 p2p-peer-address = peer.eosio.sg:80
+p2p-peer-address = node2.zbeos.com:9876
+p2p-peer-address = publicnode.cypherglass.com:9876
+p2p-peer-address = eos-bp.inbex.pro:9876
+p2p-peer-address = p2p.eosio.cr:9876
+p2p-peer-address = p2p.eosflare.io:9876
+p2p-peer-address = epeer1.nodeone.io:8970
+p2p-peer-address = pubnode.eosrapid.com:9876
 p2p-peer-address = fullnode.eoslaomao.com:443
 p2p-peer-address = mainnet.eoslaomao.com:443
-p2p-peer-address = api.eosmetal.io:19877
-p2p-peer-address = peer.eosn.io:9876
-p2p-peer-address = epeer3.nodeone.io:8980
-p2p-peer-address = br.eosrio.io:9876
-p2p-peer-address = fn001.eossv.org:445
-p2p-peer-address = boot.eostitan.com:9876
+p2p-peer-address = mainnet.eosamsterdam.net:9876
 p2p-peer-address = peer1.mainnet.helloeos.com.cn:80
-p2p-peer-address = p2p.hkeos.com:9876
-p2p-peer-address = 47.75.70.208:9376
-p2p-peer-address = p2p.eosmainnet.more.top:18181
-p2p-peer-address = p2p.newdex.one:9876
-p2p-peer-address = eos.okpool.top:9876
-p2p-peer-address = eosdapp.oneeos.org:9000
-p2p-peer-address = p2p.sheos.org:5556
-p2p-peer-address = eos-p2p.slowmist.io:9876
-p2p-peer-address = p2p.telos.africa:9877
-p2p-peer-address = p2p.stargalaxy.xyz:9876
-p2p-peer-address = peer.eosgeneva.io:9876
-p2p-peer-address = seed.greymass.com:9876
-p2p-peer-address = p2p.theteloscope.io:9876
-p2p-peer-address = api3.tokenika.io:9876
-p2p-peer-address = eth2.tokenika.io:9876
-p2p-peer-address = eos.unlimitedeos.com:15555
-p2p-peer-address = p2p.validatoreos.xyz:9800
+p2p-peer-address = node869-mainnet.eosauthority.com:9393
 p2p-peer-address = mainnet.get-scatter.com:9876
-p2p-peer-address = p2p-eos.whaleex.com:9876
-p2p-peer-address = 104.156.59.167:9876
-p2p-peer-address = node1.zbeos.com:9876
-p2p-peer-address = node2.zbeos.com:9876
+p2p-peer-address = bp.antpool.com:443
+p2p-peer-address = 47.75.70.208:9376
+p2p-peer-address = fn001.eossv.org:445
+p2p-peer-address = mainnet.eosarabia.net:3571
 
 actor-blacklist=newdexmobapp
 actor-blacklist=ftsqfgjoscma
@@ -295,8 +262,8 @@ actor-blacklist=gq4dkmzzhege
 **`genesis.json`:**
 ```
 {
-  "initial_timestamp": "2018-03-02T12:00:00.000",
-  "initial_key": "EOS8Znrtgwt8TfpmbVpTKvA2oB8Nqey625CLN8bCN3TEbgx86Dsvr",
+  "initial_timestamp": "2018-06-08T08:08:08.888",
+  "initial_key": "EOS7EarnUhcyYqmdnPon8rm7mBCTnBoot6o7fE2WzjvEX2TdggbL3",
   "initial_configuration": {
     "max_block_net_usage": 1048576,
     "target_block_net_usage_pct": 1000,
@@ -305,9 +272,9 @@ actor-blacklist=gq4dkmzzhege
     "net_usage_leeway": 500,
     "context_free_discount_net_usage_num": 20,
     "context_free_discount_net_usage_den": 100,
-    "max_block_cpu_usage": 100000,
-    "target_block_cpu_usage_pct": 500,
-    "max_transaction_cpu_usage": 50000,
+    "max_block_cpu_usage": 200000,
+    "target_block_cpu_usage_pct": 1000,
+    "max_transaction_cpu_usage": 150000,
     "min_transaction_cpu_usage": 100,
     "max_transaction_lifetime": 3600,
     "deferred_trx_expiration_window": 600,
@@ -315,8 +282,7 @@ actor-blacklist=gq4dkmzzhege
     "max_inline_action_size": 4096,
     "max_inline_action_depth": 4,
     "max_authority_depth": 6
-  },
-  "initial_chain_id": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
 }
 ```
 _Done!_
@@ -329,19 +295,19 @@ Now that you’re staged, we’ll run the Docker container.
 
 Pull the official Blocknet EOS image:
 
-* `docker pull blocknetdx/eos`
+* `docker pull blocknetdx/eos:v2.0.0`
 
 **Step 2**
 
 Run your container:
 
-* `docker run -d -p 9876:9876 -p 8888:8888 -p 8080:8080 -v /opt/eos/:/root/.local/share/eosio/  --name eos blocknetdx/eos`
+* `docker run -d -p 9876:9876 -p 8888:8888 -p 8080:8080 -v /opt/eos/:/root/.local/share/eosio/  --name eos blocknetdx/eos:v2.0.0`
 
 _or_
 
 **Step 2.a** *only required for non `docker -v` setups:*
 
-* `docker run -d -p 9876:9876 -p 8888:8888 -p 8080:8080 --name eos blocknetdx/eos`
+* `docker run -d -p 9876:9876 -p 8888:8888 -p 8080:8080 --name eos blocknetdx/eos:v2.0.0`
 
 *In the above case, data from the container's `/root/.local/share/eosio` directory will persist to the host machine's default `/var/lib/docker/volumes` directory.*
 
