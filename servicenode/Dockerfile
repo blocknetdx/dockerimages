@@ -35,7 +35,7 @@ ENV HOST=x86_64-pc-linux-gnu
 # Copy source files
 RUN mkdir -p /opt/blocknetdx \
   && cd /opt/blocknetdx \
-  && git clone --single-branch --branch v4.3.0 https://github.com/blocknetdx/blocknet.git
+  && git clone --single-branch --branch v4.3.1 https://github.com/blocknetdx/blocknet.git
 
 # Build source
 RUN mkdir -p /opt/blockchain/config \
@@ -74,4 +74,4 @@ VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 # Port, RPC, Test Port, Test RPC
 EXPOSE 41412 41414 41474 41419
 
-CMD ["blocknetd", "-daemon=0", "-server=0"]
+CMD ["blocknetd", "-daemon=0"]
