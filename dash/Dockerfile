@@ -32,7 +32,7 @@ RUN mkdir -p /opt/dash \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.dash \
   && cd /opt/dash \
-  && git clone --depth 1 --branch v0.15.0.0 https://github.com/dashpay/dash dash \
+  && git clone --depth 1 --branch v0.16.1.1 https://github.com/dashpay/dash dash \
   && cd /opt/dash/dash/ \
   && cd depends \
   && make -j$ecores NO_QT=1 \
@@ -51,8 +51,8 @@ RUN echo "datadir=/opt/blockchain/data  \n\
 dbcache=256                             \n\
 maxmempool=512                          \n\
                                         \n\
-port=9999                               \n\
-rpcport=9998                          \n\
+port=44219                               \n\
+rpcport=34219                          \n\
                                         \n\
                                         \n\
 listen=1                                \n\
@@ -69,6 +69,6 @@ WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 
 # Port, RPC, Test Port, Test RPC
-EXPOSE 9999 9998  18332  19332
+EXPOSE 44219 34219  18332  19332
 
 CMD ["/usr/bin/dashd", "-daemon=0"]

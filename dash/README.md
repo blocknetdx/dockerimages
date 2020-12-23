@@ -16,9 +16,9 @@ These images are _not a replacement or endorsement_ of the dash project (https:/
 Simple
 ======
 
-Run a simple dash node on port 9999:
+Run a simple dash node on port 44219:
 ```
-docker run -d --name=dash -p 9999:9999 blocknetdx/dash:latest
+docker run -d --name=dash -p 44219:44219 blocknetdx/dash:latest
 ```
 
 
@@ -27,7 +27,7 @@ Persist blockchain w/ volumes
 
 Run a dash node that persists the blockchain on a host directory. Recommended to avoid time consuming resyncs when updating to later container versions.
 ```
-docker run -d --name=dash -p 9999:9999 -v=/crypto/dash/config:/opt/blockchain/config -v=/crypto/dash/data:/opt/blockchain/data blocknetdx/dash:0.17.0.1
+docker run -d --name=dash -p 44219:44219 -v=/crypto/dash/config:/opt/blockchain/config -v=/crypto/dash/data:/opt/blockchain/data blocknetdx/dash:0.17.0.1
 ```
 
 
@@ -39,10 +39,10 @@ See https://docs.docker.com/engine/admin/start-containers-automatically/
 `--restart=no|on-failure:retrycount|always|unless-stopped`
 
 ```
-docker run -d --restart=no --name=dash -p 9999:9999 blocknetdx/dash:0.17.0.1 dashd -daemon=0 -rpcuser= -rpcpassword=123
-docker run -d --restart=on-failure:10 --name=dash -p 9999:9999 blocknetdx/dash:0.17.0.1 dashd -daemon=0 -rpcuser= -rpcpassword=123
-docker run -d --restart=unless-stopped --name=bitcoin -p 9999:9999 blocknetdx/dash:0.17.0.1 dashd -daemon=0 -rpcuser= -rpcpassword=123
-docker run -d --restart=always --name=bitcoin -p 9999:9999 blocknetdx/dash:0.17.0.1 dashd -daemon=0 -rpcuser= -rpcpassword=123
+docker run -d --restart=no --name=dash -p 44219:44219 blocknetdx/dash:0.17.0.1 dashd -daemon=0 -rpcuser= -rpcpassword=123
+docker run -d --restart=on-failure:10 --name=dash -p 44219:44219 blocknetdx/dash:0.17.0.1 dashd -daemon=0 -rpcuser= -rpcpassword=123
+docker run -d --restart=unless-stopped --name=bitcoin -p 44219:44219 blocknetdx/dash:0.17.0.1 dashd -daemon=0 -rpcuser= -rpcpassword=123
+docker run -d --restart=always --name=bitcoin -p 44219:44219 blocknetdx/dash:0.17.0.1 dashd -daemon=0 -rpcuser= -rpcpassword=123
 ```
 
 
