@@ -29,7 +29,7 @@ RUN mkdir -p /opt/bitcoin \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.bitcoin \
   && cd /opt/bitcoin \
-  && git clone --depth 1 --branch v0.17.0.1 https://github.com/bitcoin/bitcoin.git \
+  && git clone --depth 1 --branch v0.20.0 https://github.com/bitcoin/bitcoin.git \
   && cd /opt/bitcoin/bitcoin \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
