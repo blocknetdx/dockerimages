@@ -1,0 +1,27 @@
+
+name: Release Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version of wallet
+        required: false
+
+jobs:
+
+  release:
+    runs-on: self-hosted
+
+    steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - uses: actions/checkout@v2
+
+    - name: Login to DockerHub
+      run: docker login -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
+
+    - name: Push an image to DockerHub
+      run: ./ci.sh release ${{ steps.extract_branch.outputs.branch }}

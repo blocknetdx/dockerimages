@@ -72,6 +72,41 @@ rpcallowip=127.0.0.1
 rpctimeout=15                 
 rpcclienttimeout=15           
 ```
+### Autobuild docker images 
+
+Github actions are used to build, test and push docker images to Docker Hub.
+
+Workflow runs on self-hosted runners in k8s cluster.
+
+Pipeline has three Jobs "Build", "Staging" and manual Job release. Build Job has 6 steps, there are four main of them: 
+*  Build an image
+*  Run a container
+*  Test basic functionality of a build. Get wallet info.
+*  Push image to Docker Hub
+
+There is ci.sh script which is used to run bash commands during the Job.
+
+Build steps takes a Dockerfile from wallet directory and use it to create an Image
+
+----
+#### To build new image and push it to docker hub it requires the following steps:
+* Create a branch from master with a name "_blockchain_project-version_". Examples:
+  * dash-v0.16.1.1
+  * btc-v0.20.1
+* Create a directory "blockchain_project" Example:
+  * /dash
+  * /btc
+* in the directory create a Dockerfile
+* Push commit and create PR
+ 
+The image will be build and will have a tag with postfix "-staging". Example:
+  * dash:v0.16.1.1-staging
+
+Now the image can be passed to staging server for additional tests or can be released by manual
+start workflow.
+
+Release Job is run by using workflow_dispatch. It takes staging image, change a tag and push it to DockerHub.
+_Example: dash:v0.16.1.1_
 
 License
 =======

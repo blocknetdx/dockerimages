@@ -1,0 +1,54 @@
+
+name: BUILD_CI
+
+on:
+  push:
+    branches:
+      - '!master'
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: self-hosted
+    if: ${{ github.event.pull_request }}
+    steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - uses: actions/checkout@v2
+
+    - name: Login to DockerHub
+      run: docker login -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
+
+    # Build images
+    - name: build image
+      run: ./ci.sh build ${{ steps.extract_branch.outputs.branch }}
+    - name: Run container
+      run: ./ci.sh run ${{ steps.extract_branch.outputs.branch }}
+    - name: Test build
+      run: ./ci.sh test ${{ steps.extract_branch.outputs.branch }}
+    - name: Remove container
+      run: ./ci.sh clean ${{ steps.extract_branch.outputs.branch }}
+    - name: Remove dangling images
+      if: ${{ always() }}
+      run: yes | docker image prune
+    - name: Push image to DockerHub
+      run: ./ci.sh push ${{ steps.extract_branch.outputs.branch }}
+
+  staging:
+    if: ${{ github.event.pull_request }}
+    needs: build
+    runs-on: self-hosted
+    steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - uses: actions/checkout@v2
+
+    - name: Test new image
+      run: echo "Some test"
+
