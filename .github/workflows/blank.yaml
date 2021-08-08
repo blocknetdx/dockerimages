@@ -1,0 +1,59 @@
+
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - uses: actions/checkout@v2
+
+    # Build images
+    - name: build image
+      run: ./ci.sh build ${{ steps.extract_branch.outputs.branch }}
+    - name: Run container
+      run: ./ci.sh run ${{ steps.extract_branch.outputs.branch }}
+    - name: Test build
+      run: ./ci.sh test ${{ steps.extract_branch.outputs.branch }}
+    - name: Remove container
+      run: ./ci.sh clean ${{ steps.extract_branch.outputs.branch }}
+    - name: Remove dangling images
+      if: ${{ always() }}
+      run: yes | docker image prune
+    - name: Push image to DockerHub
+      run: ./ci.sh push_test ${{ steps.extract_branch.outputs.branch }}
+
+  test:
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+    - name: Test new image
+      run: echo "test image"
+
+  push:
+    needs: test
+    runs-on: self-hosted
+
+    steps:
+    - name: Push an image to DockerHub
+      run: echo "push image"
+
+  clean:
+    needs: push
+    runs-on: self-hosted
+
+    steps:
+    - name: remove dangling images
+      run: echo "remove dangling images"
