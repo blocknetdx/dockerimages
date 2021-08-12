@@ -3,13 +3,15 @@ name: CI
 
 on:
   push:
-  pull_request:
-    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
+  pull_request_review:
+    types: [submitted]
+
 
 jobs:
 
   build:
-
     runs-on: self-hosted
 
     steps:
@@ -32,6 +34,7 @@ jobs:
       if: ${{ always() }}
       run: yes | docker image prune
     - name: Push image to DockerHub
+      if: github.event.review.state == 'approved'
       run: ./ci.sh push_test ${{ steps.extract_branch.outputs.branch }}
 
   test:
