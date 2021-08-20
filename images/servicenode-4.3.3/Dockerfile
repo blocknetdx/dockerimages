@@ -1,8 +1,8 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/servicenode:latest .
+# docker build --build-arg cores=8 -t blocknetdx/blocknet:latest .
 FROM ubuntu:bionic
 
-ARG cores=1
+ARG cores=4
 ENV ecores=$cores
 
 RUN apt update \
@@ -35,7 +35,7 @@ ENV HOST=x86_64-pc-linux-gnu
 # Copy source files
 RUN mkdir -p /opt/blocknetdx \
   && cd /opt/blocknetdx \
-  && git clone --single-branch --branch v4.3.1 https://github.com/blocknetdx/blocknet.git
+  && git clone --single-branch --branch v4.3.3 https://github.com/blocknetdx/blocknet.git
 
 # Build source
 RUN mkdir -p /opt/blockchain/config \
@@ -65,7 +65,7 @@ logips=1                                  \n\
                                           \n\
 rpcbind=0.0.0.0                           \n\
 rpcallowip=127.0.0.1                      \n\
-rpctimeout=30                             \n\
+rpctimeout=60                             \n\
 rpcclienttimeout=30" > /opt/blockchain/config/blocknet.conf
 
 WORKDIR /opt/blockchain/
