@@ -1,0 +1,23 @@
+name: Release Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: Name of wallet
+        required: true
+      version:
+        description: Version of wallet
+        required: true
+
+jobs:
+
+  release:
+    runs-on: self-hosted
+
+    steps:
+    - name: Login to DockerHub
+      run: echo ${{ secrets.docker_password }} | docker login --username ${{ secrets.docker_username }} --password-stdin
+
+    - name: Push an image to DockerHub
+      run: ./ci.sh release ${{ steps.events.inputs.name }} ${{ steps.events.inputs.version }}
