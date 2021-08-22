@@ -1,55 +1,33 @@
 # Build via docker:
 # docker build --build-arg cores=8 -t blocknetdx/blocknet:latest .
-FROM ubuntu:bionic
+FROM blocknetdx/devbuilds:gitlab-linux
 
-ARG cores=4
+ARG cores=8
 ENV ecores=$cores
-
-RUN apt update \
-  && apt install -y --no-install-recommends \
-     software-properties-common \
-     ca-certificates \
-     wget curl git python vim \
-  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN add-apt-repository ppa:bitcoin/bitcoin \
-  && apt update \
-  && apt install -y --no-install-recommends \
-     build-essential libtool autotools-dev bsdmainutils \
-     libevent-dev autoconf automake pkg-config libssl-dev \
-     libdb4.8-dev libdb4.8++-dev python-setuptools cmake \
-     libcap-dev \
-  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# gcc 8
-RUN add-apt-repository ppa:ubuntu-toolchain-r/test \
-  && apt update \
-  && apt install -y --no-install-recommends \
-     g++-8-multilib gcc-8-multilib binutils-gold \
-  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV PROJECTDIR=/opt/blocknetdx/blocknet
 ENV BASEPREFIX=$PROJECTDIR/depends
+ENV BASEPREFIX_CACHE=/proj/depends-cache
+ENV DISTDIR=$PROJECTDIR/dist
+
 ENV HOST=x86_64-pc-linux-gnu
 
 # Copy source files
 RUN mkdir -p /opt/blocknetdx \
   && cd /opt/blocknetdx \
-  && git clone --single-branch --branch v4.3.3 https://github.com/blocknetdx/blocknet.git
+  && git clone --single-branch --branch 4.3.3 https://github.com/blocknetdx/blocknet.git
 
-# Build source
 RUN mkdir -p /opt/blockchain/config \
-  && mkdir -p /opt/blockchain/data \
-  && ln -s /opt/blockchain/config /root/.blocknet \
-  && cd $BASEPREFIX \
-  && make -j$ecores && make install \
-  && cd $PROJECTDIR \
-  && chmod +x ./autogen.sh; sync \
-  && ./autogen.sh \
-  && CONFIG_SITE=$BASEPREFIX/$HOST/share/config.site ./configure CC=gcc-8 CXX=g++-8 CFLAGS='-Wno-deprecated' CXXFLAGS='-Wno-deprecated' --disable-ccache --disable-maintainer-mode --disable-dependency-tracking --without-gui --enable-hardening --prefix=/ \
-  && echo "Building with cores: $ecores" \
-  && make -j$ecores \
-  && make install
+    && mkdir -p /opt/blockchain/data \
+    && ln -s /opt/blockchain/config /root/.blocknet \
+    && rm -rf $BASEPREFIX \
+    && mv $BASEPREFIX_CACHE $BASEPREFIX \
+    && chmod +x ./autogen.sh; sync \
+    && ./autogen.sh \
+    && CONFIG_SITE=$BASEPREFIX/$HOST/share/config.site ./configure CC=gcc-8 CXX=g++-8 CFLAGS='-Wno-deprecated' CXXFLAGS='-Wno-deprecated' --disable-ccache --disable-maintainer-mode --disable-dependency-tracking --without-gui --enable-hardening --prefix=/ \
+    && echo "Building with cores: $ecores" \
+    && make -j$ecores \
+    && make install
 
 # Write default blocknet.conf (can be overridden on commandline)
 RUN echo "datadir=/opt/blockchain/data    \n\

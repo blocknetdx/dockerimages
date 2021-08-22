@@ -29,7 +29,11 @@ function run () {
 }
 
 function test() {
-    info=$(docker exec "$1"-"$2" "$1"-cli getwalletinfo)
+    if [[ "$1" = "servicenode" ]] ; then
+      info=$(docker exec "$1"-"$2" blocknet-cli getwalletinfo)
+    else
+      info=$(docker exec "$1"-"$2" "$1"-cli getwalletinfo)
+    fi
     if [ "${info}" ]; then
       if [ `echo ${info} | grep "walletversion"` ]; then
         echo "${info}"
