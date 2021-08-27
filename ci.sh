@@ -2,7 +2,7 @@
 
 function build() {
 
-    if docker build -f ./images/"$1"-"$3"/Dockerfile -t blocknetdx/"$1":"$2" ./images/"$1"-"$3"; then
+    if docker build -f ./images/"$1"/Dockerfile -t blocknetdx/"$1":"$2" ./images/"$1"; then
       docker image ls blocknetdx/"$1":"$2"
     else
       echo "Docker build Failed"
@@ -72,36 +72,37 @@ function release() {
 }
 
 
-
 IFS='-'
 read -a strarr <<< $2
 wallet=${strarr[0]}
-tag=${strarr[1]}-staging
-release_tag=${strarr[1]}
 
-if [ ! -f images/"${wallet}"-"${release_tag}"/Dockerfile ]; then
+if [ ! -f images/"${wallet}"/Dockerfile ]; then
   echo "No Dockerfile for ${wallet}"
   exit 1
+else
+  tag=$(grep "LABEL version" images/"${wallet}"/Dockerfile | cut -d '=' -f 2)
+  release_tag=$tag
+  staging_tag=$tag-staging
 fi
 
 case $1 in
   build)
-    build "${wallet}" "${tag}" "${release_tag}"
+    build "${wallet}" "${staging_tag}"
   ;;
   run)
-    run "${wallet}" "${tag}"
+    run "${wallet}" "${staging_tag}"
   ;;
   test)
-    test "${wallet}" "${tag}"
+    test "${wallet}" "${staging_tag}"
   ;;
   push)
-    push "${wallet}" "${tag}"
+    push "${wallet}" "${staging_tag}"
   ;;
   clean)
-    clean "${wallet}" "${tag}"
+    clean "${wallet}" "${staging_tag}"
   ;;
   release)
-    release "${wallet}" "${tag}" "${release_tag}"
+    release "${wallet}" "${staging_tag}" "${release_tag}"
   ;;
   *)
     echo 'Unknown command'

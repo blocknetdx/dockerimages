@@ -5,6 +5,9 @@ FROM blocknetdx/devbuilds:gitlab-linux
 ARG cores=8
 ENV ecores=$cores
 
+LABEL wallet=blocknet
+LABEL version=4.3.3
+
 ENV PROJECTDIR=/opt/blocknetdx/blocknet
 ENV BASEPREFIX=$PROJECTDIR/depends
 ENV BASEPREFIX_CACHE=/proj/depends-cache
