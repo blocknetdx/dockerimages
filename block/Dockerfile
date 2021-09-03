@@ -32,7 +32,7 @@ RUN mkdir -p /opt/blocknet \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.blocknet \
   && cd /opt/blocknet \
-  && git clone --depth 1 --branch v4.3.0 https://github.com/blocknetdx/blocknet blocknet \
+  && git clone --depth 1 --branch 4.3.3-dev-18decimal https://github.com/blocknetdx/blocknet blocknet \
   && cd /opt/blocknet/blocknet/ \
   && cd depends \
   && make -j$ecores NO_QT=1 \
