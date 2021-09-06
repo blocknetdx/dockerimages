@@ -6,7 +6,7 @@ ARG cores=8
 ENV ecores=$cores
 
 LABEL wallet=blocknet
-LABEL version=4.3.3
+LABEL version=4.3.3-dev-18decimal
 
 ENV PROJECTDIR=/opt/blocknetdx/blocknet
 ENV BASEPREFIX=$PROJECTDIR/depends
