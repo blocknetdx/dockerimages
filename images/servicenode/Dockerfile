@@ -6,7 +6,7 @@ ARG cores=8
 ENV ecores=$cores
 
 LABEL wallet=blocknet
-LABEL version=4.3.3-dev
+LABEL version=4.3.4-dev
 
 ENV PROJECTDIR=/opt/blocknetdx/blocknet
 ENV BASEPREFIX=$PROJECTDIR/depends
@@ -18,7 +18,7 @@ ENV HOST=x86_64-pc-linux-gnu
 # Copy source files
 RUN mkdir -p /opt/blocknetdx \
   && cd /opt/blocknetdx \
-  && git clone --single-branch --branch 4.3.3-dev https://github.com/blocknetdx/blocknet.git
+  && git clone --single-branch --branch 4.3.4-dev https://github.com/blocknetdx/blocknet.git
 
 RUN mkdir -p /opt/blockchain/config \
     && mkdir -p /opt/blockchain/data \
