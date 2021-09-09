@@ -6,7 +6,7 @@ ARG cores=8
 ENV ecores=$cores
 
 LABEL wallet=blocknet
-LABEL version=4.3.3-feature/dynamic-fee
+LABEL version=4.3.3-feature-dynamic-fee
 
 ENV PROJECTDIR=/opt/blocknetdx/blocknet
 ENV BASEPREFIX=$PROJECTDIR/depends
