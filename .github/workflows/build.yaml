@@ -1,4 +1,4 @@
-name: BUILD_IMAGE_FROM_TEMPLATE
+name: BUILD IMAGE FROM TEMPLATE
 
 on:
   workflow_dispatch:

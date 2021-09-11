@@ -1,4 +1,4 @@
-name: BUILD_SERVICENODE
+name: BUILD SERVICENODE
 
 on:
   workflow_dispatch:

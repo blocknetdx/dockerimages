@@ -1,4 +1,4 @@
-name: Release Image
+name: RELEASE IMAGE
 
 on:
   workflow_dispatch:

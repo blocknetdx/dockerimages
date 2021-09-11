@@ -1,4 +1,4 @@
-name: BUILD_CUSTOM_IMAGE
+name: BUILD CUSTOM IMAGE
 
 on:
   workflow_dispatch:
