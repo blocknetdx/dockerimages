@@ -42,8 +42,10 @@ branch = subprocess.getoutput("git rev-parse --abbrev-ref HEAD")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--blockchain', help='blockchain name', default=branch)
+parser.add_argument('--version', help='version of wallet', default="latest")
 args = parser.parse_args()
 blockchain_name = args.blockchain
+wallet_version = args.version
 
 for blockchain in manifest_config:
     if blockchain['blockchain'].lower() == blockchain_name:
@@ -62,8 +64,13 @@ for blockchain in manifest_config:
         walletVerList = blockchain['versions']
         testnetPort = '18332'
         testnetRPC = '19332'
-
-        walletVersion = walletVerList[-1]
+        if wallet_version == "latest" or wallet_version == "":
+            walletVersion = walletVerList[-1]
+        else:
+            if wallet_version in walletVerList:
+                walletVersion = wallet_version
+            else:
+                sys.exit(f'Wallet version not found {wallet_version}')
         walletGitTag = walletVersion
         walletNameVerId = walletVersion
 

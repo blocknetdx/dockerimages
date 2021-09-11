@@ -1,8 +1,18 @@
 #!/bin/bash
 
+function generate() {
+
+  cd autobuild && python3 generate_build_files.py --blockchain=$1 --version=$2 && cd ../
+
+}
+
+
 function build() {
 
-    if docker build -f ./images/"$1"/Dockerfile -t blocknetdx/"$1":"$2" ./images/"$1"; then
+    if docker build --build-arg WALLET=$1 \
+                    --build-arg TAG=$2 \
+                    --build-arg BRANCH=$3 \
+                    -f ./images/"$1"/Dockerfile -t blocknetdx/"$1":"$2" ./images/"$1"; then
       docker image ls blocknetdx/"$1":"$2"
     else
       echo "Docker build Failed"
@@ -72,22 +82,30 @@ function release() {
 }
 
 
-IFS='-'
-read -a strarr <<< $2
-wallet=${strarr[0]}
+wallet=$2
+version=$3
+branch=$4
+
+if [ "$1" == "generate" ]; then
+  generate "${wallet}" "${version}"
+  exit 0
+fi
 
 if [ ! -f images/"${wallet}"/Dockerfile ]; then
   echo "No Dockerfile for ${wallet}"
   exit 1
-else
-  tag=$(grep "LABEL version" images/"${wallet}"/Dockerfile | cut -d '=' -f 2)
-  release_tag=$tag
-  staging_tag=$tag-staging
 fi
+
+if [ "${version}" == "latest" ] || [ -z "${version}" ]; then
+  version=$(grep "LABEL version" images/"${wallet}"/Dockerfile | cut -d '=' -f 2)
+fi
+
+release_tag=$version
+staging_tag=$version-staging
 
 case $1 in
   build)
-    build "${wallet}" "${staging_tag}"
+    build "${wallet}" "${staging_tag}" "${branch}"
   ;;
   run)
     run "${wallet}" "${staging_tag}"
