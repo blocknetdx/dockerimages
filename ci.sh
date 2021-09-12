@@ -1,8 +1,18 @@
 #!/bin/bash
 
+function generate() {
+
+  cd autobuild && python3 generate_build_files.py --blockchain=$1 --version=$2 && cd ../
+
+}
+
+
 function build() {
 
-    if docker build -f ./images/"$1"-"$3"/Dockerfile -t blocknetdx/"$1":"$2" ./images/"$1"-"$3"; then
+    if docker build --build-arg WALLET=$1 \
+                    --build-arg TAG=$2 \
+                    --build-arg BRANCH=$3 \
+                    -f ./images/"$1"/Dockerfile -t blocknetdx/"$1":"$2" ./images/"$1"; then
       docker image ls blocknetdx/"$1":"$2"
     else
       echo "Docker build Failed"
@@ -29,7 +39,11 @@ function run () {
 }
 
 function test() {
-    info=$(docker exec "$1"-"$2" "$1"-cli getwalletinfo)
+    if [[ "$1" = "servicenode" ]] ; then
+      info=$(docker exec "$1"-"$2" blocknet-cli getwalletinfo)
+    else
+      info=$(docker exec "$1"-"$2" "$1"-cli getwalletinfo)
+    fi
     if [ "${info}" ]; then
       if [ `echo ${info} | grep "walletversion"` ]; then
         echo "${info}"
@@ -68,36 +82,45 @@ function release() {
 }
 
 
+wallet=$2
+version=$3
+branch=$4
 
-IFS='-'
-read -a strarr <<< $2
-wallet=${strarr[0]}
-tag=${strarr[1]}-staging
-release_tag=${strarr[1]}
+if [ "$1" == "generate" ]; then
+  generate "${wallet}" "${version}"
+  exit 0
+fi
 
-if [ ! -f images/"${wallet}"-"${release_tag}"/Dockerfile ]; then
+if [ ! -f images/"${wallet}"/Dockerfile ]; then
   echo "No Dockerfile for ${wallet}"
   exit 1
 fi
 
+if [ "${version}" == "latest" ] || [ -z "${version}" ]; then
+  version=$(grep "LABEL version" images/"${wallet}"/Dockerfile | cut -d '=' -f 2)
+fi
+
+release_tag=$version
+staging_tag=$version-staging
+
 case $1 in
   build)
-    build "${wallet}" "${tag}" "${release_tag}"
+    build "${wallet}" "${staging_tag}" "${branch}"
   ;;
   run)
-    run "${wallet}" "${tag}"
+    run "${wallet}" "${staging_tag}"
   ;;
   test)
-    test "${wallet}" "${tag}"
+    test "${wallet}" "${staging_tag}"
   ;;
   push)
-    push "${wallet}" "${tag}"
+    push "${wallet}" "${staging_tag}"
   ;;
   clean)
-    clean "${wallet}" "${tag}"
+    clean "${wallet}" "${staging_tag}"
   ;;
   release)
-    release "${wallet}" "${tag}" "${release_tag}"
+    release "${wallet}" "${staging_tag}" "${release_tag}"
   ;;
   *)
     echo 'Unknown command'

@@ -1,15 +1,18 @@
-name: BUILD IMAGE FROM TEMPLATE
+name: BUILD SERVICENODE
 
 on:
   workflow_dispatch:
     inputs:
       image:
-        description: The full name of a wallet. Example - bitcoin, dash, blocknet.
+        description: Name of wallet.
         required: true
+        default: servicenode
       version:
-        description: Tag or version of an image, please check manifest.json. By default it takes the newest version.
-        required: false
-        default: latest
+        description: Tag or version of an image
+        required: true
+      branch:
+        description: branch
+        required: true
 
 jobs:
 
@@ -21,10 +24,8 @@ jobs:
       run: echo ${{ secrets.docker_password }} | docker login --username ${{ secrets.docker_username }} --password-stdin
 
     # Build images
-    - name: generate a Dockerfile
-      run: ./ci.sh generate ${{ steps.events.inputs.image }} ${{ steps.events.inputs.version }}
     - name: build an image
-      run: ./ci.sh build ${{ steps.events.inputs.image }} ${{ steps.events.inputs.version }}
+      run: ./ci.sh build ${{ steps.events.inputs.image }} ${{ steps.events.inputs.version }} ${{ steps.events.inputs.branch }}
     - name: Run a container
       run: ./ci.sh run ${{ steps.events.inputs.image }} ${{ steps.events.inputs.version }}
     - name: Test build

@@ -1,4 +1,4 @@
-name: Release Image
+name: RELEASE IMAGE
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
         description: Name of wallet
         required: true
       version:
-        description: Version of wallet
+        description: Tag or version of an image
         required: true
 
 jobs:
