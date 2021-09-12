@@ -73,47 +73,38 @@ rpcclienttimeout=30
 ```
 ### Autobuild docker images 
 
-Github actions are used to build, test and push docker images to Docker Hub.
+**BUILD IMAGE FROM TEMPLATE**  - this workflow is used to create an image based on Dockerfile template. It checks manifest.json, generates Dockerfile, build and push an image.  It takes two inputs (arguments):  The name of a wallet; the version of wallet (this is used as a tag for image).
+If do not define a version, it takes the latest one from manifest.json by default. 
 
-Workflow runs on self-hosted runners in k8s cluster.
+Scenario:
+1) Add info to manifest.json if does not exist.
+2) Run a workflow by filling inputs. Put a wallet name and a version (if necessary) in a web form. 
+3)The image will be uploaded to DockerHub blocknetdx/<wallet>:<tag>-staging
 
-There are two workflows: build image and release image. 
+**BUILD SERVICENODE** - this workflow is used to create a servicenode image. (The previous workflow also can bu used to create servicenode images. But it creates only those images which are presented in manifest.json.)  The workflow creates an image with any version of branch. It takes three inputs (arguments): The name of wallet, by default it is "servicenode"; The version (it is used as a tag for image). The branch, name of branch. 
 
-Build workflow has two Jobs "Build" and "Staging".
+Scenario:
+1) If a branch in blocknet repository is ready for building and testing, run a workflow by filling inputs. 
+2) The image will be uploaded to DockerHub blocknetdx/<wallet>:<tag>-staging
 
-Build Job:
-*  Build an image
-*  Run a container
-*  Test basic functionality of a build. Get wallet info.
-*  Push staging image to Docker Hub
 
-There is ci.sh script which is used to run bash commands during the Job.
+**BUILD CUSTOM IMAGE** - It is used if we need to create a custom dockerimage which is not presented in manifest.json, but requires testing. 
 
-During build steps Dockerfile is taken from wallet directory and used to create an Image
+Scenario:
+1) Create a branch from master
+2) Create a Dockerfile and necessary files in directory images/<wallet>/
+3) Run a workflow by filling inputs and chouse the branch which you had created! Put a wallet name and a version in a web form. 
+4) The image will be uploaded to DockerHub blocknetdx/<wallet>:<tag>-staging
 
-Release Job is a manual job. 
 
-It takes a staging image, re-tag image and push it to Dockerhub
+**RELEASE IMAGE** - when the image is tested and has no any issues it can be released by workflow. It changes a tag of an image from blocknetdx/<wallet>:<tag>-staging to blocknetdx/<wallet>:<tag>
 
-----
-#### To build new image and push it to docker hub it requires the following steps:
-* Create a branch from master with a name "_blockchain_project-version_". Examples:
-  * dash-v0.16.1.1
-  * btc-v0.20.1
-* Create a directory "blockchain_project-version" in directory images Example:
-  * images/dash-v0.16.1.1
-  * images/btc-v0.20.1
-* in the directory create a Dockerfile
-* Push commit and create PR
- 
-The image will be build and will have a tag with postfix "-staging". Example:
-  * dash:v0.16.1.1-staging
+Scenario:
+1) Run a workflow by filling inputs. Put a wallet name and a version in a web form. 
+2) The image will be re-uploaded to DockerHub blocknetdx/<wallet>:<tag>
 
-Now the image can be passed to staging server for additional tests or can be released by manual
-start workflow.
 
-Release Job is run by using workflow_dispatch. It takes staging image, change a tag and push it to DockerHub.
-_Example: dash:v0.16.1.1_
+It is not needed to create a separate branch to run workflow "BUILD IMAGE FROM TEMPLATE" and "BUILD SERVICENODE". Workflows are run from master branch. But if you want to change something in Dockerfiles or scripts, you can create new branch and run workflow for your branch.
 
 License
 =======

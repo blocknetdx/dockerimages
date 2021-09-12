@@ -22,7 +22,7 @@ jobs:
 
     # Build images
     - name: INFO BUILD
-      run: echo ${{ github.event.inputs.name }} ${{ github.event.inputs.version }}
+      run: echo ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
     - name: generate a Dockerfile
       run: ./ci.sh generate ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
     - name: build an image
