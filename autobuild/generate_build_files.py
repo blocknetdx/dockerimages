@@ -2,7 +2,6 @@ import json
 import os
 import time
 import sys
-import errno
 import subprocess
 import argparse
 import urllib.request

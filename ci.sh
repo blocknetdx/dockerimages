@@ -2,6 +2,7 @@
 
 function generate() {
 
+  pip3 install -r autobuild/requirements.txt
   cd autobuild && python3 generate_build_files.py --blockchain=$1 --version=$2 && cd ../
 
 }
@@ -45,7 +46,7 @@ function test() {
       info=$(docker exec "$1"-"$2" "$1"-cli getwalletinfo)
     fi
     if [ "${info}" ]; then
-      if [ `echo ${info} | grep "walletversion"` ]; then
+      if [[ `echo "${info}" | grep "walletversion"` ]]; then
         echo "${info}"
       else
         echo "${info}"
