@@ -20,7 +20,7 @@ WALLET_CONF_URL = 'https://raw.githubusercontent.com/blocknetdx/blockchain-confi
 
 walletDict = {}
 
-buildOS = 'xenial'
+buildOS = 'bionic'
 
 
 def load_template(template_url):
