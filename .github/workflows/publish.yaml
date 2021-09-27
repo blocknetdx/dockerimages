@@ -16,6 +16,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
+    - uses: actions/checkout@v2
     - name: Login to DockerHub
       run: echo ${{ secrets.docker_password }} | docker login --username ${{ secrets.docker_username }} --password-stdin
     - name: INFO RELEASE
