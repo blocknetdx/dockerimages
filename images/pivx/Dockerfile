@@ -7,7 +7,7 @@ ARG cores=6
 ENV ecores=$cores
 
 LABEL wallet=pivx
-LABEL version=v5.3.0
+LABEL version=v5.3.1
 
 RUN apt update \
   && apt install -y --no-install-recommends \
@@ -35,7 +35,7 @@ RUN mkdir -p /opt/pivx \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.pivx \
   && cd /opt/pivx \
-  && git clone --depth 1 --branch v5.3.0 https://github.com/PIVX-Project/PIVX pivx \
+  && git clone --depth 1 --branch v5.3.1 https://github.com/PIVX-Project/PIVX pivx \
   && cd /opt/pivx/pivx/ \
   && cd depends \
   && make -j$ecores NO_QT=1 \
