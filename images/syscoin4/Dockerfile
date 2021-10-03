@@ -51,10 +51,10 @@ RUN set -ex \
 ENV SYSCOIN_VERSION=4.2.2
 ENV SYSCOIN_PREFIX=/opt/syscoin-${SYSCOIN_VERSION}
 
-RUN wget https://github.com/syscoin/syscoin/archive/refs/heads/dev-4.x-nevm.tar.gz
+RUN wget https://github.com/syscoin/syscoin/releases/download/v4.2.2/syscoin-4.2.2-aarch64-linux-gnu.tar.gz
 RUN tar -xzf *.tar.gz
 
-WORKDIR /syscoin-dev-4.x-nevm
+WORKDIR /syscoin-4.2.2
 
 RUN sed -i '/AC_PREREQ/a\AR_FLAGS=cr' src/univalue/configure.ac
 RUN sed -i '/AX_PROG_CC_FOR_BUILD/a\AR_FLAGS=cr' src/secp256k1/configure.ac
@@ -95,7 +95,7 @@ RUN sed -i 's/http\:\/\/dl-cdn.alpinelinux.org/https\:\/\/alpine.global.ssl.fast
 RUN apk --no-cache add wget su-exec
 
 ENV SYSCOIN_DATA=/home/syscoin/.syscoin
-ENV SYSCOIN_VERSION=4.3.99
+ENV SYSCOIN_VERSION=4.2.2
 ENV SYSCOIN_PREFIX=/opt/syscoin-${SYSCOIN_VERSION}
 ENV PATH=${SYSCOIN_PREFIX}/bin:$PATH
 
