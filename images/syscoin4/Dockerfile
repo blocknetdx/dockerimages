@@ -48,7 +48,7 @@ RUN set -ex \
     gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
   done
 
-ENV SYSCOIN_VERSION=4.3.99
+ENV SYSCOIN_VERSION=4.2.2
 ENV SYSCOIN_PREFIX=/opt/syscoin-${SYSCOIN_VERSION}
 
 RUN wget https://github.com/syscoin/syscoin/archive/refs/heads/dev-4.x-nevm.tar.gz
