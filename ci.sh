@@ -83,7 +83,7 @@ function release() {
 }
 
 
-wallet=$2
+wallet=$(echo $2 | sed -e 's/\s\+/-/g' | tr '[:upper:]' '[:lower:]' )
 version=$3
 branch=$4
 
@@ -103,7 +103,6 @@ fi
 
 release_tag=$version
 staging_tag=$version-staging
-
 case $1 in
   build)
     build "${wallet}" "${staging_tag}" "${branch}"

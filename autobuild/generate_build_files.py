@@ -2,6 +2,7 @@ import json
 import os
 import time
 import sys
+import re
 import subprocess
 import argparse
 import urllib.request
@@ -47,12 +48,12 @@ blockchain_name = args.blockchain
 wallet_version = args.version
 
 for blockchain in manifest_config:
-    if blockchain['blockchain'].lower() == blockchain_name:
+    if re.sub('\s+', '-', blockchain['blockchain'].lower()) == blockchain_name.lower():
         walletConf = blockchain['wallet_conf']
         walletDaemon = blockchain['conf_name'].split('.conf')
         walletbuildname = walletDaemon[0]
         walletDaemon = walletDaemon[0] + 'd'
-        walletName = blockchain['blockchain'].lower()
+        walletName = re.sub('\s+', '-', blockchain['blockchain'].lower())
         walletNameVerId = blockchain['ver_id']
         walletGitTag = blockchain['ver_id'].split('--')
         walletGitURL = blockchain['repo_url']

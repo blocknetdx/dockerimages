@@ -22,4 +22,4 @@ jobs:
     - name: INFO RELEASE
       run: echo ${{ github.event.inputs.name }} ${{ github.event.inputs.version }}
     - name: Push an image to DockerHub
-      run: ./ci.sh release ${{ github.event.inputs.name }} ${{ github.event.inputs.version }}
+      run: ./ci.sh release "${{ github.event.inputs.name }}" ${{ github.event.inputs.version }}

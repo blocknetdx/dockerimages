@@ -23,12 +23,12 @@ jobs:
     - name: INFO BUILD
       run: echo ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
     - name: build an image
-      run: ./ci.sh build ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
+      run: ./ci.sh build "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
     - name: Remove dangling images
       if: ${{ always() }}
       run: yes | docker image prune
     - name: Push an image to DockerHub
-      run: ./ci.sh push ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
+      run: ./ci.sh push "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
 
 #  staging:
 #    if: ${{ github.event.pull_request }}
