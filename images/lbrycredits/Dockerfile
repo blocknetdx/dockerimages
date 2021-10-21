@@ -6,7 +6,7 @@ FROM ubuntu:xenial
 ARG cores=6
 ENV ecores=$cores
 
-LABEL wallet=lbry-credits
+LABEL wallet=lbrycredits
 LABEL version=v0.17.4.6
 
 RUN apt update \

@@ -83,7 +83,8 @@ function release() {
 }
 
 
-wallet=$(echo $2 | sed -e 's/\s\+/-/g' | tr '[:upper:]' '[:lower:]' )
+wallet=$(echo $2 | sed -e 's/\s\+//g' | tr '[:upper:]' '[:lower:]' )
+echo $wallet
 version=$3
 branch=$4
 
