@@ -19,7 +19,7 @@ fi
 
 if [ "$1" = "syscoind" ] || [ "$1" = "syscoin-cli" ] || [ "$1" = "syscoin-tx" ]; then
   echo
-  exec su-exec syscoin "$@"
+  exec gosu syscoin "$@"
 fi
 
 echo
