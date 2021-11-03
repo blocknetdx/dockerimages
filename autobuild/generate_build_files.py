@@ -15,10 +15,6 @@ j2_env = Environment(loader=FileSystemLoader(''),
 template = j2_env.get_template('Dockerfile.j2')
 readmetemplate = j2_env.get_template('README.md.j2')
 
-MANIFEST_URL = 'https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master/manifest-latest.json'
-WALLET_CONF_URL = 'https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master/wallet-confs/'
-
-
 walletDict = {}
 
 buildOS = 'xenial'
@@ -37,15 +33,20 @@ def load_template(template_url):
         time.sleep(10)
 
 
-manifest_config = json.loads(load_template(MANIFEST_URL))
 branch = subprocess.getoutput("git rev-parse --abbrev-ref HEAD")
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--blockchain', help='blockchain name', default=branch)
+parser.add_argument('--path', help='branch path', default='https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master')
 parser.add_argument('--version', help='version of wallet', default="latest")
 args = parser.parse_args()
 blockchain_name = args.blockchain
 wallet_version = args.version
+config_path = args.path
+MANIFEST_URL = config_path+'/manifest-latest.json'
+WALLET_CONF_URL = config_path+'/wallet-confs/'
+manifest_config = json.loads(load_template(MANIFEST_URL))
+
 
 for blockchain in manifest_config:
     if re.sub('\s+', '-', blockchain['blockchain'].lower()) == blockchain_name.lower():

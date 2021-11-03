@@ -3,7 +3,7 @@
 function generate() {
 
   pip3 install -r autobuild/requirements.txt
-  cd autobuild && python3 generate_build_files.py --blockchain=$1 --version=$2 && cd ../
+  cd autobuild && python3 generate_build_files.py --blockchain=$1 --version=$2 --path=$3 && cd ../
 
 }
 
@@ -85,10 +85,10 @@ function release() {
 
 wallet=$(echo $2 | sed -e 's/\s\+/-/g' | tr '[:upper:]' '[:lower:]' )
 version=$3
-branch=$4
+branch_or_path=$4
 
 if [ "$1" == "generate" ]; then
-  generate "${wallet}" "${version}"
+  generate "${wallet}" "${version}" "${branch_or_path}"
   exit 0
 fi
 
@@ -105,7 +105,7 @@ release_tag=$version
 staging_tag=$version-staging
 case $1 in
   build)
-    build "${wallet}" "${staging_tag}" "${branch}"
+    build "${wallet}" "${staging_tag}" "${branch_or_path}"
   ;;
   run)
     run "${wallet}" "${staging_tag}"
