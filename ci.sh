@@ -25,7 +25,8 @@ function run () {
     docker run -d --name="$1"-"$2" blocknetdx/"$1":"$2"
 
     echo 'Sleep 5 sec to give a time to up container'
-    sleep 5
+    sleep 10
+    docker ps -a
 
     container_id=$(docker ps -f status=running -f name="$1"-"$2")
 

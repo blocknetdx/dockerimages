@@ -8,6 +8,7 @@ import argparse
 import urllib.request
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
+from icecream import ic
 
 j2_env = Environment(loader=FileSystemLoader(''),
                      trim_blocks=True)
@@ -17,7 +18,7 @@ readmetemplate = j2_env.get_template('README.md.j2')
 
 walletDict = {}
 
-buildOS = 'xenial'
+buildOS = 'bionic'
 
 
 def load_template(template_url):
@@ -114,6 +115,7 @@ print(filename)
 os.makedirs(os.path.dirname(filename), exist_ok=True)
 with open(filename, "w") as f:
     f.write(rendered_file)
+    ic(rendered_file)
 
 readmefilename = '../images/' + dockerpath + '/README.md'
 print(readmefilename)
