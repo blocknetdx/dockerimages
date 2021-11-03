@@ -27,8 +27,9 @@ function run () {
     echo 'Sleep 5 sec to give a time to up container'
     sleep 10
     docker ps -a
+    docker logs $(docker ps -q -l)
 
-    container_id=$(docker ps -f status=running -f name="$1"-"$2")
+    container_id=$(docker ps -q -f status=running -f name="$1"-"$2")
 
     if [ "${container_id}" ]; then
       echo "${container_id}"
