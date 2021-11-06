@@ -43,9 +43,17 @@ branch = subprocess.getoutput("git rev-parse --abbrev-ref HEAD")
 parser = argparse.ArgumentParser()
 parser.add_argument('--blockchain', help='blockchain name', default=branch)
 parser.add_argument('--version', help='version of wallet', default="latest")
+parser.add_argument('--manifest', help='manifest config', default=False)
+parser.add_argument('--wallet_conf', help='wallet config', default=False)
 args = parser.parse_args()
 blockchain_name = args.blockchain
 wallet_version = args.version
+manifest_config = args.manifest
+wallet_config = args.wallet_conf
+if not manifest_config:
+    manifest_config = json.loads(load_template(MANIFEST_URL))
+else:
+    manifest_config = json.loads(manifest_config)
 
 for blockchain in manifest_config:
     if re.sub('\s+', '-', blockchain['blockchain'].lower()) == blockchain_name.lower():
@@ -77,11 +85,18 @@ for blockchain in manifest_config:
 
 
 # open up wallet_conf and get the rpc & port
-try:
-    walletData = load_template(WALLET_CONF_URL + walletConf).split('\n')
-except Exception as e:
-    print(e)
-    sys.exit(f'Wallet not found {blockchain_name}')
+if not wallet_config:
+    try:
+        walletData = load_template(WALLET_CONF_URL + walletConf).split('\n')
+    except Exception as e:
+        print(e)
+        sys.exit(f'Wallet not found {blockchain_name}')
+else:
+    try:
+        walletData = wallet_config.split('\n')
+    except Exception as e:
+        print(e)
+        sys.exit(f'Wrong wallet config {blockchain_name}')
 
 for z in walletData:
     if 'rpcport' in z:
