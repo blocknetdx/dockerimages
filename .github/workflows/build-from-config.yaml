@@ -30,7 +30,7 @@ jobs:
     - name: INFO BUILD
       run: echo ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
     - name: generate a Dockerfile
-      run: ./generate.sh "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }} '${{ githib.event.inputs.manifest}}' '${{ github.event.inputs.wallet_conf}}'
+      run: ./generate.sh "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }} '${{ github.event.inputs.manifest}}' '${{ github.event.inputs.wallet_conf}}'
     - name: build an image
       run: ./ci.sh build "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
     - name: Run a container
