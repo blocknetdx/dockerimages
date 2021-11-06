@@ -1,13 +1,5 @@
 #!/bin/bash
 
-function generate() {
-
-  pip3 install -r autobuild/requirements.txt
-  cd autobuild && python3 generate_build_files.py --blockchain=$1 --version=$2 && cd ../
-
-}
-
-
 function build() {
 
     if docker build --build-arg WALLET=$1 \
@@ -87,10 +79,6 @@ wallet=$(echo $2 | sed -e 's/\s\+/-/g' | tr '[:upper:]' '[:lower:]' )
 version=$3
 branch=$4
 
-if [ "$1" == "generate" ]; then
-  generate "${wallet}" "${version}"
-  exit 0
-fi
 
 if [ ! -f images/"${wallet}"/Dockerfile ]; then
   echo "No Dockerfile for ${wallet}"

@@ -1,4 +1,4 @@
-name: BUILD IMAGE FROM TEMPLATE
+name: BUILD IMAGE FROM CONFIG
 
 on:
   workflow_dispatch:
@@ -10,6 +10,12 @@ on:
         description: Tag or version of an image, please check manifest.json. By default it takes the newest version.
         required: false
         default: latest
+      manifest:
+        description: manifest config file
+        required: false
+      wallet_conf:
+        description: wallet config file
+        default: false
 
 jobs:
 
@@ -24,7 +30,7 @@ jobs:
     - name: INFO BUILD
       run: echo ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
     - name: generate a Dockerfile
-      run: ./generate.sh "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./generate.sh "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }} '${{ githib.event.inputs.manifest}}' '${{ github.event.inputs.wallet_conf}}'
     - name: build an image
       run: ./ci.sh build "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
     - name: Run a container
