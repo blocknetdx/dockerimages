@@ -93,7 +93,7 @@ if not wallet_config:
         sys.exit(f'Wallet not found {blockchain_name}')
 else:
     try:
-        walletData = wallet_config.split('\n')
+        walletData = wallet_config.split(' ')
     except Exception as e:
         print(e)
         sys.exit(f'Wrong wallet config {blockchain_name}')
