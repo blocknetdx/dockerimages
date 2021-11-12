@@ -48,8 +48,12 @@ MANIFEST_URL = config_path+'/manifest-latest.json'
 WALLET_CONF_URL = config_path+'/wallet-confs/'
 ic(MANIFEST_URL)
 ic(WALLET_CONF_URL)
-manifest_config = json.loads(load_template(MANIFEST_URL))
-ic(manifest_config)
+try: 
+    manifest_config = json.loads(load_template(MANIFEST_URL))
+except:
+    print("Couldn't read manifest-latest.json, falling back to manifest.json")
+    MANIFEST_URL = config_path+'/manifest.json'
+    manifest_config = json.loads(load_template(MANIFEST_URL))  
 
 
 for blockchain in manifest_config:
