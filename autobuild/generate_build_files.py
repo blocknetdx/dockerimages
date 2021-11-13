@@ -44,16 +44,15 @@ args = parser.parse_args()
 blockchain_name = args.blockchain
 wallet_version = args.version
 config_path = args.path
-MANIFEST_URL = config_path+'/manifest-latest.json'
+MANIFEST_URL = config_path+'/manifest.json'
 WALLET_CONF_URL = config_path+'/wallet-confs/'
 ic(MANIFEST_URL)
 ic(WALLET_CONF_URL)
 try: 
     manifest_config = json.loads(load_template(MANIFEST_URL))
 except:
-    print("Couldn't read manifest-latest.json, falling back to manifest.json")
-    MANIFEST_URL = config_path+'/manifest.json'
-    manifest_config = json.loads(load_template(MANIFEST_URL))  
+    print("Couldn't read manifest.json, aborting.")
+    exit
 
 
 for blockchain in manifest_config:
