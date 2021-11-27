@@ -105,10 +105,10 @@ rendered_file = template.render(walletName=walletName, walletDaemon=walletDaemon
                                 walletDockerName=walletTicker.lower())
 
 
-readme_rendered_file = readmetemplate.render(walletName=walletName, walletDaemon=walletDaemon,
-                                             walletGitTag=walletGitTag,
-                                             walletGitURL=walletGitURL, walletPort=walletPort,
-                                             walletRPCPort=walletRPCPort,
+readme_rendered_file = readmetemplate.render(walletName=walletName, walletVersion=walletVersion, 
+                                             walletDaemon=walletDaemon, walletGitTag=walletGitTag,
+                                             walletGitURL=walletGitURL, walletTicker=walletTicker,
+                                             walletPort=walletPort, walletRPCPort=walletRPCPort,
                                              testnetPort=testnetPort, testnetRPC=testnetRPC,
                                              walletConfName=walletConfName,
                                              walletLinuxDir=walletLinuxDir, walletNameVerId=walletNameVerId,
@@ -120,11 +120,11 @@ print(filename)
 os.makedirs(os.path.dirname(filename), exist_ok=True)
 with open(filename, "w") as f:
     f.write(rendered_file)
-    ic(rendered_file)
+    #ic(rendered_file)
 
 readmefilename = '../images/' + dockerpath + '/README.md'
 print(readmefilename)
 os.makedirs(os.path.dirname(filename), exist_ok=True)
 with open(readmefilename, "w") as f:
     f.write(readme_rendered_file)
-
+    #ic(readme_rendered_file)
