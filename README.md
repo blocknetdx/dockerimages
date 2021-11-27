@@ -73,27 +73,26 @@ rpcclienttimeout=30
 ```
 ### Autobuild docker images 
 
-**BUILD IMAGE FROM TEMPLATE**  - this workflow is used to create an image based on Dockerfile template. It checks manifest.json, generates Dockerfile, build and push an image.  It takes two inputs (arguments):  The name of a wallet; the version of wallet (this is used as a tag for image).
-If do not define a version, it takes the latest one from manifest.json by default. 
+**BUILD IMAGE FROM TEMPLATE**  - this workflow is used to create an image based on Dockerfile template. It checks manifest-latest.json, generates Dockerfile, build and push an image.  It takes three inputs (arguments):  The path of the branch where the manifest and config files are to be found (defaults to master); the name of a wallet; the version of wallet (defaults to latest) which is used as a tag for image.
 
 Scenario:
-1) Add info to manifest.json if does not exist.
+1) Add info to manifest-latest.json if does not exist.
 2) Run a workflow by filling inputs. Put a wallet name and a version (if necessary) in a web form. 
 3)The image will be uploaded to DockerHub blocknetdx/<wallet>:<tag>-staging
 
-**BUILD SERVICENODE** - this workflow is used to create a servicenode image. (The previous workflow also can bu used to create servicenode images. But it creates only those images which are presented in manifest.json.)  The workflow creates an image with any version of branch. It takes three inputs (arguments): The name of wallet, by default it is "servicenode"; The version (it is used as a tag for image). The branch, name of branch. 
+**BUILD SERVICENODE** - this workflow is used to create a servicenode image. (The previous workflow also can be used to create servicenode images. But it creates only those images which are presented in manifest-latest.json.)  This workflow creates an image with any version of branch. It takes three inputs (arguments): The name of wallet, by default it is "servicenode"; The version (it is used as a tag for image). The branch, name of branch. 
 
 Scenario:
 1) If a branch in blocknet repository is ready for building and testing, run a workflow by filling inputs. 
 2) The image will be uploaded to DockerHub blocknetdx/<wallet>:<tag>-staging
 
 
-**BUILD CUSTOM IMAGE** - It is used if we need to create a custom dockerimage which is not presented in manifest.json, but requires testing. 
+**BUILD CUSTOM IMAGE** - It is used if we need to create a custom dockerimage which is not presented in manifest-latest.json, but requires testing. 
 
 Scenario:
 1) Create a branch from master
 2) Create a Dockerfile and necessary files in directory images/<wallet>/
-3) Run a workflow by filling inputs and chouse the branch which you had created! Put a wallet name and a version in a web form. 
+3) Run a workflow by filling inputs and chouse the branch which you had created. Put a wallet name and a version in a web form. 
 4) The image will be uploaded to DockerHub blocknetdx/<wallet>:<tag>-staging
 
 

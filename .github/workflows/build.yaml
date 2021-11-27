@@ -6,11 +6,12 @@ on:
       path:
         description: Full path of a branch where the config can be found.
         required: false
+        default: https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master
       image:
         description: The full name of a wallet. Example - bitcoin, dash, blocknet.
         required: true
       version:
-        description: Tag or version of an image, please check manifest.json. By default it takes the newest version.
+        description: Tag or version of an image, please check manifest-latest.json. By default it takes the newest version.
         required: false
         default: latest
 
@@ -25,7 +26,7 @@ jobs:
 
     # Build images
     - name: INFO BUILD
-      run: echo ${{ github.event.inputs.branch }} ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
+      run: echo ${{ github.event.inputs.path }} ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
     - name: generate a Dockerfile
       run: ./ci.sh generate "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "${{ github.event.inputs.path }}"
     - name: build an image

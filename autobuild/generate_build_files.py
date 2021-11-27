@@ -6,8 +6,7 @@ import re
 import subprocess
 import argparse
 import urllib.request
-from jinja2 import Environment
-from jinja2 import FileSystemLoader
+from jinja2 import Environment, FileSystemLoader
 from icecream import ic
 
 j2_env = Environment(loader=FileSystemLoader(''),
@@ -44,14 +43,14 @@ args = parser.parse_args()
 blockchain_name = args.blockchain
 wallet_version = args.version
 config_path = args.path
-MANIFEST_URL = config_path+'/manifest.json'
+MANIFEST_URL = config_path+'/manifest-latest.json'
 WALLET_CONF_URL = config_path+'/wallet-confs/'
 ic(MANIFEST_URL)
 ic(WALLET_CONF_URL)
 try: 
     manifest_config = json.loads(load_template(MANIFEST_URL))
 except:
-    print("Couldn't read manifest.json, aborting.")
+    print("Couldn't read manifest-latest.json, aborting.")
     exit
 
 
