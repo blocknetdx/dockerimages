@@ -1,0 +1,18 @@
+[
+  {
+    "blockchain": "examplecoin",
+    "ticker": "EXC",
+    "ver_id": "examplecoin--v1.0.0",
+    "ver_name": "examplecoin",
+    "conf_name": "examplecoin.conf",
+    "dir_name_linux": "examplecoincore",
+    "dir_name_mac": "examplecoinCore",
+    "dir_name_win": "examplecoinCore",
+    "repo_url": "https://github.com/examplecoin/examplecoin",
+    "versions": [
+      "v1.0.0"
+    ],
+    "xbridge_conf": "examplecoin--v1.0.0.conf",
+    "wallet_conf": "examplecoin--v1.0.0.conf"
+  }
+]
