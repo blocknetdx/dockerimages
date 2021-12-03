@@ -61,7 +61,6 @@ if not manifest_config:
 else:
     manifest_config = json.loads(manifest_config)
  
-
 for blockchain in manifest_config:
     if re.sub('\s+', '-', blockchain['blockchain'].lower()) == blockchain_name.lower():
         walletConf = blockchain['wallet_conf']

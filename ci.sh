@@ -7,7 +7,6 @@ function generate() {
 
 }
 
-
 function build() {
 
     if docker build --build-arg WALLET=$1 \
