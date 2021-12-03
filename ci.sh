@@ -42,15 +42,23 @@ function run () {
 }
 
 function test() {
+    # dont use getwalletinfo for the test; newer bitcoin and alts don't automatically create a 
+    # wallet on first startup and getwalletinfo will fail with eg:
+    # error code: -18
+    # error message:
+    # No wallet is loaded. Load a wallet using loadwallet or create a new one with createwallet. (Note: A default wallet is no longer automatically created)
+
     if [[ "$1" = "servicenode" ]] ; then
-      info=$(docker exec "$1"-"$2" blocknet-cli getwalletinfo)
+      info=$(docker exec "$1"-"$2" blocknet-cli getblockchaininfo)
     else
-      info=$(docker exec "$1"-"$2" "$1"-cli getwalletinfo)
+      info=$(docker exec "$1"-"$2" "$1"-cli getblockchaininfo)
     fi
     if [ "${info}" ]; then
-      if [[ `echo "${info}" | grep "walletversion"` ]]; then
+      if [[ `echo "${info}" | grep "chain"` ]]; then
+        echo "Good result."
         echo "${info}"
       else
+        echo "Bad result."
         echo "${info}"
         docker stop "$1"-"$2"
         docker rm "$1"-"$2"

@@ -1,4 +1,4 @@
-Official Blocknet Coin Images
+Official Blocknet {{ walletDockerName }} Images
 =================================
 
 These {{ walletDockerName }} docker images can be found on the docker hub: https://hub.docker.com/r/blocknetdx/{{ walletDockerName }}/
@@ -69,12 +69,14 @@ port={{ walletPort }}
 rpcport={{ walletRPCPort }}
 
 listen=1
+txindex=1
 server=1
+maxconnections=16
 logtimestamps=1
 logips=1
 
 rpcallowip=127.0.0.1
-rpctimeout=30
+rpcwaittimeout=30
 rpcclienttimeout=30
 ```
 
