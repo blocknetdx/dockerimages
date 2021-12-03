@@ -1,118 +1,78 @@
-# Build Geth in a stock Go builder container
-FROM golang:1.16-alpine as go-ethereum
+# Build via docker:
+# docker build --build-arg cores=8 -t blocknetdx/sys:latest .
 
-ARG GETH_REPO=https://github.com/syscoin/go-ethereum.git
-ARG GETH_BRANCH=master
+FROM ubuntu:bionic
 
-RUN set -xe; \
-  apk add --no-cache --virtual .build-deps \
-  make gcc musl-dev linux-headers git; \
-  mkdir -p go-ethereum; \
-  git clone ${GETH_REPO} --branch ${GETH_BRANCH} --depth 1 --single-branch go-ethereum; \
-  cd go-ethereum; \
-  make geth -j$(nproc) all; \
-  apk del .build-deps;
+ARG cores=6
+ENV ecores=$cores
 
-# Build stage for Syscoin Core
-FROM alpine as syscoin-core
+LABEL wallet=syscoin
+LABEL version=v4.3.0
 
-RUN sed -i 's/http\:\/\/dl-cdn.alpinelinux.org/https\:\/\/alpine.global.ssl.fastly.net/g' /etc/apk/repositories
-RUN apk --no-cache add autoconf
-RUN apk --no-cache add automake
-RUN apk --no-cache add build-base
-RUN apk --no-cache add chrpath
-RUN apk --no-cache add file
-RUN apk --no-cache add gnupg
-RUN apk --no-cache add libtool
-RUN apk --no-cache add linux-headers
-RUN apk --no-cache add cmake
-RUN apk --no-cache add libc-dev
-RUN apk --no-cache add make
-RUN apk --no-cache add git
-RUN apk --no-cache add python3
-RUN apk --no-cache add xz
-RUN apk --no-cache add bison
-RUN apk --no-cache add curl
-RUN apk --no-cache add pkgconf
-RUN apk --no-cache add bash
-RUN apk --no-cache add clang
+RUN apt update \
+  && apt install -y --no-install-recommends \
+     software-properties-common \
+     ca-certificates \
+     wget curl git python vim \
+  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN set -ex \
-  && for key in \
-    90C8019E36C2E964 \
-  ; do \
-    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key" || \
-    gpg --batch --keyserver pgp.mit.edu --recv-keys "$key" || \
-    gpg --batch --keyserver keyserver.pgp.com --recv-keys "$key" || \
-    gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
-    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" ; \
-  done
+RUN add-apt-repository ppa:bitcoin/bitcoin \
+  && apt update \
+  && apt install -y --no-install-recommends \
+     gcc-8 g++-8 \
+     curl build-essential libtool autotools-dev automake \
+     python3 bsdmainutils cmake libevent-dev autoconf automake \
+     pkg-config libssl-dev libboost-system-dev libboost-filesystem-dev \
+     libboost-chrono-dev libboost-program-options-dev libboost-test-dev \
+     libboost-thread-dev libdb4.8-dev libdb4.8++-dev libgmp-dev \
+     libminiupnpc-dev libzmq3-dev \
+  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV SYSCOIN_VERSION=4.3.99
-ENV SYSCOIN_PREFIX=/opt/syscoin-${SYSCOIN_VERSION}
+ENV DISTDIR=/opt/blockchain/dist
 
-RUN wget https://github.com/syscoin/syscoin/archive/refs/heads/dev-4.x-nevm.tar.gz
-RUN tar -xzf *.tar.gz
+# Build source
+RUN mkdir -p /opt/syscoin \
+  && mkdir -p /opt/blockchain/config \
+  && mkdir -p /opt/blockchain/data \
+  && ln -s /opt/blockchain/config /root/.syscoin \
+  && cd /opt/syscoin \
+  && git clone --depth 1 --branch v4.3.0 https://github.com/syscoin/syscoin syscoin \
+  && cd /opt/syscoin/syscoin/ \
+  && cd depends \
+  && make -j$ecores NO_QT=1 \
+  && cd .. \
+  && chmod +x ./autogen.sh \
+  && ./autogen.sh \
+  && ./configure CC="gcc-8" CXX="g++-8" --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && make -j$ecores \
+  && make install DESTDIR=$DISTDIR \
+  && cp $DISTDIR/opt/syscoin/syscoin/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
+  && rm -rf /opt/syscoin/
 
-WORKDIR /syscoin-dev-4.x-nevm
+# Write default syscoin.conf (can be overridden on commandline)
+RUN echo "datadir=/opt/blockchain/data  \n\
+                                        \n\
+dbcache=256                             \n\
+maxmempool=512                          \n\
+                                        \n\
+port=8369                               \n\
+rpcport=8370                            \n\
+                                        \n\
+listen=1                                \n\
+txindex=1                               \n\
+server=1                                \n\
+maxconnections=16                       \n\
+logtimestamps=1                         \n\
+logips=1                                \n\
+                                        \n\
+rpcallowip=127.0.0.1                    \n\
+rpcwaittimeout=30                       \n\
+rpcclienttimeout=30                     \n" > /opt/blockchain/config/syscoin.conf
 
-RUN sed -i '/AC_PREREQ/a\AR_FLAGS=cr' src/univalue/configure.ac
-RUN sed -i '/AX_PROG_CC_FOR_BUILD/a\AR_FLAGS=cr' src/secp256k1/configure.ac
-RUN sed -i s:sys/fcntl.h:fcntl.h: src/compat.h
-RUN make -C depends -j $(nproc)
-RUN ./autogen.sh
-RUN CONFIG_SITE=$PWD/depends/x86_64-pc-linux-musl/share/config.site  ./configure \  
-    --prefix=${SYSCOIN_PREFIX} \
-    --mandir=/usr/share/man \
-    --disable-tests \
-    --disable-bench \
-    --disable-ccache \
-    --disable-maintainer-mode \
-    --disable-dependency-tracking \
-    --enable-reduce-exports \
-    --with-gui=no \
-    --with-utils \
-    --with-libs \
-    --with-daemon \
-    CC=clang CXX=clang++ \
-    CFLAGS="-O2 -g0 --static -static -fPIC" \
-    CXXFLAGS="-O2 -g0 --static -static -fPIC" \
-    LDFLAGS="-s -static-libgcc -static-libstdc++ -Wl,-O2"
+WORKDIR /opt/blockchain/
+VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 
-RUN make install -j $(nproc)
-RUN strip ${SYSCOIN_PREFIX}/bin/syscoin-cli
-RUN strip ${SYSCOIN_PREFIX}/bin/syscoin-tx
-RUN strip ${SYSCOIN_PREFIX}/bin/syscoind
+# Port, RPC, Test Port, Test RPC
+EXPOSE 8369 8370  18332  19332
 
-
-# Build stage for compiled artifacts
-FROM alpine
-
-LABEL maintainer.0="Jagdeep Sidhu (@realSidhuJag)"
-
-RUN adduser -S syscoin
-RUN sed -i 's/http\:\/\/dl-cdn.alpinelinux.org/https\:\/\/alpine.global.ssl.fastly.net/g' /etc/apk/repositories
-RUN apk --no-cache add wget su-exec
-
-ENV SYSCOIN_DATA=/home/syscoin/.syscoin
-ENV SYSCOIN_VERSION=4.3.99
-ENV SYSCOIN_PREFIX=/opt/syscoin-${SYSCOIN_VERSION}
-ENV PATH=${SYSCOIN_PREFIX}/bin:$PATH
-
-# Copy NEVM binary to the container
-COPY --from=go-ethereum /go/go-ethereum/build/bin/geth ${SYSCOIN_DATA}/sysgeth
-COPY --from=go-ethereum /go/go-ethereum/build/bin/faucet ${SYSCOIN_DATA}/faucet
-RUN wget https://raw.githubusercontent.com/syscoin/descriptors/master/gethdescriptor.json -O ${SYSCOIN_DATA}/gethdescriptor.json
-
-COPY --from=syscoin-core /opt /opt
-COPY docker-entrypoint.sh /entrypoint.sh
-
-VOLUME ["/home/syscoin/.syscoin"]
-
-EXPOSE 8369 8370 18369 18370 18443 18444 38332 38333
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-RUN syscoind -version | grep "Syscoin Core version v${SYSCOIN_VERSION}"
-
-CMD ["syscoind"]
+CMD ["/usr/bin/syscoind", "-daemon=0"]
