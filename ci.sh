@@ -1,5 +1,12 @@
 #!/bin/bash
 
+function generate() {
+
+  pip3 install -r autobuild/requirements.txt
+  cd autobuild && python3 generate_build_files.py --blockchain=$1 --version=$2 --path=$3 && cd ../
+
+}
+
 function build() {
 
     if docker build --build-arg WALLET=$1 \
@@ -17,9 +24,11 @@ function run () {
     docker run -d --name="$1"-"$2" blocknetdx/"$1":"$2"
 
     echo 'Sleep 5 sec to give a time to up container'
-    sleep 5
+    sleep 10
+    docker ps -a
+    docker logs $(docker ps -q -l)
 
-    container_id=$(docker ps -f status=running -f name="$1"-"$2")
+    container_id=$(docker ps -q -f status=running -f name="$1"-"$2")
 
     if [ "${container_id}" ]; then
       echo "${container_id}"
@@ -32,15 +41,23 @@ function run () {
 }
 
 function test() {
+    # dont use getwalletinfo for the test; newer bitcoin and alts don't automatically create a 
+    # wallet on first startup and getwalletinfo will fail with eg:
+    # error code: -18
+    # error message:
+    # No wallet is loaded. Load a wallet using loadwallet or create a new one with createwallet. (Note: A default wallet is no longer automatically created)
+
     if [[ "$1" = "servicenode" ]] ; then
-      info=$(docker exec "$1"-"$2" blocknet-cli getwalletinfo)
+      info=$(docker exec "$1"-"$2" blocknet-cli getblockchaininfo)
     else
-      info=$(docker exec "$1"-"$2" "$1"-cli getwalletinfo)
+      info=$(docker exec "$1"-"$2" "$1"-cli getblockchaininfo)
     fi
     if [ "${info}" ]; then
-      if [[ `echo "${info}" | grep "walletversion"` ]]; then
+      if [[ `echo "${info}" | grep "chain"` ]]; then
+        echo "Good result."
         echo "${info}"
       else
+        echo "Bad result."
         echo "${info}"
         docker stop "$1"-"$2"
         docker rm "$1"-"$2"
@@ -77,8 +94,12 @@ function release() {
 
 wallet=$(echo $2 | sed -e 's/\s\+/-/g' | tr '[:upper:]' '[:lower:]' )
 version=$3
-branch=$4
+branch_or_path=$4
 
+if [ "$1" == "generate" ]; then
+  generate "${wallet}" "${version}" "${branch_or_path}"
+  exit 0
+fi
 
 if [ ! -f images/"${wallet}"/Dockerfile ]; then
   echo "No Dockerfile for ${wallet}"
@@ -93,7 +114,7 @@ release_tag=$version
 staging_tag=$version-staging
 case $1 in
   build)
-    build "${wallet}" "${staging_tag}" "${branch}"
+    build "${wallet}" "${staging_tag}" "${branch_or_path}"
   ;;
   run)
     run "${wallet}" "${staging_tag}"

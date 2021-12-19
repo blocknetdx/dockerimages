@@ -55,8 +55,7 @@ dbcache=256                             \n\
 maxmempool=512                          \n\
                                         \n\
 port={{ walletPort }}                               \n\
-rpcport={{ walletRPCPort }}                          \n\
-                                        \n\
+rpcport={{ walletRPCPort }}                            \n\
                                         \n\
 listen=1                                \n\
 txindex=1                               \n\
@@ -66,8 +65,8 @@ logtimestamps=1                         \n\
 logips=1                                \n\
                                         \n\
 rpcallowip=127.0.0.1                    \n\
-rpctimeout=15                           \n\
-rpcclienttimeout=15                     \n" > /opt/blockchain/config/{{ walletConfName }}
+rpcwaittimeout=30                       \n\
+rpcclienttimeout=30                     \n" > /opt/blockchain/config/{{ walletConfName }}
 
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
