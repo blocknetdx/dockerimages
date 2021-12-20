@@ -85,7 +85,7 @@ Autobuild pipeline is based on github actions. There are several key components 
 The pipelines are triggered by workflow yaml files in _.github/workflows/some_pipeline.yaml_
 
 It starts build process on self-hosted runner in k8s cluster. If build process is successful, the image is pushed to
-dockerhub repository blocknetdx/\<wallet>:\<tag>
+dockerhub repository blocknetdx/\<wallet\>:\<tag\>
 
 How to deploy the stack?
 
@@ -141,7 +141,7 @@ Scenario:
    * The blockchain-configuration-files branch from which to read the configs.
    * The wallet name.
    * The wallet version. 
-3) The image will be uploaded to DockerHub blocknetdx/\<wallet>:\<tag>-staging
+3) The image will be uploaded to DockerHub blocknetdx/\<wallet\>:\<tag\>-staging
 
 **BUILD SERVICENODE** - this Github action is used to create a servicenode image. (The previous workflow also can be used to create servicenode images. But it creates images only for those coins and versions which are present in manifest-latest.json.)  This workflow creates an image from any Blocknet branch version. It takes three inputs (arguments):
 * The name of wallet, by default it is "servicenode".
@@ -150,16 +150,16 @@ Scenario:
 
 Scenario:
 1) If a branch in Blocknet repository is ready for building and testing, run the Github action and respond to the prompts. 
-2) The image will be uploaded to DockerHub blocknetdx/\<wallet>:\<tag>-staging.
+2) The image will be uploaded to DockerHub blocknetdx/\<wallet\>:\<tag\>-staging.
 
 
 **BUILD CUSTOM IMAGE** - this Github action is used to create a custom dockerimage for a coin which is not present in manifest-latest.json, or which cannot be built by the regular BUILD IMAGE FROM TEMPLATE workflow (eg: due to compiler version requirements (ie: syscoin4), or moved dependencies which prevent building from the project from the tagged version branch (ie. ravencoin)). 
 
 Scenario:
 1) Create a branch from master.
-2) Create a Dockerfile and necessary files in directory images/\<wallet>/
+2) Create a Dockerfile and necessary files in directory images/\<wallet\>/
 3) Run the workflow by filling inputs and choose the branch which you created. Reply to the wallet name and version in the web form. 
-4) The image will be uploaded to DockerHub blocknetdx/\<wallet>:\<tag>-staging
+4) The image will be uploaded to DockerHub blocknetdx/\<wallet\>:\<tag\>-staging
 
 
 **BUILD IMAGE FROM CONFIG** - this Github action is used to build an image for a new coin which is not present in manifest-latest.json.
@@ -173,7 +173,7 @@ The workflow takes four arguments:
 Scenario:
 1) Prepare manifest config and wallet config for workflow.
 2) Run the workflow by filling inputs. Enter a wallet name and version in the web form. Enter the manifest content and wallet config.   
-3) The image will be uploaded to DockerHub blocknetdx/\<wallet>:\<tag>-staging
+3) The image will be uploaded to DockerHub blocknetdx/\<wallet\>:\<tag\>-staging
 
 
 ***Note***
@@ -183,11 +183,11 @@ It is not required to create a separate branch to run workflow "BUILD IMAGE FROM
 Once an image is built it must be tested. This is done by adding the image to the exproxy-env autobuild stack and deploying a node with a set of wallets including the new image. When testing is complete the image can be released.
 
 
-**RELEASE IMAGE** - when the image is tested and has no issues it can be released by this Github action. It changes the tag of an image from blocknetdx/<wallet>:<tag>-staging to blocknetdx/<wallet>:<tag>
+**RELEASE IMAGE** - when the image is tested and has no issues it can be released by this Github action. It changes the tag of an image from blocknetdx/\<wallet\>:\<tag\>-staging to blocknetdx/\<wallet\>:\<tag\>
 
 Scenario:
 1) Run the workflow by filling inputs. Enter the wallet name and version in the web form. 
-2) The image will be re-uploaded to DockerHub blocknetdx/\<wallet>:\<tag>
+2) The image will be re-uploaded to DockerHub blocknetdx/\<wallet\>:\<tag\>
 
 
 License
