@@ -129,7 +129,8 @@ How to deploy the stack?
    - Create github secrets for DockerHub registry credentials (Blocknetdximg login/password)
     
     
-**BUILD IMAGE FROM TEMPLATE**  - this Github action is used to create an image based on Dockerfile template. It checks manifest-latest.json, generates Dockerfile, builds and pushes an image.  It takes three inputs (arguments):
+### BUILD IMAGE FROM TEMPLATE
+This Github action is used to create an image based on Dockerfile template. It checks manifest-latest.json, generates Dockerfile, builds and pushes an image.  It takes three inputs (arguments):
 * The raw path of the branch where the manifest and config files are to be found (defaults to master), eg: https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master
 * The full name of a wallet (corresponding to ver_name in manifest-latest.json), eg: bitcoin, ravencoin.
 * the version of wallet (defaults to latest) which is used as a tag for image.
@@ -143,7 +144,9 @@ Scenario:
    * The wallet version. 
 3) The image will be uploaded to DockerHub blocknetdx/\<wallet\>:\<tag\>-staging
 
-**BUILD SERVICENODE** - this Github action is used to create a servicenode image. (The previous workflow also can be used to create servicenode images. But it creates images only for those coins and versions which are present in manifest-latest.json.)  This workflow creates an image from any Blocknet branch version. It takes three inputs (arguments):
+### BUILD SERVICENODE
+
+This Github action is used to create a servicenode image. (The previous workflow also can be used to create servicenode images. But it creates images only for those coins and versions which are present in manifest-latest.json.)  This workflow creates an image from any Blocknet branch version. It takes three inputs (arguments):
 * The name of wallet, by default it is "servicenode".
 * The version (it is used as a tag for image).
 * The branch, name of branch. 
@@ -153,7 +156,9 @@ Scenario:
 2) The image will be uploaded to DockerHub blocknetdx/\<wallet\>:\<tag\>-staging.
 
 
-**BUILD CUSTOM IMAGE** - this Github action is used to create a custom dockerimage for a coin which is not present in manifest-latest.json, or which cannot be built by the regular BUILD IMAGE FROM TEMPLATE workflow (eg: due to compiler version requirements (ie: syscoin4), or moved dependencies which prevent building from the project from the tagged version branch (ie. ravencoin)). 
+### BUILD CUSTOM IMAGE
+
+This Github action is used to create a custom dockerimage for a coin which is not present in manifest-latest.json, or which cannot be built by the regular BUILD IMAGE FROM TEMPLATE workflow (eg: due to compiler version requirements (ie: syscoin4), or moved dependencies which prevent building from the project from the tagged version branch (ie. ravencoin)). 
 
 Scenario:
 1) Create a branch from master.
@@ -162,7 +167,9 @@ Scenario:
 4) The image will be uploaded to DockerHub blocknetdx/\<wallet\>:\<tag\>-staging
 
 
-**BUILD IMAGE FROM CONFIG** - this Github action is used to build an image for a new coin which is not present in manifest-latest.json.
+### BUILD IMAGE FROM CONFIG
+
+This Github action is used to build an image for a new coin which is not present in manifest-latest.json.
 
 The workflow takes four arguments:
 * Image (name of coin, chain. Ex: dash, btc, etc)
@@ -183,7 +190,9 @@ It is not required to create a separate branch to run workflow "BUILD IMAGE FROM
 Once an image is built it must be tested. This is done by adding the image to the exproxy-env autobuild stack and deploying a node with a set of wallets including the new image. When testing is complete the image can be released.
 
 
-**RELEASE IMAGE** - when the image is tested and has no issues it can be released by this Github action. It changes the tag of an image from blocknetdx/\<wallet\>:\<tag\>-staging to blocknetdx/\<wallet\>:\<tag\>
+### RELEASE IMAGE
+
+When the image is tested and has no issues it can be released by this Github action. It changes the tag of an image from blocknetdx/\<wallet\>:\<tag\>-staging to blocknetdx/\<wallet\>:\<tag\>
 
 Scenario:
 1) Run the workflow by filling inputs. Enter the wallet name and version in the web form. 
