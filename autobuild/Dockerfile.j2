@@ -19,6 +19,7 @@ RUN apt update \
 RUN add-apt-repository ppa:bitcoin/bitcoin \
   && apt update \
   && apt install -y --no-install-recommends \
+     gcc-8 g++-8 \
      curl build-essential libtool autotools-dev automake \
      python3 bsdmainutils cmake libevent-dev autoconf automake \
      pkg-config libssl-dev libboost-system-dev libboost-filesystem-dev \
@@ -42,7 +43,7 @@ RUN mkdir -p /opt/{{ walletLinuxDir }} \
   && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+  && ./configure CC="gcc-8" CXX="g++-8" --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
   && make -j$ecores \
   && make install DESTDIR=$DISTDIR \
   && cp $DISTDIR/opt/{{ walletLinuxDir }}/{{ walletLinuxDir }}/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
