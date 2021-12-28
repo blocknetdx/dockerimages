@@ -41,7 +41,6 @@ jobs:
       if: ${{ always() }}
       run: yes | docker image prune
     - name: Push an image to DockerHub
-      run: echo Pushing "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
       run: ./ci.sh push "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
 
 #  staging:
