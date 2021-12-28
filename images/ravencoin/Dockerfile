@@ -1,13 +1,13 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/sys:latest .
+# docker build --build-arg cores=8 -t blocknetdx/rvn:latest .
 
 FROM ubuntu:bionic
 
 ARG cores=6
 ENV ecores=$cores
 
-LABEL wallet=syscoin
-LABEL version=v4.3.0
+LABEL wallet=ravencoin
+LABEL version=fix-depends
 
 RUN apt update \
   && apt install -y --no-install-recommends \
@@ -31,13 +31,13 @@ RUN add-apt-repository ppa:bitcoin/bitcoin \
 ENV DISTDIR=/opt/blockchain/dist
 
 # Build source
-RUN mkdir -p /opt/syscoin \
+RUN mkdir -p /opt/raven \
   && mkdir -p /opt/blockchain/config \
   && mkdir -p /opt/blockchain/data \
-  && ln -s /opt/blockchain/config /root/.syscoin \
-  && cd /opt/syscoin \
-  && git clone --depth 1 --branch v4.3.0 https://github.com/syscoin/syscoin syscoin \
-  && cd /opt/syscoin/syscoin/ \
+  && ln -s /opt/blockchain/config /root/.raven \
+  && cd /opt/raven \
+  && git clone --depth 1 --branch fix-depends https://github.com/walkjivefly/Ravencoin raven \
+  && cd /opt/raven/raven/ \
   && cd depends \
   && make -j$ecores NO_QT=1 \
   && cd .. \
@@ -46,17 +46,17 @@ RUN mkdir -p /opt/syscoin \
   && ./configure CC="gcc-8" CXX="g++-8" --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
   && make -j$ecores \
   && make install DESTDIR=$DISTDIR \
-  && cp $DISTDIR/opt/syscoin/syscoin/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
-  && rm -rf /opt/syscoin/
+  && cp $DISTDIR/opt/raven/raven/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
+  && rm -rf /opt/raven/
 
-# Write default syscoin.conf (can be overridden on commandline)
+# Write default raven.conf (can be overridden on commandline)
 RUN echo "datadir=/opt/blockchain/data  \n\
                                         \n\
 dbcache=256                             \n\
 maxmempool=512                          \n\
                                         \n\
-port=8369                               \n\
-rpcport=8370                            \n\
+port=8767                               \n\
+rpcport=8766                            \n\
                                         \n\
 listen=1                                \n\
 txindex=1                               \n\
@@ -67,12 +67,12 @@ logips=1                                \n\
                                         \n\
 rpcallowip=127.0.0.1                    \n\
 rpcwaittimeout=30                       \n\
-rpcclienttimeout=30                     \n" > /opt/blockchain/config/syscoin.conf
+rpcclienttimeout=30                     \n" > /opt/blockchain/config/raven.conf
 
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 
 # Port, RPC, Test Port, Test RPC
-EXPOSE 8369 8370  18332  19332
+EXPOSE 8767 8766  18332  19332
 
-CMD ["/usr/bin/syscoind", "-daemon=0"]
+CMD ["/usr/bin/ravend", "-daemon=0"]
