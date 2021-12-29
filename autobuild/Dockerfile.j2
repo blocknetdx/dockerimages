@@ -25,7 +25,7 @@ RUN add-apt-repository ppa:bitcoin/bitcoin \
      pkg-config libssl-dev libboost-system-dev libboost-filesystem-dev \
      libboost-chrono-dev libboost-program-options-dev libboost-test-dev \
      libboost-thread-dev libdb4.8-dev libdb4.8++-dev libgmp-dev \
-     libminiupnpc-dev libzmq3-dev libattr1-dev \
+     libminiupnpc-dev libzmq3-dev libattr1-dev zlib1g-dev \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV DISTDIR=/opt/blockchain/dist
