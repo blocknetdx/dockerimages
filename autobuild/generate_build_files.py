@@ -70,7 +70,7 @@ for blockchain in manifest_config:
         else:
             walletDaemon = blockchain['conf_name'].split('.conf')[0]
         if stem_only:
-            print(blockchain['daemon_stem'])
+            print(walletDaemon)
             raise SystemExit
         walletDaemon = walletDaemon + 'd'
         walletConf = blockchain['wallet_conf']
