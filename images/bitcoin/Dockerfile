@@ -47,7 +47,7 @@ RUN mkdir -p /opt/bitcoin \
   && ./configure CC="gcc-8" CXX="g++-8" CXXFLAGS="-Wno-error=return-type" --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
   && make -j$ecores \
   && make install DESTDIR=$DISTDIR \
-  && cp $DISTDIR/opt/bitcoin/bitcoin/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
+  && cp $DISTDIR/opt/bitcoin/bitcoin-22.0/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
   && rm -rf /opt/bitcoin/
 
 # Write default bitcoin.conf (can be overridden on commandline)
