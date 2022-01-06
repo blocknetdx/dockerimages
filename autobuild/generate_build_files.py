@@ -41,17 +41,19 @@ parser.add_argument('--path', help='branch path', default='https://raw.githubuse
 parser.add_argument('--version', help='version of wallet', default="latest")
 parser.add_argument('--manifest', help='coin manifest fragment', default=False)
 parser.add_argument('--wallet_conf', help='coin wallet config', default=False)
+parser.add_argument('--stem_only', help='special use: just return the coin daemon stem', default=False)
 args = parser.parse_args()
 blockchain_name = args.blockchain
 wallet_version = args.version
 config_path = args.path
 manifest_config = args.manifest
 wallet_config = args.wallet_conf
+stem_only = args.stem_only
 if not manifest_config:
     MANIFEST_URL = config_path+'/manifest-latest.json'
     WALLET_CONF_URL = config_path+'/wallet-confs/'
-    ic(MANIFEST_URL)
-    ic(WALLET_CONF_URL)
+    #ic(MANIFEST_URL)
+    #ic(WALLET_CONF_URL)
     manifest_config = json.loads(load_template(MANIFEST_URL))
     try: 
         manifest_config = json.loads(load_template(MANIFEST_URL))
@@ -63,10 +65,15 @@ else:
  
 for blockchain in manifest_config:
     if re.sub('\s+', '-', blockchain['blockchain'].lower()) == blockchain_name.lower():
+        if 'daemon_stem' in blockchain:
+            walletDaemon = blockchain['daemon_stem']
+        else:
+            walletDaemon = blockchain['conf_name'].split('.conf')[0]
+        if stem_only:
+            print(walletDaemon)
+            raise SystemExit
+        walletDaemon = walletDaemon + 'd'
         walletConf = blockchain['wallet_conf']
-        walletDaemon = blockchain['conf_name'].split('.conf')
-        walletbuildname = walletDaemon[0]
-        walletDaemon = walletDaemon[0] + 'd'
         walletName = re.sub('\s+', '-', blockchain['blockchain'].lower())
         walletNameVerId = blockchain['ver_id']
         walletGitTag = blockchain['ver_id'].split('--')

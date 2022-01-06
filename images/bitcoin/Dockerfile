@@ -1,13 +1,13 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/{{ walletDockerName }}:latest .
+# docker build --build-arg cores=8 -t blocknetdx/btc:latest .
 
-FROM ubuntu:{{ buildOS }}
+FROM ubuntu:bionic
 
 ARG cores=6
 ENV ecores=$cores
 
-LABEL wallet={{ walletName }}
-LABEL version={{ walletGitTag }}
+LABEL wallet=bitcoin
+LABEL version=v0.22.0
 
 RUN apt update \
   && apt install -y --no-install-recommends \
@@ -31,13 +31,14 @@ RUN add-apt-repository ppa:bitcoin/bitcoin \
 ENV DISTDIR=/opt/blockchain/dist
 
 # Build source
-RUN mkdir -p /opt/{{ walletLinuxDir }} \
+RUN mkdir -p /opt/bitcoin \
   && mkdir -p /opt/blockchain/config \
   && mkdir -p /opt/blockchain/data \
-  && ln -s /opt/blockchain/config /root/.{{ walletLinuxDir }} \
-  && cd /opt/{{ walletLinuxDir }} \
-  && git clone --depth 1 --branch {{ walletGitTag }} {{ walletGitURL }} {{ walletLinuxDir }} \
-  && cd /opt/{{ walletLinuxDir }}/{{ walletLinuxDir }}/ \
+  && ln -s /opt/blockchain/config /root/.bitcoin \
+  && cd /opt/bitcoin \
+  && wget https://github.com/bitcoin/bitcoin/archive/refs/tags/v22.0.tar.gz \
+  && tar -xf v22.0.tar.gz \
+  && cd /opt/bitcoin/bitcoin-22.0 \
   && cd depends \
   && make -j$ecores NO_QT=1 \
   && cd .. \
@@ -46,17 +47,17 @@ RUN mkdir -p /opt/{{ walletLinuxDir }} \
   && ./configure CC="gcc-8" CXX="g++-8" CXXFLAGS="-Wno-error=return-type" --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
   && make -j$ecores \
   && make install DESTDIR=$DISTDIR \
-  && cp $DISTDIR/opt/{{ walletLinuxDir }}/{{ walletLinuxDir }}/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
-  && rm -rf /opt/{{ walletLinuxDir }}/
+  && cp $DISTDIR/opt/bitcoin/bitcoin-22.0/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
+  && rm -rf /opt/bitcoin/
 
-# Write default {{ walletConfName }} (can be overridden on commandline)
+# Write default bitcoin.conf (can be overridden on commandline)
 RUN echo "datadir=/opt/blockchain/data  \n\
                                         \n\
 dbcache=256                             \n\
 maxmempool=512                          \n\
                                         \n\
-port={{ walletPort }}                               \n\
-rpcport={{ walletRPCPort }}                            \n\
+port=8333                               \n\
+rpcport=8332                            \n\
                                         \n\
 listen=1                                \n\
 txindex=1                               \n\
@@ -66,13 +67,13 @@ logtimestamps=1                         \n\
 logips=1                                \n\
                                         \n\
 rpcallowip=127.0.0.1                    \n\
-rpctimeout=30                           \n\
-rpcclienttimeout=30                     \n" > /opt/blockchain/config/{{ walletConfName }}
+rpcwaittimeout=30                       \n\
+rpcclienttimeout=30                     \n" > /opt/blockchain/config/bitcoin.conf
 
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 
 # Port, RPC, Test Port, Test RPC
-EXPOSE {{ walletPort }} {{ walletRPCPort }}  {{ testnetPort }}  {{ testnetRPC }}
+EXPOSE 8333 8332  18332  19332
 
-CMD ["/usr/bin/{{ walletDaemon }}", "-daemon=0"]
+CMD ["/usr/bin/bitcoind", "-daemon=0"]

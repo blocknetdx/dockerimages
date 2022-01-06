@@ -1,13 +1,13 @@
 # Build via docker:
-# docker build --build-arg cores=8 -t blocknetdx/{{ walletDockerName }}:latest .
+# docker build --build-arg cores=8 -t blocknetdx/xvg:latest .
 
-FROM ubuntu:{{ buildOS }}
+FROM ubuntu:bionic
 
 ARG cores=6
 ENV ecores=$cores
 
-LABEL wallet={{ walletName }}
-LABEL version={{ walletGitTag }}
+LABEL wallet=verge
+LABEL version=v7.0.0
 
 RUN apt update \
   && apt install -y --no-install-recommends \
@@ -31,13 +31,13 @@ RUN add-apt-repository ppa:bitcoin/bitcoin \
 ENV DISTDIR=/opt/blockchain/dist
 
 # Build source
-RUN mkdir -p /opt/{{ walletLinuxDir }} \
+RUN mkdir -p /opt/VERGE \
   && mkdir -p /opt/blockchain/config \
   && mkdir -p /opt/blockchain/data \
-  && ln -s /opt/blockchain/config /root/.{{ walletLinuxDir }} \
-  && cd /opt/{{ walletLinuxDir }} \
-  && git clone --depth 1 --branch {{ walletGitTag }} {{ walletGitURL }} {{ walletLinuxDir }} \
-  && cd /opt/{{ walletLinuxDir }}/{{ walletLinuxDir }}/ \
+  && ln -s /opt/blockchain/config /root/.VERGE \
+  && cd /opt/VERGE \
+  && git clone --depth 1 --branch v7.0.0 https://github.com/vergecurrency/verge VERGE \
+  && cd /opt/VERGE/VERGE/ \
   && cd depends \
   && make -j$ecores NO_QT=1 \
   && cd .. \
@@ -46,17 +46,17 @@ RUN mkdir -p /opt/{{ walletLinuxDir }} \
   && ./configure CC="gcc-8" CXX="g++-8" CXXFLAGS="-Wno-error=return-type" --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
   && make -j$ecores \
   && make install DESTDIR=$DISTDIR \
-  && cp $DISTDIR/opt/{{ walletLinuxDir }}/{{ walletLinuxDir }}/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
-  && rm -rf /opt/{{ walletLinuxDir }}/
+  && cp $DISTDIR/opt/VERGE/VERGE/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
+  && rm -rf /opt/VERGE/
 
-# Write default {{ walletConfName }} (can be overridden on commandline)
+# Write default VERGE.conf (can be overridden on commandline)
 RUN echo "datadir=/opt/blockchain/data  \n\
                                         \n\
 dbcache=256                             \n\
 maxmempool=512                          \n\
                                         \n\
-port={{ walletPort }}                               \n\
-rpcport={{ walletRPCPort }}                            \n\
+port=21102                               \n\
+rpcport=20102                            \n\
                                         \n\
 listen=1                                \n\
 txindex=1                               \n\
@@ -65,14 +65,12 @@ maxconnections=16                       \n\
 logtimestamps=1                         \n\
 logips=1                                \n\
                                         \n\
-rpcallowip=127.0.0.1                    \n\
-rpctimeout=30                           \n\
-rpcclienttimeout=30                     \n" > /opt/blockchain/config/{{ walletConfName }}
+rpcallowip=127.0.0.1                    \n" > /opt/blockchain/config/VERGE.conf
 
 WORKDIR /opt/blockchain/
 VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 
 # Port, RPC, Test Port, Test RPC
-EXPOSE {{ walletPort }} {{ walletRPCPort }}  {{ testnetPort }}  {{ testnetRPC }}
+EXPOSE 21102 20102  18332  19332
 
-CMD ["/usr/bin/{{ walletDaemon }}", "-daemon=0"]
+CMD ["/usr/bin/verged", "-daemon=0"]
