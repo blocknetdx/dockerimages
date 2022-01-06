@@ -1,9 +1,9 @@
 # Build via docker:
 # docker build --build-arg cores=8 -t blocknetdx/pivx:5.3.2.1 .
 
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
-ARG cores=2
+ARG cores=6
 ENV ecores=$cores
 
 RUN apt update \
@@ -16,6 +16,7 @@ RUN apt update \
 RUN add-apt-repository ppa:pivx/pivx \
   && apt update \
   && apt install -y --no-install-recommends \
+     gcc-8 g++-8 \
      build-essential libtool autotools-dev automake pkg-config \
      libssl-dev libevent-dev bsdmainutils python3 autoconf \
      libboost-all-dev libsodium-dev cargo \
@@ -28,11 +29,11 @@ RUN mkdir -p /opt/pivx \
   && mkdir -p /opt/blockchain/data \
   && ln -s /opt/blockchain/config /root/.pivx \
   && cd /opt/pivx \
-  && git clone --depth 1 --branch v5.3.2.1 https://github.com/PIVX-Project/PIVX.git \
+  && git clone --depth 1 --branch v5.4.0 https://github.com/PIVX-Project/PIVX.git \
   && cd /opt/pivx/PIVX \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure --with-boot-libdir="/usr/local/lib" --without-gui --enable-hardening \
+  && ./configure CC="gcc-8" CXX="g++-8" --with-boot-libdir="/usr/local/lib" --without-gui --enable-hardening \
   && make -j$ecores \
   && make install \
   && rm -rf /opt/pivx/
