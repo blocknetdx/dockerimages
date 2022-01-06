@@ -9,6 +9,7 @@ on:
       version:
         description: Tag of an image
         required: true
+        default: latest
 
 jobs:
 

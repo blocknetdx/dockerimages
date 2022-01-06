@@ -41,8 +41,8 @@ function run () {
 }
 
 function test() {
-    # dont use getwalletinfo for the test; newer bitcoin and alts don't automatically create a 
-    # wallet on first startup and getwalletinfo will fail with eg:
+    # dont use getwalletinfo for the test; newer bitcoin and alts don't automatically
+    # create a wallet on first startup and getwalletinfo will fail with eg:
     # error code: -18
     # error message:
     # No wallet is loaded. Load a wallet using loadwallet or create a new one with createwallet. (Note: A default wallet is no longer automatically created)
@@ -50,7 +50,9 @@ function test() {
     if [[ "$1" = "servicenode" ]] ; then
       info=$(docker exec "$1"-"$2" blocknet-cli getblockchaininfo)
     else
-      info=$(docker exec "$1"-"$2" "$1"-cli getblockchaininfo)
+      # Need to get the executable stem from manifest because it might not be the same as the chain name 
+      cd autobuild && stem=$(python3 generate_build_files.py --blockchain=$1 --version=$2 --path=$3 --stem_only=true) && cd ../
+      info=$(docker exec "$1"-"$2" "$stem"-cli getblockchaininfo)
     fi
     if [ "${info}" ]; then
       if [[ `echo "${info}" | grep "chain"` ]]; then
@@ -120,7 +122,7 @@ case $1 in
     run "${wallet}" "${staging_tag}"
   ;;
   test)
-    test "${wallet}" "${staging_tag}"
+    test "${wallet}" "${staging_tag}" "${branch_or_path}"
   ;;
   push)
     push "${wallet}" "${staging_tag}"
