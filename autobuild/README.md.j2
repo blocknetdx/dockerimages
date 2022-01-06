@@ -1,4 +1,4 @@
-Official Blocknet Bitcoin Images
+Official Blocknet {{ walletDockerName }} Images
 =================================
 
 These {{ walletDockerName }} docker images can be found on the docker hub: https://hub.docker.com/r/blocknetdx/{{ walletDockerName }}/
@@ -18,7 +18,7 @@ Simple
 
 Run a simple {{ walletDockerName }} node on port {{ walletPort }}:
 ```
-docker run -d --name={{ walletDockerName }} -p {{ walletPort }}:{{ walletPort }} blocknetdx/{{ walletDockerName }}:latest
+docker run -d --name={{ walletDockerName }} -p {{ walletPort }}:{{ walletPort }} blocknetdx/{{ walletDockerName }}:{{ walletVersion }}
 ```
 
 
@@ -27,7 +27,7 @@ Persist blockchain w/ volumes
 
 Run a {{ walletDockerName }} node that persists the blockchain on a host directory. Recommended to avoid time consuming resyncs when updating to later container versions.
 ```
-docker run -d --name={{ walletDockerName }} -p {{ walletPort }}:{{ walletPort }} -v=/crypto/{{ walletDockerName }}/config:/opt/blockchain/config -v=/crypto/{{ walletDockerName }}/data:/opt/blockchain/data blocknetdx/{{ walletDockerName }}:0.17.0.1
+docker run -d --name={{ walletDockerName }} -p {{ walletPort }}:{{ walletPort }} -v=/crypto/{{ walletDockerName }}/config:/opt/blockchain/config -v=/crypto/{{ walletDockerName }}/data:/opt/blockchain/data blocknetdx/{{ walletDockerName }}:{{ walletVersion }}
 ```
 
 
@@ -36,13 +36,13 @@ Automatically restart the container
 
 See https://docs.docker.com/engine/admin/start-containers-automatically/
 
-`--restart=no|on-failure:retrycount|always|unless-stopped`
+`--restart=no|on-failure:retrycount|unless-stopped|always`
 
 ```
-docker run -d --restart=no --name={{ walletDockerName }} -p {{ walletPort }}:{{ walletPort }} blocknetdx/{{ walletDockerName }}:0.17.0.1 {{ walletDaemon }} -daemon=0 -rpcuser={{ walletTicker }} -rpcpassword={{ walletTicker }}123
-docker run -d --restart=on-failure:10 --name={{ walletDockerName }} -p {{ walletPort }}:{{ walletPort }} blocknetdx/{{ walletDockerName }}:0.17.0.1 {{ walletDaemon }} -daemon=0 -rpcuser={{ walletTicker }} -rpcpassword={{ walletTicker }}123
-docker run -d --restart=unless-stopped --name=bitcoin -p {{ walletPort }}:{{ walletPort }} blocknetdx/{{ walletDockerName }}:0.17.0.1 {{ walletDaemon }} -daemon=0 -rpcuser={{ walletTicker }} -rpcpassword={{ walletTicker }}123
-docker run -d --restart=always --name=bitcoin -p {{ walletPort }}:{{ walletPort }} blocknetdx/{{ walletDockerName }}:0.17.0.1 {{ walletDaemon }} -daemon=0 -rpcuser={{ walletTicker }} -rpcpassword={{ walletTicker }}123
+docker run -d --restart=no --name={{ walletDockerName }} -p {{ walletPort }}:{{ walletPort }} blocknetdx/{{ walletDockerName }}:{{ walletVersion }} {{ walletDaemon }} -daemon=0 -rpcuser={{ walletTicker }} -rpcpassword={{ walletTicker }}123
+docker run -d --restart=on-failure:10 --name={{ walletDockerName }} -p {{ walletPort }}:{{ walletPort }} blocknetdx/{{ walletDockerName }}:{{ walletVersion }} {{ walletDaemon }} -daemon=0 -rpcuser={{ walletTicker }} -rpcpassword={{ walletTicker }}123
+docker run -d --restart=unless-stopped --name={{ walletDockerName }} -p {{ walletPort }}:{{ walletPort }} blocknetdx/{{ walletDockerName }}:{{ walletVersion }} {{ walletDaemon }} -daemon=0 -rpcuser={{ walletTicker }} -rpcpassword={{ walletTicker }}123
+docker run -d --restart=always --name={{ walletDockerName }} -p {{ walletPort }}:{{ walletPort }} blocknetdx/{{ walletDockerName }}:{{ walletVersion }} {{ walletDaemon }} -daemon=0 -rpcuser={{ walletTicker }} -rpcpassword={{ walletTicker }}123
 ```
 
 
@@ -65,17 +65,19 @@ datadir=/opt/blockchain/data
 dbcache=256
 maxmempool=512
 
-port=8333    # testnet: 18333
-rpcport=8332 # testnet: 18332
+port={{ walletPort }}
+rpcport={{ walletRPCPort }}
 
 listen=1
+txindex=1
 server=1
+maxconnections=16
 logtimestamps=1
 logips=1
 
 rpcallowip=127.0.0.1
-rpctimeout=15
-rpcclienttimeout=15
+rpcwaittimeout=30
+rpcclienttimeout=30
 ```
 
 

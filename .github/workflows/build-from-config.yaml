@@ -1,12 +1,8 @@
-name: BUILD IMAGE FROM TEMPLATE
+name: BUILD IMAGE FROM CONFIG
 
 on:
   workflow_dispatch:
     inputs:
-      path:
-        description: Full path of a branch where the config can be found.
-        required: false
-        default: https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master
       image:
         description: The full name of a wallet. Example - bitcoin, dash, blocknet.
         required: true
@@ -14,6 +10,12 @@ on:
         description: Tag or version of an image, please check manifest-latest.json. By default it takes the newest version.
         required: false
         default: latest
+      manifest:
+        description: manifest config file
+        required: false
+      wallet_conf:
+        description: wallet config file
+        default: false
 
 jobs:
 
@@ -26,11 +28,11 @@ jobs:
 
     # Build images
     - name: INFO BUILD
-      run: echo ${{ github.event.inputs.path }} ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
+      run: echo ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
     - name: generate a Dockerfile
-      run: ./ci.sh generate "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "${{ github.event.inputs.path }}"
+      run: ./generate.sh "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }} '${{ github.event.inputs.manifest}}' '${{ github.event.inputs.wallet_conf}}'
     - name: build an image
-      run: ./ci.sh build "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}"
+      run: ./ci.sh build "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
     - name: Run a container
       run: ./ci.sh run "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
     - name: Test build
