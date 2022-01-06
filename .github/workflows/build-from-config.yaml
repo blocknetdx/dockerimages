@@ -7,7 +7,7 @@ on:
         description: The full name of a wallet. Example - bitcoin, dash, blocknet.
         required: true
       version:
-        description: Tag or version of an image, please check manifest.json. By default it takes the newest version.
+        description: Tag or version of an image, please check manifest-latest.json. By default it takes the newest version.
         required: false
         default: latest
       manifest:
