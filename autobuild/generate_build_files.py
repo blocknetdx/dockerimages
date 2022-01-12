@@ -79,8 +79,7 @@ for blockchain in manifest_config:
         walletGitTag = blockchain['ver_id'].split('--')
         walletGitURL = blockchain['repo_url']
         walletConfName = blockchain['conf_name']
-        walletLinuxDir = blockchain['conf_name'].split('.conf')
-        walletLinuxDir = walletLinuxDir[0]
+        walletLinuxDir = blockchain['dir_name_linux']
         walletTicker = blockchain['ticker']
         walletVerList = blockchain['versions']
         testnetPort = '18332'
