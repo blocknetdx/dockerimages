@@ -4,18 +4,22 @@ on:
   workflow_dispatch:
     inputs:
       image:
-        description: The full name of a wallet. Example - bitcoin, dash, blocknet.
+        description: The full name of the wallet. Example - bitcoin, dash, blocknet.
         required: true
       version:
-        description: Tag or version of an image, please check manifest-latest.json. By default it takes the newest version.
+        description: Wallet version. Please check manifest-latest.json. By default it takes the newest version.
         required: false
         default: latest
       manifest:
-        description: manifest config file
+        description: Raw manifest config file contents.
         required: false
       wallet_conf:
-        description: wallet config file
+        description: Raw wallet config file contents.
         default: false
+      repo:
+        description: DockerHub repo name.
+        required: true
+        default: blocknetdx
 
 jobs:
 
@@ -30,20 +34,21 @@ jobs:
     - name: INFO BUILD
       run: echo ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
     - name: generate a Dockerfile
-      run: ./generate.sh "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }} '${{ github.event.inputs.manifest}}' '${{ github.event.inputs.wallet_conf}}'
+      run: ./generate.sh "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "${{ github.event.inputs.manifest }}" "${{ github.event.inputs.wallet_conf }}"
     - name: build an image
-      run: ./ci.sh build "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./ci.sh build "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
     - name: Run a container
-      run: ./ci.sh run "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
-    - name: Test build
-      run: ./ci.sh test "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./ci.sh run "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
+    # TODO: next step commented out until generate_build_files.py is updated to read the *local* manifest to find the daemon stem
+    #- name: Test build
+    #  run: ./ci.sh test "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}"
     - name: Remove a container
-      run: ./ci.sh clean "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./ci.sh clean "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}"
     - name: Remove dangling images
       if: ${{ always() }}
       run: yes | docker image prune
     - name: Push an image to DockerHub
-      run: ./ci.sh push "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./ci.sh push "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
 
 #  staging:
 #    if: ${{ github.event.pull_request }}
@@ -54,3 +59,4 @@ jobs:
 #
 #    - name: Test new image
 #      run: echo "Some test"
+ 

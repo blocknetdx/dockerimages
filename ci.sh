@@ -12,8 +12,8 @@ function build() {
     if docker build --build-arg WALLET=$1 \
                     --build-arg TAG=$2 \
                     --build-arg BRANCH=$3 \
-                    -f ./images/"$1"/Dockerfile -t blocknetdx/"$1":"$2" ./images/"$1"; then
-      docker image ls blocknetdx/"$1":"$2"
+                    -f ./images/"$1"/Dockerfile -t "$repo"/"$1":"$2" ./images/"$1"; then
+      docker image ls "$repo"/"$1":"$2"
     else
       echo "Docker build Failed"
       exit 1
@@ -21,10 +21,10 @@ function build() {
 }
 
 function run () {
-    docker run -d --name="$1"-"$2" blocknetdx/"$1":"$2"
+    docker run -d --name="$1"-"$2" "$repo"/"$1":"$2"
 
-    echo 'Sleep 5 sec to give a time to up container'
-    sleep 10
+    echo 'Sleep 5 sec to allow the container to start'
+    sleep 5
     docker ps -a
     docker logs $(docker ps -q -l)
 
@@ -74,7 +74,7 @@ function test() {
 }
 
 function push() {
-  docker push blocknetdx/"$1":"$2"
+  docker push "$repo"/"$1":"$2"
 }
 
 function clean() {
@@ -88,15 +88,19 @@ function clean() {
 }
 
 function release() {
-    docker pull blocknetdx/"$1":"$2"
-    docker tag blocknetdx/"$1":"$2" blocknetdx/"$1":"$3"
-    docker push blocknetdx/"$1":"$3"
+    docker pull "$repo"/"$1":"$2"
+    docker tag "$repo"/"$1":"$2" "$repo"/"$1":"$3"
+    docker push "$repo"/"$1":"$3"
 }
-
 
 wallet=$(echo $2 | sed -e 's/\s\+/-/g' | tr '[:upper:]' '[:lower:]' )
 version=$3
 branch_or_path=$4
+repo=$5
+
+if [[ -z "$5" ]]; then
+   repo="blocknetdx"
+fi
 
 if [ "$1" == "generate" ]; then
   generate "${wallet}" "${version}" "${branch_or_path}"
@@ -111,9 +115,8 @@ fi
 if [ "${version}" == "latest" ] || [ -z "${version}" ]; then
   version=$(grep "LABEL version" images/"${wallet}"/Dockerfile | cut -d '=' -f 2)
 fi
+staging_tag=$version"-staging"
 
-release_tag=$version
-staging_tag=$version-staging
 case $1 in
   build)
     build "${wallet}" "${staging_tag}" "${branch_or_path}"
@@ -131,7 +134,10 @@ case $1 in
     clean "${wallet}" "${staging_tag}"
   ;;
   release)
-    release "${wallet}" "${staging_tag}" "${release_tag}"
+    release "${wallet}" "${staging_tag}" "${version}"
+  ;;
+  release-as-latest)
+    release "${wallet}" "${staging_tag}" "latest"
   ;;
   *)
     echo 'Unknown command'

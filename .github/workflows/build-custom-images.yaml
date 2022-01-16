@@ -4,12 +4,20 @@ on:
   workflow_dispatch:
     inputs:
       image:
-        description: Name of wallet
+        description: The full name of the wallet. Example - bitcoin, dash, blocknet.
         required: true
       version:
-        description: Tag of an image
+        description: Version (this will also be used in the tag of the image).
         required: true
         default: latest
+      path:
+        description: Full raw path of a branch where the config can be found.
+        required: false
+        default: https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master
+      repo:
+        description: DockerHub repo name.
+        required: true
+        default: blocknetdx
 
 jobs:
 
@@ -24,12 +32,12 @@ jobs:
     - name: INFO BUILD
       run: echo ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
     - name: build an image
-      run: ./ci.sh build "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./ci.sh build "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "*" "${{ github.events.inputs.repo }}"
     - name: Remove dangling images
       if: ${{ always() }}
       run: yes | docker image prune
     - name: Push an image to DockerHub
-      run: ./ci.sh push "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./ci.sh push "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "*" "${{ github.events.inputs.repo }}"
 
 #  staging:
 #    if: ${{ github.event.pull_request }}
@@ -40,3 +48,4 @@ jobs:
 #
 #    - name: Test new image
 #      run: echo "Some test"
+
