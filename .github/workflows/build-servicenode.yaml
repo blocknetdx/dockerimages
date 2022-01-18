@@ -8,11 +8,15 @@ on:
         required: true
         default: servicenode
       version:
-        description: Tag or version of an image
+        description: Version tag to apply to image (example v4.3.3)
         required: true
       branch:
-        description: branch
+        description: Branch name (example 4.3.3)
         required: true
+      repo:
+        description: DockerHub repo name.
+        required: true
+        default: blocknetdx
 
 jobs:
 
@@ -27,18 +31,18 @@ jobs:
     - name: INFO BUILD
       run: echo ${{ github.event.inputs.image }} ${{ github.event.inputs.version }} ${{ github.event.inputs.branch }}
     - name: build an image
-      run: ./ci.sh build "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }} ${{ github.event.inputs.branch }}
+      run: ./ci.sh build "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "${{ github.event.inputs.branch }}" "${{ github.event.inputs.repo }}"
     - name: Run a container
-      run: ./ci.sh run "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./ci.sh run "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
     - name: Test build
-      run: ./ci.sh test "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./ci.sh test "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}"
     - name: Remove a container
-      run: ./ci.sh clean "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./ci.sh clean "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}"
     - name: Remove dangling images
       if: ${{ always() }}
       run: yes | docker image prune
     - name: Push an image to DockerHub
-      run: ./ci.sh push "${{ github.event.inputs.image }}" ${{ github.event.inputs.version }}
+      run: ./ci.sh push "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
 
 #  staging:
 #    if: ${{ github.event.pull_request }}
@@ -49,3 +53,4 @@ jobs:
 #
 #    - name: Test new image
 #      run: echo "Some test"
+

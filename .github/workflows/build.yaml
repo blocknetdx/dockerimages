@@ -3,17 +3,21 @@ name: BUILD IMAGE FROM TEMPLATE
 on:
   workflow_dispatch:
     inputs:
-      path:
-        description: Full path of a branch where the config can be found.
-        required: false
-        default: https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master
       image:
-        description: The full name of a wallet. Example - bitcoin, dash, blocknet.
+        description: The full name of the wallet. Example - bitcoin, dash, blocknet.
         required: true
       version:
         description: Tag or version of an image, please check manifest-latest.json. By default it takes the newest version.
         required: false
         default: latest
+      path:
+        description: Full raw path of a branch where the config can be found.
+        required: false
+        default: https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master
+      repo:
+        description: DockerHub repo name.
+        required: true
+        default: blocknetdx
 
 jobs:
 
@@ -30,9 +34,9 @@ jobs:
     - name: generate a Dockerfile
       run: ./ci.sh generate "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "${{ github.event.inputs.path }}"
     - name: build an image
-      run: ./ci.sh build "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}"
+      run: ./ci.sh build "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
     - name: Run a container
-      run: ./ci.sh run "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}"
+      run: ./ci.sh run "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
     - name: Test build
       run: ./ci.sh test "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "${{ github.event.inputs.path }}"
     - name: Remove a container
@@ -41,7 +45,7 @@ jobs:
       if: ${{ always() }}
       run: yes | docker image prune
     - name: Push an image to DockerHub
-      run: ./ci.sh push "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}"
+      run: ./ci.sh push "${{ github.event.inputs.image }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
 
 #  staging:
 #    if: ${{ github.event.pull_request }}
@@ -52,3 +56,4 @@ jobs:
 #
 #    - name: Test new image
 #      run: echo "Some test"
+ 

@@ -1,4 +1,4 @@
-name: RELEASE IMAGE
+name: RELEASE IMAGE AS LATEST
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
         description: The full name of the wallet. Example - bitcoin, dash, blocknet.
         required: true
       version:
-        description: Version (this will also be used in the tag of the image).
+        description: Version to re-tag as "latest".
         required: true
       repo:
         description: DockerHub repo name.
@@ -23,7 +23,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Login to DockerHub
       run: echo ${{ secrets.docker_password }} | docker login --username ${{ secrets.docker_username }} --password-stdin
-    - name: INFO RELEASE
+    - name: INFO RELEASE AS LATEST
       run: echo ${{ github.event.inputs.name }} ${{ github.event.inputs.version }}
     - name: Push an image to DockerHub
-      run: ./ci.sh release "${{ github.event.inputs.name }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
+      run: ./ci.sh release-as-latest "${{ github.event.inputs.name }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
