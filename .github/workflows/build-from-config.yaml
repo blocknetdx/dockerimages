@@ -28,7 +28,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Login to DockerHub
-      run: echo ${{ secrets.docker_password }} | docker login --username ${{ secrets.docker_username }} --password-stdin
+      run: echo ${{ secrets.org_blocknetdximg_password }} | docker login --username ${{ secrets.org_blocknetdximg_username }} --password-stdin
 
     # Build images
     - name: INFO BUILD
