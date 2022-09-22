@@ -17,13 +17,13 @@ on:
 jobs:
 
   release:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
     - name: Login to DockerHub
-      run: echo ${{ secrets.docker_password }} | docker login --username ${{ secrets.docker_username }} --password-stdin
+      run: echo ${{ secrets.org_blocknetdximg_password }} | docker login --username ${{ secrets.org_blocknetdximg_username }} --password-stdin
     - name: INFO RELEASE
       run: echo ${{ github.event.inputs.name }} ${{ github.event.inputs.version }}
     - name: Push an image to DockerHub
-      run: ./ci.sh release "${{ github.event.inputs.name }}" "${{ github.event.inputs.version }}" "*" "${{ github.event.inputs.repo }}"
+      run: ./release.sh "${{ github.event.inputs.name }}" "${{ github.event.inputs.version }}"
