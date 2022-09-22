@@ -22,7 +22,7 @@ on:
 jobs:
 
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Login to DockerHub
@@ -42,7 +42,7 @@ jobs:
 #  staging:
 #    if: ${{ github.event.pull_request }}
 #    needs: build
-#    runs-on: self-hosted
+#    runs-on: ubuntu-latest
 #    steps:
 #    - uses: actions/checkout@v2
 #
