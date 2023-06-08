@@ -45,7 +45,10 @@ RUN mkdir -p /opt/{{ walletLinuxDir }} \
   && ./autogen.sh \
   && ./configure CC="gcc-8" CXX="g++-8" CXXFLAGS="-Wno-error=return-type" --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
   && make -j$ecores \
-  && make install DESTDIR=$DISTDIR \
+  {% if walletName == 'pivx' %}
+&& ./params/install-params.sh \
+  {% endif %}
+&& make install DESTDIR=$DISTDIR \
   && cp $DISTDIR/opt/{{ walletLinuxDir }}/{{ walletLinuxDir }}/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
   && rm -rf /opt/{{ walletLinuxDir }}/
 
