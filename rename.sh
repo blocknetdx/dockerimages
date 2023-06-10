@@ -1,13 +1,17 @@
 #!/bin/bash
 
 function rename() {
-    docker pull blocknetdx/"$1"
-    docker tag blocknetdx/"$1" blocknetdx/"$2"
-    docker push blocknetdx/"$2"
+    source_image="blocknetdx/$1:$2"
+    target_image="blocknetdx/$1:$3"
+
+    docker pull "$source_image"
+    docker tag "$source_image" "$target_image"
+    docker push "$target_image"
 }
 
 imageName=$1
-targetName=$2
+tag=$2
+targetTag=$3
 
 # Call the rename function
-rename "${imageName}" "${targetName}"
+rename "$imageName" "$tag" "$targetTag"
