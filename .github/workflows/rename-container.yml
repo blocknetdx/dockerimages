@@ -1,0 +1,27 @@
+name: RENAME IMAGE
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: The full name of the docker image. Example - "blocknetdx/dash/v0.19.0.0-staging" - "blocknetdx/bitcoin/v0.19-staging"
+        required: true
+      target-name:
+        description: Targe image name. Example - "blocknetdx/dash/v.19.0.0" - "blocknetdx/bitcoin/v0.19"
+        required: true
+
+# Obviously, will only work on dockerHUB repo with keys set on github repo 'secrets'
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to DockerHub
+      run: echo ${{ secrets.org_blocknetdximg_password }} | docker login --username ${{ secrets.org_blocknetdximg_username }} --password-stdin
+    - name: RENAME IMAGE
+      run: echo ${{ github.event.inputs.name }} ${{ github.event.inputs.target-name }}
+    - name: Push an image to DockerHub
+      run: ./rename.sh "${{ github.event.inputs.name }}" "${{ github.event.inputs.target-name }}"
