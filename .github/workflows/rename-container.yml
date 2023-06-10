@@ -4,13 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: The full name of the docker image. Example - "blocknetdx/dash/v0.19.0.0-staging" - "blocknetdx/bitcoin/v0.19-staging"
+        description: The full name of the docker image. Example - "dash/v0.19.0.0-staging" - "bitcoin/v0.19-staging"
         required: true
       target-name:
-        description: Targe image name. Example - "blocknetdx/dash/v.19.0.0" - "blocknetdx/bitcoin/v0.19"
+        description: Targe image name. Example - "dash/v.19.0.0" - "bitcoin/v0.19"
         required: true
 
-# Obviously, will only work on dockerHUB repo with keys set on github repo 'secrets'
 
 jobs:
 
