@@ -10,7 +10,7 @@ on:
         description: The full tag of the existing docker image on Hub. Example - "v0.19.0.0-staging" - "v0.19-staging"
         required: true
       target_tag:
-        description: Targe image tag. Example - "v.19.0.0" - "v0.19"
+        description: Target image tag. Example - "v.19.0.0" - "v0.19"
         required: true
 
 
