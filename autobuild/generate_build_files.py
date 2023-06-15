@@ -89,10 +89,11 @@ for blockchain in manifest_config:
         else:
             if wallet_version in walletVerList:
                 walletVersion = wallet_version
-            else:
-                sys.exit(f'Wallet version not found {wallet_version}')
-        walletGitTag = walletVersion
-        walletNameVerId = walletVersion
+                walletGitTag = walletVersion
+                walletNameVerId = walletVersion
+                
+if not walletVersion:
+    sys.exit(f'Wallet version not found {wallet_version}')
 
 
 
