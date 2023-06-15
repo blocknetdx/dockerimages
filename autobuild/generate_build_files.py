@@ -96,11 +96,6 @@ for blockchain in manifest_config:
 
 if not found:
     sys.exit(f'Wallet version not found {wallet_version}')
-                
-if not walletVersion:
-    sys.exit(f'Wallet version not found {wallet_version}')
-
-
 
 # open up wallet_conf and get the rpc & port
 if not wallet_config:
