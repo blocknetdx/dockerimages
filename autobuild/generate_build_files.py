@@ -63,6 +63,7 @@ if not manifest_config:
 else:
     manifest_config = json.loads(manifest_config)
  
+found = false
 for blockchain in manifest_config:
     if re.sub('\s+', '-', blockchain['blockchain'].lower()) == blockchain_name.lower():
         if 'daemon_stem' in blockchain:
@@ -89,10 +90,12 @@ for blockchain in manifest_config:
         else:
             if wallet_version in walletVerList:
                 walletVersion = wallet_version
-            else:
-                sys.exit(f'Wallet version not found {wallet_version}')
-        walletGitTag = walletVersion
-        walletNameVerId = walletVersion
+                walletGitTag = walletVersion
+                walletNameVerId = walletVersion
+                found = true
+                
+if not found:
+    sys.exit(f'Wallet version not found {wallet_version}')
 
 
 
