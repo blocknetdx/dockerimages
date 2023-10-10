@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: The full name of the wallet. Example - bitcoin, dash, blocknet.
+        description: The full name of the wallet. Example - bitcoin, dash, servicenode.
         required: true
       version:
         description: Version to re-tag as "latest".
