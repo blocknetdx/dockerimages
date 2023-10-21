@@ -39,6 +39,9 @@ RUN mkdir -p /opt/{{ walletLinuxDir }} \
   && git clone --depth 1 --branch {{ walletGitTag }} {{ walletGitURL }} {{ walletLinuxDir }} \
   && cd /opt/{{ walletLinuxDir }}/{{ walletLinuxDir }}/ \
   && cd depends \
+  {% if walletName == 'dash' %}
+&& sed -i "s/\$(package)_download_path=https:\/\/gmplib.org\/download\/gmp/\$(package)_download_path=https:\/\/ftp.gnu.org\/gnu\/gmp/" packages/gmp.mk \
+  {% endif %}  
   && make -j$ecores NO_QT=1 \
   && cd .. \
   && chmod +x ./autogen.sh \
