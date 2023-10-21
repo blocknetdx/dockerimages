@@ -107,14 +107,15 @@ if [ "$1" == "generate" ]; then
   exit 0
 fi
 
-if [ ! -f images/"${wallet}"/Dockerfile ]; then
-  echo "No Dockerfile for ${wallet}"
-  exit 1
-fi
+#if [ ! -f images/"${wallet}"/Dockerfile ]; then
+#  echo "No Dockerfile for ${wallet}"
+#  exit 1
+#fi
 
-if [ "${version}" == "latest" ] || [ -z "${version}" ]; then
-  version=$(grep "LABEL version" images/"${wallet}"/Dockerfile | cut -d '=' -f 2)
-fi
+#if [ "${version}" == "latest" ] || [ -z "${version}" ]; then
+#  version=$(grep "LABEL version" images/"${wallet}"/Dockerfile | cut -d '=' -f 2)
+#fi
+
 staging_tag=$version"-staging"
 
 case $1 in
