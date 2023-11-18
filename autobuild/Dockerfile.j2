@@ -17,7 +17,8 @@ RUN apt update \
      software-properties-common \
      ca-certificates \
      wget curl git python vim \
-     build-essential libtool autotools-dev automake pkg-config bsdmainutils bison python3 libgmp-dev \
+     build-essential libtool autotools-dev automake \
+     pkg-config bsdmainutils bison python3 libgmp-dev cmake \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV DISTDIR=/opt/blockchain/dist
