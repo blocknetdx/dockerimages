@@ -3,3 +3,5 @@
 blockchain/
 .idea/
 venv/
+.history/
+images/
