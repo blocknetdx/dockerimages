@@ -33,19 +33,22 @@ RUN mkdir -p /opt/{{ walletLinuxDir }} \
   && cd /opt/{{ walletLinuxDir }}/{{ walletLinuxDir }}/ \
   && cd depends \
   {% if walletName == 'dash' %}
+# github actions ips are firewalled from default GMP package path, using ftp server alternative.
 && sed -i "s/\$(package)_download_path=https:\/\/gmplib.org\/download\/gmp/\$(package)_download_path=https:\/\/ftp.gnu.org\/gnu\/gmp/" packages/gmp.mk \
   {% endif %}
 && make -j$ecores NO_QT=1 \
   && cd .. \
   && chmod +x ./autogen.sh \
   && ./autogen.sh \
-  && ./configure CC="gcc-9" CXX="g++-9" CXXFLAGS="-Wno-error=return-type" --with-gui=no --enable-hardening --prefix=`pwd`/depends/x86_64-pc-linux-gnu \
+{% set platformPath = 'x86_64-unknown-linux-gnu' if walletName == 'unobtanium' else 'x86_64-pc-linux-gnu' %}
+  && ./configure CC="gcc-9" CXX="g++-9" CXXFLAGS="-Wno-error=return-type" --with-gui=no --enable-hardening --prefix=`pwd`/depends/{{ platformPath }} \
   && make -j$ecores \
   {% if walletName == 'pivx' %}
+# pivx need this script run once.
 && ./params/install-params.sh \
   {% endif %}
 && make install DESTDIR=$DISTDIR \
-  && cp $DISTDIR/opt/{{ walletLinuxDir }}/{{ walletLinuxDir }}/depends/x86_64-pc-linux-gnu/bin/* /usr/bin/ \
+  && cp $DISTDIR/opt/{{ walletLinuxDir }}/{{ walletLinuxDir }}/depends/{{ platformPath }}/bin/* /usr/bin/ \
   && rm -rf /opt/{{ walletLinuxDir }}/
 
 # Write default {{ walletConfName }} (can be overridden on commandline)
@@ -54,8 +57,11 @@ RUN echo "datadir=/opt/blockchain/data  \n\
 dbcache=256                             \n\
 maxmempool=512                          \n\
                                         \n\
-port={{ walletPort }}                               \n\
-rpcport={{ walletRPCPort }}                            \n\
+rpcuser=test                            \n\
+rpcpassword=AZErty.1                    \n\   
+                                        \n\
+port={{ walletPort }}                              \n\
+rpcport={{ walletRPCPort }}                           \n\
                                         \n\
 listen=1                                \n\
 txindex=1                               \n\
@@ -74,4 +80,10 @@ VOLUME ["/opt/blockchain/config", "/opt/blockchain/data"]
 # Port, RPC, Test Port, Test RPC
 EXPOSE {{ walletPort }} {{ walletRPCPort }}  {{ testnetPort }}  {{ testnetRPC }}
 
+{% if walletName == 'unobtanium' %}
+# uno daemon need '-reindex' launch option.
+CMD ["/usr/bin/{{ walletDaemon }}", "-daemon=0", "-reindex"]
+{% else %}
 CMD ["/usr/bin/{{ walletDaemon }}", "-daemon=0"]
+{% endif %}
+
