@@ -17,7 +17,7 @@ readmetemplate = j2_env.get_template('README.md.j2')
 
 walletDict = {}
 
-buildOS = 'focal'
+buildOS = 'jammy'
 
 
 def load_template(template_url):
